@@ -746,7 +746,7 @@
   <div class="hero">
     <div class="hero-badge">🔴 EN VIVO — Miles de radios online</div>
     <h1>Escucha el mundo<br><span class="gradient">en un solo lugar</span></h1>
-    <p>Descubre miles de emisoras de radio online. Busca por género, país o nombre y empieza a escuchar gratis.</p>
+    <p>Descubre miles de emisoras online. Busca por género, país o nombre.</p>
   </div>
   <div class="search-wrap" style="padding:0 2rem">
     <div class="search-bar">
@@ -783,7 +783,7 @@
   </div>
 </div>
 
-<!-- POST INDIVIDUAL -->
+<!-- POST -->
 <div id="page-post" class="page">
   <div class="single-post">
     <button class="back-btn" onclick="goBack()">← Volver</button>
@@ -1219,19 +1219,18 @@ function showDeezerTrack(track) {
 }
 
 // ─── INIT ────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function(){ loadHome(''); });
+window.addEventListener('load', function(){ loadHome(''); });
 
-// ── NOVEDADES (JSONP - sin CORS) ─────────────────────────
+// ── NOVEDADES ───────────────────────────────────────────
 function loadPosts() {
   var c = document.getElementById('posts-container');
   if (!c) return;
   c.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando novedades...</div>';
-
   window._blogCB = function(data) {
-    try { document.getElementById('_blogScript').remove(); } catch(e){}
+    try { var s = document.getElementById('_bs'); if(s) s.remove(); } catch(e){}
     var entries = (data.feed && data.feed.entry) ? data.feed.entry : [];
     if (!entries.length) {
-      c.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aun no hay novedades. Vuelve pronto!</p></div>';
+      c.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aun no hay novedades.</p></div>';
       return;
     }
     c.innerHTML = entries.map(function(e) {
@@ -1246,16 +1245,13 @@ function loadPosts() {
         + '<div class="post-meta">📅 ' + date + '</div>'
         + '<h3><a href="#" data-t="'+encT+'" data-h="'+enc+'" data-d="'+date+'" onclick="openPost(this);return false;">' + title + '</a></h3>'
         + '<p class="post-snippet">' + snippet + '</p>'
-        + '<button class="read-more" onclick="openPost(this.closest('.post-card').querySelector('a'))">Leer mas →</button>'
+        + '<button class="read-more" onclick="openPost(this.closest('div').querySelector('a'))">Leer mas →</button>'
         + '</div>';
     }).join('');
   };
-
   var s = document.createElement('script');
-  s.id  = '_blogScript';
-  s.onerror = function() {
-    c.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error cargando novedades.</p></div>';
-  };
+  s.id = '_bs';
+  s.onerror = function(){ c.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error cargando novedades.</p></div>'; };
   s.src = 'https://softsonicstream.blogspot.com/feeds/posts/default?alt=json-in-script&callback=_blogCB&max-results=20';
   document.head.appendChild(s);
 }
