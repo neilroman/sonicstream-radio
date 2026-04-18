@@ -714,10 +714,11 @@
 .post-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;transition:border-color .2s}
 .post-card:hover{border-color:rgba(0,229,255,.25)}
 .post-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:8px}
-.post-card h3 a{color:var(--text);text-decoration:none}.post-card h3 a:hover{color:var(--accent)}
+.post-card h3 a{color:var(--text);text-decoration:none}
+.post-card h3 a:hover{color:var(--accent)}
 .post-meta{font-size:.78rem;color:var(--muted);margin-bottom:12px}
 .post-snippet{font-size:.88rem;color:var(--muted);line-height:1.7}
-.read-more{background:none;border:none;margin-top:12px;font-size:.8rem;color:var(--accent);font-weight:600;cursor:pointer;padding:0;font-family:inherit}
+.read-more{background:none;border:none;margin-top:12px;font-size:.8rem;color:var(--accent);font-weight:600;cursor:pointer;padding:0;font-family:inherit;display:inline-block}
 .single-post{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;position:relative;z-index:1}
 .single-post h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:1rem}
 .single-post .post-meta{font-size:.82rem;color:var(--muted);margin-bottom:2rem}
@@ -731,19 +732,16 @@
 
 <header>
   <div class="header-inner">
-    <a class="logo" href="#">
-      <div class="logo-icon">📻</div>
-      Sonic<span>Stream</span>
-    </a>
+    <a class="logo" href="#"><div class="logo-icon">📻</div>Sonic<span>Stream</span></a>
     <nav>
-      <button class="active" onclick="showPage('home', this)">📻 Radio</button>
-      <button onclick="showPage('news', this)">📰 Novedades</button>
-      <button onclick="showPage('download', this)">📱 App</button>
+      <button class="active" onclick="showPage('home',this)">📻 Radio</button>
+      <button onclick="showPage('news',this)">📰 Novedades</button>
+      <button onclick="showPage('download',this)">📱 App</button>
     </nav>
   </div>
 </header>
 
-<!-- RADIO PAGE -->
+<!-- RADIO -->
 <div id="page-home" class="page active">
   <div class="hero">
     <div class="hero-badge">🔴 EN VIVO — Miles de radios online</div>
@@ -777,7 +775,7 @@
   </div>
 </div>
 
-<!-- NEWS PAGE -->
+<!-- NOVEDADES -->
 <div id="page-news" class="page">
   <div class="news-page">
     <h2>📰 <span class="gradient">Novedades</span></h2>
@@ -785,23 +783,23 @@
   </div>
 </div>
 
-<!-- SINGLE POST -->
+<!-- POST INDIVIDUAL -->
 <div id="page-post" class="page">
   <div class="single-post">
-    <button class="back-btn" onclick="goBack()">← Volver a novedades</button>
+    <button class="back-btn" onclick="goBack()">← Volver</button>
     <h1 id="post-title"></h1>
     <div class="post-meta" id="post-meta"></div>
     <div class="post-body" id="post-body"></div>
   </div>
 </div>
 
-<!-- DOWNLOAD PAGE -->
+<!-- DESCARGA -->
 <div id="page-download" class="page">
   <div class="download-page">
     <div class="download-hero">
       <div class="app-icon">📻</div>
       <h2>SonicStream <span style="color:var(--accent)">para Android</span></h2>
-      <p>La app de radio online más completa. Miles de emisoras, reproductor avanzado y descarga gratis.</p>
+      <p>La app de radio online más completa. Miles de emisoras y descarga gratis.</p>
       <a class="download-btn" href="https://mega.nz/file/TyohGDjK#bR-6HoXmrDtHo-5GNPO0KCMMZel_bD2ns6f9rxtSyzg" target="_blank">⬇️ Descargar SonicStream APK</a>
       <br>
       <span class="download-soon">⏳ Próximamente en Google Play Store</span>
@@ -818,7 +816,7 @@
   </div>
 </div>
 
-<!-- PLAYER BAR -->
+<!-- PLAYER -->
 <div class="player-bar" id="player-bar">
   <div class="player-inner">
     <div class="player-station">
@@ -1221,19 +1219,16 @@ function showDeezerTrack(track) {
 }
 
 // ─── INIT ────────────────────────────────────────────
-loadHome('');
+document.addEventListener('DOMContentLoaded', function(){ loadHome(''); });
 
-
-// ── NOVEDADES ───────────────────────────────────────────
+// ── NOVEDADES (JSONP - sin CORS) ─────────────────────────
 function loadPosts() {
   var c = document.getElementById('posts-container');
   if (!c) return;
-  c.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
+  c.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando novedades...</div>';
 
-  // Use JSONP to bypass CORS - Blogger supports callback param
-  var script = document.createElement('script');
-  window._bloggerCallback = function(data) {
-    document.head.removeChild(script);
+  window._blogCB = function(data) {
+    try { document.getElementById('_blogScript').remove(); } catch(e){}
     var entries = (data.feed && data.feed.entry) ? data.feed.entry : [];
     if (!entries.length) {
       c.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aun no hay novedades. Vuelve pronto!</p></div>';
@@ -1251,17 +1246,18 @@ function loadPosts() {
         + '<div class="post-meta">📅 ' + date + '</div>'
         + '<h3><a href="#" data-t="'+encT+'" data-h="'+enc+'" data-d="'+date+'" onclick="openPost(this);return false;">' + title + '</a></h3>'
         + '<p class="post-snippet">' + snippet + '</p>'
-        + '<button class="read-more" onclick="openPost(this.parentElement.querySelector('a'))">Leer mas →</button>'
+        + '<button class="read-more" onclick="openPost(this.closest('.post-card').querySelector('a'))">Leer mas →</button>'
         + '</div>';
     }).join('');
   };
 
-  script.onerror = function() {
+  var s = document.createElement('script');
+  s.id  = '_blogScript';
+  s.onerror = function() {
     c.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error cargando novedades.</p></div>';
   };
-
-  script.src = 'https://softsonicstream.blogspot.com/feeds/posts/default?alt=json-in-script&callback=_bloggerCallback&max-results=20';
-  document.head.appendChild(script);
+  s.src = 'https://softsonicstream.blogspot.com/feeds/posts/default?alt=json-in-script&callback=_blogCB&max-results=20';
+  document.head.appendChild(s);
 }
 
 function openPost(el) {
@@ -1269,7 +1265,7 @@ function openPost(el) {
   var enc   = el.getAttribute('data-h') || '';
   var date  = el.getAttribute('data-d') || '';
   var body  = '';
-  try { body = decodeURIComponent(escape(atob(enc))); } catch(e) {}
+  try { body = decodeURIComponent(escape(atob(enc))); } catch(e){}
   document.getElementById('post-title').textContent = title;
   document.getElementById('post-meta').textContent  = '📅 ' + date;
   document.getElementById('post-body').innerHTML    = body;
@@ -1285,20 +1281,6 @@ function goBack() {
   document.querySelectorAll('nav button')[1].classList.add('active');
 }
 
-// ── SHOW PAGE ────────────────────────────────────────────
-function showPage(page, btn) {
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
-  var el = document.getElementById('page-' + page);
-  if (!el) el = document.getElementById('page-home');
-  if (el) el.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (page === 'news') loadPosts();
-}
-
-document.addEventListener('DOMContentLoaded', function(){ loadHome(''); });
-
 </script>
-
 </body>
 </html>
