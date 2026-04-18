@@ -726,6 +726,26 @@
 .single-post .post-body p{margin-bottom:1rem}
 .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:.85rem;font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;margin-bottom:2rem}
 
+
+/* LOCATION FILTERS */
+.location-bar {
+  max-width:1200px;margin:0 auto;padding:0 2rem 1.5rem;position:relative;z-index:1;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+}
+.loc-select {
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:10px 16px;border-radius:10px;font-family:'DM Sans',sans-serif;
+  font-size:.85rem;cursor:pointer;outline:none;transition:border-color .2s;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+}
+.loc-select:focus{border-color:rgba(0,229,255,.4);}
+.loc-select option{background:#131929;color:#e8eaf0;}
+.loc-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+.loc-reset{background:none;border:1px solid var(--border);color:var(--muted);padding:10px 14px;border-radius:10px;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.loc-reset:hover{border-color:rgba(0,229,255,.3);color:var(--accent);}
+
 </style>
 </head>
 <body>
@@ -767,6 +787,28 @@
     <button class="genre-btn" onclick="filterGenre('bachata',this)">🎵 Bachata</button>
     <button class="genre-btn" onclick="filterGenre('tropical',this)">🌴 Tropical</button>
   </div>
+
+  <!-- LOCATION FILTERS -->
+  <div class="location-bar">
+    <span class="loc-label">📍 Ubicación:</span>
+    <select class="loc-select" id="sel-continent" onchange="onContinentChange(this.value)">
+      <option value="">🌍 Todos los continentes</option>
+      <option value="AF">🌍 África</option>
+      <option value="AS">🌏 Asia</option>
+      <option value="EU">🌍 Europa</option>
+      <option value="NA">🌎 Norteamérica</option>
+      <option value="SA">🌎 Sudamérica</option>
+      <option value="OC">🌏 Oceanía</option>
+    </select>
+    <select class="loc-select" id="sel-country" onchange="onCountryChange(this.value)" style="display:none">
+      <option value="">🏳️ Todos los países</option>
+    </select>
+    <select class="loc-select" id="sel-state" onchange="onStateChange(this.value)" style="display:none">
+      <option value="">🏙️ Todas las ciudades</option>
+    </select>
+    <button class="loc-reset" onclick="resetLocation()">✕ Limpiar</button>
+  </div>
+
   <div class="stations-section">
     <div class="section-title">🔥 Estaciones populares</div>
     <div id="stations-grid" class="stations-grid">
@@ -1275,6 +1317,132 @@ function goBack() {
   document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('page-news').classList.add('active');
   document.querySelectorAll('nav button')[1].classList.add('active');
+}
+
+
+// ── LOCATION FILTERS ────────────────────────────────────
+var COUNTRIES = {
+  AF: [['DZ','Argelia'],['EG','Egipto'],['ET','Etiopía'],['GH','Ghana'],['KE','Kenia'],['MA','Marruecos'],['NG','Nigeria'],['ZA','Sudáfrica'],['TN','Túnez'],['UG','Uganda']],
+  AS: [['CN','China'],['IN','India'],['ID','Indonesia'],['IR','Irán'],['JP','Japón'],['MY','Malasia'],['PH','Filipinas'],['SA','Arabia Saudita'],['KR','Corea del Sur'],['TR','Turquía'],['AE','Emiratos Árabes'],['TH','Tailandia'],['VN','Vietnam']],
+  EU: [['AT','Austria'],['BE','Bélgica'],['HR','Croacia'],['CZ','República Checa'],['DK','Dinamarca'],['FI','Finlandia'],['FR','Francia'],['DE','Alemania'],['GR','Grecia'],['HU','Hungría'],['IE','Irlanda'],['IT','Italia'],['NL','Países Bajos'],['NO','Noruega'],['PL','Polonia'],['PT','Portugal'],['RO','Rumanía'],['RU','Rusia'],['RS','Serbia'],['ES','España'],['SE','Suecia'],['CH','Suiza'],['GB','Reino Unido'],['UA','Ucrania']],
+  NA: [['CA','Canadá'],['CU','Cuba'],['DO','República Dominicana'],['GT','Guatemala'],['HN','Honduras'],['MX','México'],['NI','Nicaragua'],['PA','Panamá'],['PR','Puerto Rico'],['US','Estados Unidos']],
+  SA: [['AR','Argentina'],['BO','Bolivia'],['BR','Brasil'],['CL','Chile'],['CO','Colombia'],['EC','Ecuador'],['PY','Paraguay'],['PE','Perú'],['UY','Uruguay'],['VE','Venezuela']],
+  OC: [['AU','Australia'],['FJ','Fiji'],['NZ','Nueva Zelanda'],['PG','Papúa Nueva Guinea']]
+};
+
+var currentContinent = '';
+var currentCountry   = '';
+var currentState     = '';
+
+function onContinentChange(continent) {
+  currentContinent = continent;
+  currentCountry   = '';
+  currentState     = '';
+
+  var selCountry = document.getElementById('sel-country');
+  var selState   = document.getElementById('sel-state');
+  selState.style.display = 'none';
+  selState.innerHTML = '<option value="">🏙️ Todas las ciudades</option>';
+
+  if (!continent) {
+    selCountry.style.display = 'none';
+    selCountry.innerHTML = '<option value="">🏳️ Todos los países</option>';
+    loadHome('');
+    return;
+  }
+
+  // Populate countries
+  var countries = COUNTRIES[continent] || [];
+  selCountry.innerHTML = '<option value="">🏳️ Todos los países</option>'
+    + countries.map(function(c){ return '<option value="'+c[0]+'">'+c[1]+'</option>'; }).join('');
+  selCountry.style.display = 'block';
+
+  // Load by continent (all countries)
+  loadByLocation(continent, '', '');
+}
+
+async function onCountryChange(country) {
+  currentCountry = country;
+  currentState   = '';
+
+  var selState = document.getElementById('sel-state');
+
+  if (!country) {
+    selState.style.display = 'none';
+    selState.innerHTML = '<option value="">🏙️ Todas las ciudades</option>';
+    loadByLocation(currentContinent, '', '');
+    return;
+  }
+
+  // Load states/cities for this country
+  try {
+    var states = await apiFetch('/states/' + encodeURIComponent(country) + '/json');
+    if (states && states.length > 1) {
+      selState.innerHTML = '<option value="">🏙️ Todas las ciudades</option>'
+        + states.filter(function(s){ return s.name; })
+                .sort(function(a,b){ return a.name.localeCompare(b.name); })
+                .map(function(s){ return '<option value="'+s.name+'">'+s.name+'</option>'; }).join('');
+      selState.style.display = 'block';
+    } else {
+      selState.style.display = 'none';
+    }
+  } catch(e) {
+    selState.style.display = 'none';
+  }
+
+  loadByLocation(currentContinent, country, '');
+}
+
+function onStateChange(state) {
+  currentState = state;
+  loadByLocation(currentContinent, currentCountry, state);
+}
+
+function resetLocation() {
+  currentContinent = ''; currentCountry = ''; currentState = '';
+  document.getElementById('sel-continent').value = '';
+  document.getElementById('sel-country').style.display = 'none';
+  document.getElementById('sel-country').innerHTML = '<option value="">🏳️ Todos los países</option>';
+  document.getElementById('sel-state').style.display = 'none';
+  document.getElementById('sel-state').innerHTML = '<option value="">🏙️ Todas las ciudades</option>';
+  // Reset genre buttons
+  document.querySelectorAll('.genre-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.genre-btn').classList.add('active');
+  loadHome('');
+}
+
+async function loadByLocation(continent, country, state) {
+  var grid = document.getElementById('stations-grid');
+  grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando estaciones...</div>';
+
+  try {
+    var stations = [];
+    if (state) {
+      stations = await apiFetch('/stations/search?state=' + encodeURIComponent(state) + '&countrycode=' + encodeURIComponent(country) + '&limit=48&order=votes&reverse=true&hidebroken=true');
+    } else if (country) {
+      stations = await apiFetch('/stations/search?countrycode=' + encodeURIComponent(country) + '&limit=48&order=votes&reverse=true&hidebroken=true');
+    } else if (continent) {
+      // Load from all countries of this continent in parallel
+      var countries = (COUNTRIES[continent] || []).slice(0, 6);
+      var results = await Promise.all(
+        countries.map(function(c){
+          return apiFetch('/stations/search?countrycode=' + c[0] + '&limit=12&order=votes&reverse=true&hidebroken=true');
+        })
+      );
+      stations = mergeDedup(results).slice(0, 48);
+    }
+
+    var label = state || (country ? country : (continent ? continent : ''));
+    document.querySelector('.section-title').textContent = '📍 ' + (stations.length) + ' estaciones — ' + label;
+
+    if (!stations.length) {
+      grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No se encontraron estaciones para esta ubicación.</p></div>';
+      return;
+    }
+    grid.innerHTML = stations.map(renderCard).join('');
+  } catch(e) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error cargando estaciones.</p></div>';
+  }
 }
 
 </script>
