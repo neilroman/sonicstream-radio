@@ -1225,13 +1225,15 @@ loadHome('');
 
 
 // ── NOVEDADES ───────────────────────────────────────────
-async function loadPosts() {
+function loadPosts() {
   var c = document.getElementById('posts-container');
   if (!c) return;
   c.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
-  try {
-    var res = await fetch('https://softsonicstream.blogspot.com/feeds/posts/default?alt=json&max-results=20');
-    var data = await res.json();
+
+  // Use JSONP to bypass CORS - Blogger supports callback param
+  var script = document.createElement('script');
+  window._bloggerCallback = function(data) {
+    document.head.removeChild(script);
     var entries = (data.feed && data.feed.entry) ? data.feed.entry : [];
     if (!entries.length) {
       c.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aun no hay novedades. Vuelve pronto!</p></div>';
@@ -1249,13 +1251,17 @@ async function loadPosts() {
         + '<div class="post-meta">📅 ' + date + '</div>'
         + '<h3><a href="#" data-t="'+encT+'" data-h="'+enc+'" data-d="'+date+'" onclick="openPost(this);return false;">' + title + '</a></h3>'
         + '<p class="post-snippet">' + snippet + '</p>'
-        + '<button class="read-more" onclick="openPost(this.parentElement.querySelector(&quot;a&quot;))">Leer mas →</button>'
+        + '<button class="read-more" onclick="openPost(this.parentElement.querySelector('a'))">Leer mas →</button>'
         + '</div>';
     }).join('');
-  } catch(err) {
+  };
+
+  script.onerror = function() {
     c.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error cargando novedades.</p></div>';
-    console.error('Feed error:', err);
-  }
+  };
+
+  script.src = 'https://softsonicstream.blogspot.com/feeds/posts/default?alt=json-in-script&callback=_bloggerCallback&max-results=20';
+  document.head.appendChild(script);
 }
 
 function openPost(el) {
