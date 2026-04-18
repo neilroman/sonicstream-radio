@@ -800,7 +800,7 @@
       <option value="SA">🌎 Sudamérica</option>
       <option value="OC">🌏 Oceanía</option>
     </select>
-    <select class="loc-select" id="sel-country" onchange="onCountryChange(this.value)" style="display:none">
+    <select class="loc-select" id="sel-country" onchange="handleCountryChange(this.value)" style="display:none">
       <option value="">🏳️ Todos los países</option>
     </select>
     <select class="loc-select" id="sel-state" onchange="onStateChange(this.value)" style="display:none">
@@ -1359,6 +1359,10 @@ function onContinentChange(continent) {
 
   // Load by continent (all countries)
   loadByLocation(continent, '', '');
+}
+
+function handleCountryChange(country) {
+  onCountryChange(country).catch(function(e){ console.error(e); });
 }
 
 async function onCountryChange(country) {
