@@ -391,14 +391,8 @@ header {
 <audio id="preview-audio" preload="none"></audio>
 
 <script>
-// ── INVIDIOUS INSTANCES ──────────────────────────────────
-var INVIDIOUS = [
-  'https://inv.nadeko.net',
-  'https://invidious.nerdvpn.de',
-  'https://yewtu.be',
-  'https://iv.melmac.space',
-  'https://invidious.io'
-];
+// ── VIDEO SEARCH APIS ───────────────────────────────────
+// We use multiple strategies to find YouTube video IDs without API key
 
 // ── STATE ────────────────────────────────────────────────
 var previewAudio  = document.getElementById('preview-audio');
@@ -573,49 +567,65 @@ async function startDownload(encQuery, encTitle, encArtist) {
   };
 }
 
-// CORS proxies to wrap Invidious requests
-var CORS_PROXIES = [
-  'https://corsproxy.io/?',
-  'https://api.allorigins.win/raw?url='
-];
-
 async function findVideoId(query) {
-  for (var i = 0; i < INVIDIOUS.length; i++) {
-    var directUrl = INVIDIOUS[i] + '/api/v1/search?q=' + encodeURIComponent(query) + '&type=video&fields=videoId,title&page=1';
-    for (var j = 0; j < CORS_PROXIES.length; j++) {
-      try {
-        var proxyUrl = CORS_PROXIES[j] + encodeURIComponent(directUrl);
-        console.log('[Invidious] Trying proxy:', CORS_PROXIES[j].substring(0,30), '+', INVIDIOUS[i]);
-        var res = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
-        if (!res.ok) continue;
-        var text = await res.text();
-        var data = JSON.parse(text);
-        if (Array.isArray(data) && data.length > 0 && data[0].videoId) {
-          console.log('[Invidious] ✅ Found videoId:', data[0].videoId);
-          return data[0].videoId;
+  // Strategy 1: piped.video API (open source YouTube frontend, CORS enabled)
+  var PIPED = [
+    'https://pipedapi.kavin.rocks',
+    'https://piped-api.garudalinux.org',
+    'https://api.piped.projectsegfau.lt',
+    'https://pipedapi.tokhmi.xyz',
+    'https://pipedapi.moomoo.me'
+  ];
+
+  for (var i = 0; i < PIPED.length; i++) {
+    try {
+      var url = PIPED[i] + '/search?q=' + encodeURIComponent(query) + '&filter=videos';
+      console.log('[Piped] Trying:', PIPED[i]);
+      var res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+      if (!res.ok) continue;
+      var data = await res.json();
+      var items = data.items || [];
+      for (var j = 0; j < items.length; j++) {
+        var item = items[j];
+        // Piped returns url like /watch?v=VIDEO_ID
+        if (item.url && item.url.includes('watch?v=')) {
+          var vid = item.url.split('watch?v=')[1].split('&')[0];
+          if (vid && vid.length === 11) {
+            console.log('[Piped] ✅ Found videoId:', vid, 'via', PIPED[i]);
+            return vid;
+          }
         }
-      } catch(e) {
-        console.warn('[Invidious] ❌ Failed:', INVIDIOUS[i], e.message);
-        continue;
       }
+    } catch(e) {
+      console.warn('[Piped] ❌ Failed:', PIPED[i], e.message);
+      continue;
     }
   }
 
-  // Last resort: try YouTube Data API v3 search via Invidious public search page scraping
-  // Use corsproxy.io with a known working instance
+  // Strategy 2: Use corsproxy + piped as last resort
   try {
-    var fallbackUrl = 'https://corsproxy.io/?' + encodeURIComponent(
-      'https://inv.nadeko.net/api/v1/search?q=' + encodeURIComponent(query) + '&type=video&page=1'
+    var proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(
+      'https://pipedapi.kavin.rocks/search?q=' + encodeURIComponent(query) + '&filter=videos'
     );
-    var res2 = await fetch(fallbackUrl, { signal: AbortSignal.timeout(10000) });
+    var res2 = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
     if (res2.ok) {
       var data2 = await res2.json();
-      if (Array.isArray(data2) && data2.length > 0 && data2[0].videoId) {
-        return data2[0].videoId;
+      var items2 = data2.items || [];
+      for (var k = 0; k < items2.length; k++) {
+        if (items2[k].url && items2[k].url.includes('watch?v=')) {
+          var vid2 = items2[k].url.split('watch?v=')[1].split('&')[0];
+          if (vid2 && vid2.length === 11) {
+            console.log('[Piped+Proxy] ✅ Found:', vid2);
+            return vid2;
+          }
+        }
       }
     }
-  } catch(e) {}
+  } catch(e) {
+    console.warn('[Piped+Proxy] Failed:', e.message);
+  }
 
+  console.error('[findVideoId] All strategies failed for:', query);
   return null;
 }
 
