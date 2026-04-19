@@ -329,11 +329,11 @@ async function startDownload(encTitle, encArtist) {
       iframeWrap.innerHTML =
         '<div style="padding:20px;text-align:center;">'
         + '<p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;">🎵 ' + title + '</p>'
-        + '<a href="' + downloadPageUrl + '" '
+        + '<a href="' + downloadPageUrl + '" target="_blank" '
         + 'style="display:block;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;'
         + 'font-weight:700;padding:16px 24px;border-radius:12px;text-decoration:none;'
         + 'font-size:1rem;margin-bottom:10px;">⬇️ Descargar MP3</a>'
-        + '<p style="font-size:.7rem;color:var(--muted);">Se abrirá el conversor en esta misma ventana</p>'
+        + '<p style="font-size:.7rem;color:var(--muted);">Se abrirá en nueva pestaña — tus resultados quedan aquí</p>'
         + '</div>';
     }
   } catch(e) {
