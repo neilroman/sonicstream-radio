@@ -271,7 +271,6 @@ async function startDownload(encTitle, encArtist) {
     setStep(1, 'done', '✅ Video encontrado');
     setStep(2, 'active', '🔄 Generando enlace MP3...');
 
-    var ytUrl = 'https://www.youtube.com/watch?v=' + data.videoId;
     var title = data.title || '';
 
     setStep(2, 'done', '✅ Video encontrado');
@@ -280,24 +279,20 @@ async function startDownload(encTitle, encArtist) {
     var iframeWrap = document.getElementById('modal-iframe-wrap');
     iframeWrap.style.display = 'block';
 
-    // Show apiyt iframe inside the page
-    iframeWrap.innerHTML = 
-      '<div style="padding:12px;background:rgba(0,229,255,.05);border-bottom:1px solid var(--border);text-align:center;">'
+    // Use Vevioz API - designed for iframe embedding, no cookie issues
+    iframeWrap.innerHTML =
+      '<div style="padding:10px 16px;background:rgba(0,229,255,.05);border-bottom:1px solid rgba(255,255,255,.06);text-align:center;">'
       + '<p style="font-size:.78rem;color:var(--muted);">🎵 ' + title + '</p>'
       + '</div>'
-      + '<iframe src="https://apiyt.com/iframe/?vid=' + data.videoId + '&color=00e5ff" '
-      + 'style="width:100%;height:160px;border:none;background:#111827;" '
-      + 'title="Descarga MP3" allowfullscreen></iframe>'
+      + '<iframe src="https://api.vevioz.com/api/button/mp3/' + data.videoId + '" '
+      + 'width="100%" height="120" allowtransparency="true" scrolling="no" '
+      + 'style="border:none;background:#111827;display:block;" '
+      + 'title="Descargar MP3"></iframe>'
       + '<div style="padding:10px;text-align:center;">'
-      + '<p style="font-size:.7rem;color:var(--muted);line-height:1.5;">'
-      + '💡 Si el botón no aparece, desactiva uBlock Origin para esta página<br>'
-      + 'o prueba en Chrome/Edge sin extensiones.'
-      + '</p>'
+      + '<p style="font-size:.7rem;color:var(--muted);line-height:1.5;">💡 Haz clic en el botón MP3 para descargar</p>'
       + '</div>';
 
-    document.getElementById('modal-iframe').onload = function() {
-      setStep(3, 'done', '✅ Haz clic en el botón para descargar MP3');
-    };
+    setStep(3, 'done', '✅ Haz clic en MP3 para descargar');
   } catch(e) {
     setStep(1, 'error', '❌ ' + e.message);
   }
