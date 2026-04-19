@@ -306,7 +306,11 @@ function setStep(num, state, text) {
 
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
-  document.getElementById('modal-iframe').src = '';
+  var iframe = document.getElementById('modal-iframe');
+  if (iframe) iframe.src = '';
+  // Clear dynamic iframe content too
+  var wrap = document.getElementById('modal-iframe-wrap');
+  if (wrap) { wrap.innerHTML = ''; wrap.style.display = 'none'; }
 }
 
 document.getElementById('modal').addEventListener('click', function(e) {
