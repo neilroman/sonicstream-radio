@@ -1,0 +1,37 @@
+{
+  "name": "SonicStream Radio",
+  "short_name": "SonicStream",
+  "description": "Miles de radios online y descarga de música gratis",
+  "start_url": "/sonicstream-radio/",
+  "scope": "/sonicstream-radio/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080c14",
+  "theme_color": "#00e5ff",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": [
+    "music",
+    "entertainment"
+  ],
+  "lang": "es",
+  "shortcuts": [
+    {
+      "name": "Radio",
+      "url": "/sonicstream-radio/",
+      "description": "Escuchar radio online"
+    },
+    {
+      "name": "Descargar Música",
+      "url": "/sonicstream-radio/music.html",
+      "description": "Descargar canciones MP3"
+    }
+  ]
+}

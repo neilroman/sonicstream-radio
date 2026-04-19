@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="#080c14"/>
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e5ff"/>
+      <stop offset="100%" style="stop-color:#7c4dff"/>
+    </linearGradient>
+  </defs>
+  <!-- Radio icon circle -->
+  <circle cx="256" cy="256" r="160" fill="none" stroke="url(#g)" stroke-width="20"/>
+  <circle cx="256" cy="256" r="80" fill="url(#g)"/>
+  <circle cx="256" cy="256" r="30" fill="#080c14"/>
+  <!-- Sound waves left -->
+  <path d="M160 200 Q120 256 160 312" fill="none" stroke="url(#g)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M120 170 Q60 256 120 342" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round" opacity="0.6"/>
+  <!-- Sound waves right -->
+  <path d="M352 200 Q392 256 352 312" fill="none" stroke="url(#g)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M392 170 Q452 256 392 342" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round" opacity="0.6"/>
+</svg>
