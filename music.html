@@ -271,14 +271,22 @@ async function startDownload(encTitle, encArtist) {
     setStep(1, 'done', '✅ Video encontrado');
     setStep(2, 'active', '🔄 Generando enlace MP3...');
 
-    var iframe = document.getElementById('modal-iframe');
-    iframe.src = 'https://apiyt.com/iframe/?vid=' + data.videoId + '&color=00e5ff&utm_source=sonicstream';
-    document.getElementById('modal-iframe-wrap').style.display = 'block';
+    // Build direct download URL using loader.to
+    var ytUrl = 'https://www.youtube.com/watch?v=' + data.videoId;
+    var loaderUrl = 'https://loader.to/api/button/?url=' + encodeURIComponent(ytUrl) + '&f=mp3';
 
-    iframe.onload = function() {
-      setStep(2, 'done', '✅ Enlace MP3 listo');
-      setStep(3, 'active', '⬇️ Haz clic para descargar el MP3');
-    };
+    setStep(2, 'done', '✅ Enlace MP3 listo');
+    setStep(3, 'done', '⬇️ Descarga lista');
+
+    // Show direct download button
+    var iframeWrap = document.getElementById('modal-iframe-wrap');
+    iframeWrap.style.display = 'block';
+    iframeWrap.innerHTML = '<div style="padding:20px;text-align:center;">'
+      + '<p style="color:var(--muted);font-size:.85rem;margin-bottom:16px">🎵 ' + data.title + '</p>'
+      + '<a href="https://loader.to/api/button/?url=' + encodeURIComponent(ytUrl) + '&f=mp3" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:700;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:.95rem;margin-bottom:10px">⬇️ Descargar MP3</a>'
+      + '<br><a href="https://www.y2mate.com/youtube-mp3/' + data.videoId + '" target="_blank" style="display:inline-block;margin-top:8px;color:var(--accent);font-size:.8rem;">🎵 Alternativa: Y2Mate</a>'
+      + '<br><a href="https://yt1s.com/youtube-to-mp3?q=' + encodeURIComponent(ytUrl) + '" target="_blank" style="display:inline-block;margin-top:6px;color:var(--accent);font-size:.8rem;">🎵 Alternativa: YT1S</a>'
+      + '</div>';
   } catch(e) {
     setStep(1, 'error', '❌ ' + e.message);
   }
