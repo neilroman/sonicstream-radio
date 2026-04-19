@@ -315,26 +315,19 @@ async function startDownload(encTitle, encArtist) {
       setStep(2, 'done', '✅ Video encontrado');
       setStep(3, 'done', '⬇️ Listo para descargar');
 
-      // Open apiyt.com in a small popup window - works without CORS/cookie issues
-      var apiytUrl = 'https://apiyt.com/iframe/?vid=' + videoId + '&color=2DB94D&utm_source=api';
-      var popup = window.open(apiytUrl, 'descarga_mp3',
-        'width=400,height=200,top=' + (window.screen.height/2 - 100) +
-        ',left=' + (window.screen.width/2 - 200) +
-        ',toolbar=no,menubar=no,scrollbars=no,resizable=no');
+      // Build URL to our dedicated download page
+      var downloadPageUrl = 'download.html?vid=' + videoId
+        + '&title=' + encodeURIComponent(title)
+        + '&artist=' + encodeURIComponent(artist || '');
 
       iframeWrap.innerHTML =
-        '<div style="padding:16px;text-align:center;">'
-        + '<p style="font-size:.82rem;color:var(--muted);margin-bottom:8px;">🎵 ' + title + '</p>'
-        + '<p style="font-size:.78rem;color:#4ade80;margin-bottom:16px;">✅ Se abrió el conversor MP3</p>'
-        + '<p style="font-size:.72rem;color:var(--muted);margin-bottom:14px;">Si el popup fue bloqueado, haz clic aquí:</p>'
-        + '<button onclick="window.open('https://apiyt.com/iframe/?vid=' + videoId + '&color=2DB94D&utm_source=api','descarga_mp3','width=400,height=200')" '
-        + 'style="background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:700;'
-        + 'padding:14px 24px;border-radius:12px;border:none;font-size:.9rem;cursor:pointer;width:100%;margin-bottom:8px;">'
-        + '⬇️ Abrir descarga MP3</button>'
-        + '<a href="https://cobalt.tools/?url=' + encodeURIComponent(ytUrl) + '" target="_blank" '
-        + 'style="display:block;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);'
-        + 'color:#00e5ff;font-weight:600;padding:11px 20px;border-radius:12px;text-decoration:none;font-size:.82rem;margin-top:6px;">'
-        + '🎵 Alternativa: Cobalt.tools</a>'
+        '<div style="padding:20px;text-align:center;">'
+        + '<p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;">🎵 ' + title + '</p>'
+        + '<a href="' + downloadPageUrl + '" '
+        + 'style="display:block;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;'
+        + 'font-weight:700;padding:16px 24px;border-radius:12px;text-decoration:none;'
+        + 'font-size:1rem;margin-bottom:10px;">⬇️ Descargar MP3</a>'
+        + '<p style="font-size:.7rem;color:var(--muted);">Se abrirá el conversor en esta misma ventana</p>'
         + '</div>';
     }
   } catch(e) {
