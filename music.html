@@ -271,63 +271,42 @@ async function startDownload(encTitle, encArtist) {
     setStep(1, 'done', '✅ Video encontrado');
     setStep(2, 'active', '🔄 Generando enlace MP3...');
 
-    var title = data.title || '';
+    var title  = data.title || '';
     var videoId = data.videoId;
+    var ytUrl   = 'https://www.youtube.com/watch?v=' + videoId;
 
-    setStep(2, 'active', '🔄 Generando enlace de descarga...');
-    setStep(3, '', '⬇️ Listo para descargar');
+    setStep(2, 'done', '✅ Video encontrado');
+    setStep(3, 'active', '⬇️ Cargando conversor...');
 
     var iframeWrap = document.getElementById('modal-iframe-wrap');
     iframeWrap.style.display = 'block';
 
-    // Call Vevioz JSON API directly via Vercel proxy to avoid CORS
-    try {
-      var veviozUrl = 'https://api.vevioz.com/@api/json/mp3/' + videoId;
-      var proxyUrl = VERCEL_API.replace('/api/search', '/api/proxy') + '?url=' + encodeURIComponent(veviozUrl);
-      
-      // Try direct fetch first (may work without CORS issues)
-      var mp3Res = await fetch(veviozUrl);
-      var mp3Data = await mp3Res.json();
-      
-      if (mp3Data && mp3Data.links && mp3Data.links.mp3) {
-        var links = mp3Data.links.mp3;
-        setStep(2, 'done', '✅ Enlace MP3 generado');
-        setStep(3, 'done', '⬇️ Elige la calidad y descarga');
-        
-        iframeWrap.innerHTML = 
-          '<div style="padding:16px;text-align:center;">'
-          + '<p style="font-size:.82rem;color:var(--muted);margin-bottom:14px;">🎵 ' + title + '</p>'
-          + '<div style="display:flex;flex-direction:column;gap:8px;">'
-          + Object.entries(links).map(function(entry) {
-              var quality = entry[0];
-              var url = entry[1].url || entry[1];
-              return '<a href="' + url + '" download target="_blank" '
-                + 'style="display:block;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;'
-                + 'font-weight:700;padding:12px 20px;border-radius:12px;text-decoration:none;font-size:.88rem;">'
-                + '⬇️ Descargar MP3 ' + quality + '</a>';
-            }).join('')
-          + '</div></div>';
-      } else {
-        throw new Error('No links found');
-      }
-    } catch(e) {
-      // Fallback: show manual download options
-      setStep(2, 'done', '✅ Video encontrado');
-      setStep(3, 'done', '⬇️ Elige cómo descargar');
-      
-      var ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
-      iframeWrap.innerHTML =
-        '<div style="padding:16px;text-align:center;">'
-        + '<p style="font-size:.82rem;color:var(--muted);margin-bottom:14px;">🎵 ' + title + '</p>'
-        + '<div style="display:flex;flex-direction:column;gap:8px;">'
-        + '<a href="https://cobalt.tools/?url=' + encodeURIComponent(ytUrl) + '" target="_blank" '
-        + 'style="display:block;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:700;padding:13px 20px;border-radius:12px;text-decoration:none;font-size:.9rem;">⬇️ Cobalt.tools — MP3 directo</a>'
-        + '<a href="https://yt1s.com/en/youtube-to-mp3?q=' + encodeURIComponent(ytUrl) + '" target="_blank" '
-        + 'style="display:block;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);color:#00e5ff;font-weight:600;padding:11px 20px;border-radius:12px;text-decoration:none;font-size:.85rem;">🎵 YT1S</a>'
-        + '<a href="https://www.y2mate.com/youtube-mp3/' + videoId + '" target="_blank" '
-        + 'style="display:block;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);color:#00e5ff;font-weight:600;padding:11px 20px;border-radius:12px;text-decoration:none;font-size:.85rem;">🎵 Y2Mate</a>'
-        + '</div></div>';
-    }
+    // Vevioz Single API - uses full YouTube URL, generates download button inside iframe
+    var veviozSrc = 'https://api.vevioz.com/api/single/mp3?url=' + encodeURIComponent(ytUrl);
+
+    iframeWrap.innerHTML =
+      '<div style="padding:10px 16px;background:rgba(0,229,255,.05);border-bottom:1px solid rgba(255,255,255,.06);text-align:center;">'
+      + '<p style="font-size:.78rem;color:var(--muted);">🎵 ' + title + '</p>'
+      + '</div>'
+      + '<iframe id="vevioz-frame" src="' + veviozSrc + '" '
+      + 'width="100%" height="180" allowtransparency="true" scrolling="no" '
+      + 'style="border:none;background:#111827;display:block;" '
+      + 'title="Descargar MP3"></iframe>'
+      + '<div style="padding:10px 16px;border-top:1px solid rgba(255,255,255,.06);text-align:center;">'
+      + '<p style="font-size:.7rem;color:var(--muted);">Si no carga, usa estas alternativas:</p>'
+      + '<div style="display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;">'
+      + '<a href="https://cobalt.tools/?url=' + encodeURIComponent(ytUrl) + '" target="_blank" '
+      + 'style="font-size:.75rem;color:var(--accent);text-decoration:none;padding:6px 12px;border:1px solid rgba(0,229,255,.3);border-radius:8px;">Cobalt</a>'
+      + '<a href="https://www.y2mate.com/youtube-mp3/' + videoId + '" target="_blank" '
+      + 'style="font-size:.75rem;color:var(--accent);text-decoration:none;padding:6px 12px;border:1px solid rgba(0,229,255,.3);border-radius:8px;">Y2Mate</a>'
+      + '<a href="https://yt1s.com/en/youtube-to-mp3?q=' + encodeURIComponent(ytUrl) + '" target="_blank" '
+      + 'style="font-size:.75rem;color:var(--accent);text-decoration:none;padding:6px 12px;border:1px solid rgba(0,229,255,.3);border-radius:8px;">YT1S</a>'
+      + '</div>'
+      + '</div>';
+
+    document.getElementById('vevioz-frame').onload = function() {
+      setStep(3, 'done', '✅ Haz clic en el botón MP3 para descargar');
+    };
   } catch(e) {
     setStep(1, 'error', '❌ ' + e.message);
   }
