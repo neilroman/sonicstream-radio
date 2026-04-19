@@ -172,7 +172,13 @@ async function searchMusic() {
       c.innerHTML = '<div class="empty"><div class="icon">📭</div><p>No se encontraron canciones para "<strong>' + q + '</strong>"</p></div>';
       return;
     }
-    c.innerHTML = '<div class="results-grid">' + tracks.map(renderTrack).join('') + '</div>';
+    var rendered = '<div class="results-grid">' + tracks.map(renderTrack).join('') + '</div>';
+    c.innerHTML = rendered;
+    // Save results and query to restore when user comes back
+    try {
+      sessionStorage.setItem('ss_results', rendered);
+      sessionStorage.setItem('ss_query', q);
+    } catch(e) {}
   } catch(e) {
     c.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Error buscando. Intenta de nuevo.</p></div>';
   }
@@ -352,6 +358,18 @@ function closeModal() {
 
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
+});
+
+// Restore previous search results when coming back from download page
+window.addEventListener('load', function() {
+  try {
+    var saved = sessionStorage.getItem('ss_results');
+    var savedQ = sessionStorage.getItem('ss_query');
+    if (saved) {
+      document.getElementById('results-container').innerHTML = saved;
+      if (savedQ) document.getElementById('music-search').value = savedQ;
+    }
+  } catch(e) {}
 });
 </script>
 </body>
