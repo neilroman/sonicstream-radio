@@ -761,6 +761,94 @@
 .loc-reset{background:none;border:1px solid var(--border);color:var(--muted);padding:10px 14px;border-radius:10px;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
 .loc-reset:hover{border-color:rgba(0,229,255,.3);color:var(--accent);}
 
+
+/* ── FAVORITES ──────────────────────────────────────── */
+.btn-fav {
+  position:absolute; top:10px; right:10px;
+  background:none; border:none; font-size:1.2rem;
+  cursor:pointer; opacity:.5; transition:all .2s;
+  z-index:2;
+}
+.btn-fav:hover { opacity:1; transform:scale(1.2); }
+.btn-fav.active { opacity:1; }
+.station-card { position:relative; }
+
+/* ── SLEEP TIMER ────────────────────────────────────── */
+.sleep-btn {
+  background:none; border:none; color:var(--muted);
+  cursor:pointer; font-size:1rem; padding:8px;
+  border-radius:8px; transition:all .2s;
+  display:flex; align-items:center; gap:4px;
+  font-family:'DM Sans',sans-serif; font-size:.78rem;
+}
+.sleep-btn:hover { color:var(--text); background:var(--border); }
+.sleep-btn.active { color:var(--accent); }
+
+.sleep-menu {
+  position:fixed; bottom:80px; right:16px;
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:14px; padding:12px;
+  z-index:300; display:none; flex-direction:column; gap:6px;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+  min-width:160px;
+}
+.sleep-menu.open { display:flex; }
+.sleep-menu button {
+  background:none; border:1px solid var(--border);
+  color:var(--text); padding:8px 14px; border-radius:8px;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+  font-size:.82rem; transition:all .2s; text-align:left;
+}
+.sleep-menu button:hover { background:rgba(0,229,255,.08); border-color:rgba(0,229,255,.3); color:var(--accent); }
+.sleep-timer-badge {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+  background:rgba(0,229,255,.1); border:1px solid rgba(0,229,255,.3);
+  border-radius:100px; padding:6px 16px;
+  font-size:.75rem; color:var(--accent); font-weight:600;
+  z-index:300; display:none; align-items:center; gap:6px;
+}
+.sleep-timer-badge.visible { display:flex; }
+
+/* ── EQUALIZER VISUAL ───────────────────────────────── */
+.eq-visual {
+  display:flex; align-items:flex-end; gap:2px; height:24px;
+}
+.eq-visual span {
+  display:block; width:3px; background:var(--accent);
+  border-radius:2px; transition:height .1s;
+}
+
+/* ── WHATSAPP SHARE ─────────────────────────────────── */
+.btn-share {
+  background:none; border:none; color:var(--muted);
+  cursor:pointer; font-size:1rem; padding:8px;
+  border-radius:8px; transition:all .2s;
+}
+.btn-share:hover { color:#25D366; background:rgba(37,211,102,.1); }
+
+/* ── FAVORITES PAGE ─────────────────────────────────── */
+.favs-page { max-width:1200px; margin:0 auto; padding:3rem 2rem 6rem; position:relative; z-index:1; }
+.favs-page h2 { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; margin-bottom:2rem; }
+.favs-empty { text-align:center; padding:4rem 2rem; color:var(--muted); }
+.favs-empty .icon { font-size:3rem; margin-bottom:1rem; }
+
+/* ── MOOD SECTION ───────────────────────────────────── */
+.mood-bar {
+  display:flex; gap:8px; justify-content:center;
+  flex-wrap:wrap; margin-bottom:2rem; padding:0 2rem;
+  position:relative; z-index:1;
+}
+.mood-btn {
+  background:var(--card); border:1px solid var(--border);
+  color:var(--muted); padding:8px 16px; border-radius:100px;
+  font-size:.82rem; font-weight:500; cursor:pointer;
+  transition:all .2s; font-family:'DM Sans',sans-serif;
+  display:flex; align-items:center; gap:6px;
+}
+.mood-btn:hover, .mood-btn.active {
+  background:rgba(124,77,255,.1); border-color:rgba(124,77,255,.3); color:#a78bfa;
+}
+
 </style>
 </head>
 <body>
@@ -770,6 +858,7 @@
     <a class="logo" href="#"><div class="logo-icon">📻</div>Sonic<span>Stream</span></a>
     <nav>
       <button class="active" onclick="showPage('home',this)">📻 Radio</button>
+      <button onclick="showPage('favs',this)">⭐ Favoritos</button>
       <button onclick="showPage('news',this)">📰 Novedades</button>
       <button onclick="window.location.href='music.html'">🎵 Música</button>
       <button onclick="showPage('download',this)">📱 App</button>
@@ -790,6 +879,17 @@
       <button onclick="doSearch()">Buscar</button>
     </div>
   </div>
+
+  <!-- MOOD BAR -->
+  <div class="mood-bar">
+    <button class="mood-btn" onclick="filterMood('happy')">😄 Feliz</button>
+    <button class="mood-btn" onclick="filterMood('relax')">😌 Relajado</button>
+    <button class="mood-btn" onclick="filterMood('energy')">⚡ Energético</button>
+    <button class="mood-btn" onclick="filterMood('romantic')">💕 Romántico</button>
+    <button class="mood-btn" onclick="filterMood('focus')">🎯 Concentración</button>
+    <button class="mood-btn" onclick="filterMood('party')">🎉 Fiesta</button>
+  </div>
+
   <div class="genres">
     <button class="genre-btn active" onclick="filterGenre('',this)">🎵 Todos</button>
     <button class="genre-btn" onclick="filterGenre('pop',this)">🎤 Pop</button>
@@ -830,6 +930,15 @@
     <div id="stations-grid" class="stations-grid">
       <div class="loading"><div class="spinner"></div>Cargando estaciones...</div>
     </div>
+  </div>
+</div>
+
+
+<!-- FAVORITOS -->
+<div id="page-favs" class="page">
+  <div class="favs-page">
+    <h2>⭐ <span class="gradient">Favoritos</span></h2>
+    <div id="favs-grid" class="stations-grid"></div>
   </div>
 </div>
 
@@ -891,6 +1000,8 @@
     <div class="player-controls">
       <button class="ctrl-btn" onclick="stopAudio()">⏹</button>
       <button class="ctrl-play" id="ctrl-play" onclick="togglePlay()">▶</button>
+      <button class="sleep-btn" id="sleep-btn" onclick="toggleSleepMenu()" title="Sleep timer">😴</button>
+      <button class="btn-share" onclick="shareStation()" title="Compartir por WhatsApp">📲</button>
       <div class="volume-wrap">🔊
         <input type="range" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)" id="vol-slider">
       </div>
@@ -899,6 +1010,20 @@
 </div>
 
 <audio id="audio-player" preload="none"></audio>
+
+<!-- SLEEP MENU -->
+<div class="sleep-menu" id="sleep-menu">
+  <button onclick="setSleepTimer(15)">⏱ 15 minutos</button>
+  <button onclick="setSleepTimer(30)">⏱ 30 minutos</button>
+  <button onclick="setSleepTimer(60)">⏱ 60 minutos</button>
+  <button onclick="setSleepTimer(90)">⏱ 90 minutos</button>
+  <button onclick="cancelSleep()" style="color:#ff3d7f;border-color:rgba(255,61,127,.3)">✕ Cancelar</button>
+</div>
+
+<!-- SLEEP BADGE -->
+<div class="sleep-timer-badge" id="sleep-badge">
+  😴 Apagando en <span id="sleep-countdown"></span>
+</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────
@@ -1463,6 +1588,152 @@ async function loadByLocation(continent, country, state) {
   } catch(e) {
     grid.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error cargando estaciones.</p></div>';
   }
+}
+
+
+// ── FAVORITES ────────────────────────────────────────────
+function getFavs() {
+  try { return JSON.parse(localStorage.getItem('ss_favs') || '[]'); } catch(e) { return []; }
+}
+function saveFavs(favs) {
+  try { localStorage.setItem('ss_favs', JSON.stringify(favs)); } catch(e) {}
+}
+function isFav(uuid) {
+  return getFavs().some(function(s) { return s.stationuuid === uuid; });
+}
+function toggleFav(station, btn) {
+  var favs = getFavs();
+  var idx  = favs.findIndex(function(s) { return s.stationuuid === station.stationuuid; });
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    btn.textContent = '🤍';
+    btn.classList.remove('active');
+  } else {
+    favs.unshift(station);
+    btn.textContent = '❤️';
+    btn.classList.add('active');
+  }
+  saveFavs(favs);
+}
+function loadFavs() {
+  var grid = document.getElementById('favs-grid');
+  var favs = getFavs();
+  if (!favs.length) {
+    grid.innerHTML = '<div class="favs-empty"><div class="icon">🤍</div><p>Aún no tienes favoritos.<br>Toca ❤️ en cualquier emisora para guardarla.</p></div>';
+    return;
+  }
+  grid.innerHTML = favs.map(renderCard).join('');
+}
+
+// Override renderCard to include fav button
+var _origRenderCard = renderCard;
+function renderCard(station) {
+  var card = _origRenderCard(station);
+  var favIcon = isFav(station.stationuuid) ? '❤️' : '🤍';
+  var favActive = isFav(station.stationuuid) ? ' active' : '';
+  var stationData = JSON.stringify(station).replace(/"/g, '&quot;');
+  var favBtn = '<button class="btn-fav' + favActive + '" '
+    + 'onclick="event.stopPropagation();toggleFav(JSON.parse(this.dataset.s),this)" '
+    + 'data-s="' + stationData + '">'
+    + favIcon + '</button>';
+  return card.replace('<div class="station-card', favBtn + '<div class="station-card');
+}
+
+// ── MOOD FILTERS ─────────────────────────────────────────
+var MOODS = {
+  happy:    ['pop','happy','hits','top40','chart'],
+  relax:    ['chill','ambient','lounge','relaxation','sleep'],
+  energy:   ['electronic','dance','edm','house','techno','workout'],
+  romantic: ['romantic','love','bachata','bolero','soul'],
+  focus:    ['classical','jazz','instrumental','study','piano'],
+  party:    ['reggaeton','salsa','tropical','latin','merengue']
+};
+
+function filterMood(mood) {
+  document.querySelectorAll('.mood-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.querySelectorAll('.genre-btn').forEach(function(b) { b.classList.remove('active'); });
+  var tags = MOODS[mood] || [mood];
+  var grid = document.getElementById('stations-grid');
+  grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
+  Promise.all(tags.slice(0,3).map(function(t) {
+    return apiFetch('/stations/search?tag=' + encodeURIComponent(t) + '&limit=16&order=votes&reverse=true&hidebroken=true');
+  })).then(function(results) {
+    var stations = mergeDedup(results).slice(0,24);
+    if (!stations.length) {
+      grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No se encontraron estaciones</p></div>';
+      return;
+    }
+    grid.innerHTML = stations.map(renderCard).join('');
+    document.querySelector('.section-title').textContent = '🎭 Estado de ánimo: ' + mood;
+  });
+}
+
+// ── SLEEP TIMER ──────────────────────────────────────────
+var sleepTimer    = null;
+var sleepInterval = null;
+var sleepEnd      = null;
+
+function toggleSleepMenu() {
+  document.getElementById('sleep-menu').classList.toggle('open');
+}
+
+function setSleepTimer(minutes) {
+  cancelSleep();
+  document.getElementById('sleep-menu').classList.remove('open');
+  sleepEnd = Date.now() + minutes * 60000;
+  document.getElementById('sleep-btn').classList.add('active');
+  document.getElementById('sleep-badge').classList.add('visible');
+  updateSleepCountdown();
+  sleepInterval = setInterval(updateSleepCountdown, 1000);
+  sleepTimer = setTimeout(function() {
+    stopAudio();
+    cancelSleep();
+    document.getElementById('sleep-badge').classList.remove('visible');
+  }, minutes * 60000);
+}
+
+function updateSleepCountdown() {
+  if (!sleepEnd) return;
+  var remaining = Math.max(0, Math.ceil((sleepEnd - Date.now()) / 1000));
+  var m = Math.floor(remaining / 60);
+  var s = remaining % 60;
+  document.getElementById('sleep-countdown').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function cancelSleep() {
+  if (sleepTimer)    { clearTimeout(sleepTimer);    sleepTimer = null; }
+  if (sleepInterval) { clearInterval(sleepInterval); sleepInterval = null; }
+  sleepEnd = null;
+  var btn = document.getElementById('sleep-btn');
+  if (btn) btn.classList.remove('active');
+  var badge = document.getElementById('sleep-badge');
+  if (badge) badge.classList.remove('visible');
+}
+
+// Close sleep menu when clicking outside
+document.addEventListener('click', function(e) {
+  var menu = document.getElementById('sleep-menu');
+  var btn  = document.getElementById('sleep-btn');
+  if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+
+// ── WHATSAPP SHARE ───────────────────────────────────────
+function shareStation() {
+  if (!currentStation) return;
+  var text = '🎵 Estoy escuchando ' + currentStation.name + ' en SonicStream!\n'
+    + '📻 Escúchalo aquí: https://softsonicstream.blogspot.com';
+  var url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
+
+// ── OVERRIDE SHOWPAGE FOR FAVS ───────────────────────────
+var _origShowPage2 = showPage;
+function showPage(page, btn) {
+  _origShowPage2(page, btn);
+  if (page === 'favs') loadFavs();
 }
 
 </script>
