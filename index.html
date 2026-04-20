@@ -1059,13 +1059,14 @@ const GENRE_ALIASES = {
 
 // ─── PAGE NAV ────────────────────────────────────────
 function showPage(page, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  btn.classList.add('active');
-  if (page === 'radios' && document.getElementById('radios-grid').children.length <= 1) {
-    loadRadios('');
-  }
+  if (page === 'radios') page = 'home';
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
+  var el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (page === 'news') loadPosts();
+  if (page === 'favs') loadFavs();
 }
 
 // ─── API FETCH ───────────────────────────────────────
@@ -1147,9 +1148,10 @@ async function fetchStations(query = '', tag = '', limit = 24) {
 
 // ─── RENDER CARD ─────────────────────────────────────
 function renderCard(station) {
-  const tag = station.tags ? station.tags.split(',')[0].trim() : '';
+  const tag      = station.tags ? station.tags.split(',')[0].trim() : '';
   const isActive = currentStation && currentStation.stationuuid === station.stationuuid;
-  // Escape for inline onclick
+  const favIcon  = isFav(station.stationuuid) ? '❤️' : '🤍';
+  const favClass = isFav(station.stationuuid) ? ' active' : '';
   const data = JSON.stringify(station)
     .replace(/\\/g, '\\\\')
     .replace(/'/g, "\'")
@@ -1160,6 +1162,9 @@ function renderCard(station) {
          onclick="playStation(JSON.parse(this.dataset.station))"
          data-station="${data}"
          id="card-${station.stationuuid}">
+      <button class="btn-fav${favClass}"
+        onclick="event.stopPropagation();toggleFav(JSON.parse(this.closest('.station-card').dataset.station),this)"
+        title="Guardar en favoritos">${favIcon}</button>
       <div class="station-logo">
         ${station.favicon
           ? `<img src="${station.favicon}" onerror="this.parentElement.innerHTML='📻'" alt="">`
@@ -1625,19 +1630,7 @@ function loadFavs() {
   grid.innerHTML = favs.map(renderCard).join('');
 }
 
-// Override renderCard to include fav button
-var _origRenderCard = renderCard;
-function renderCard(station) {
-  var card = _origRenderCard(station);
-  var favIcon = isFav(station.stationuuid) ? '❤️' : '🤍';
-  var favActive = isFav(station.stationuuid) ? ' active' : '';
-  var stationData = JSON.stringify(station).replace(/"/g, '&quot;');
-  var favBtn = '<button class="btn-fav' + favActive + '" '
-    + 'onclick="event.stopPropagation();toggleFav(JSON.parse(this.dataset.s),this)" '
-    + 'data-s="' + stationData + '">'
-    + favIcon + '</button>';
-  return card.replace('<div class="station-card', favBtn + '<div class="station-card');
-}
+// renderCard with fav button is now integrated directly in the original function
 
 // ── MOOD FILTERS ─────────────────────────────────────────
 var MOODS = {
@@ -1729,12 +1722,7 @@ function shareStation() {
   window.open(url, '_blank');
 }
 
-// ── OVERRIDE SHOWPAGE FOR FAVS ───────────────────────────
-var _origShowPage2 = showPage;
-function showPage(page, btn) {
-  _origShowPage2(page, btn);
-  if (page === 'favs') loadFavs();
-}
+
 
 </script>
 </body>
