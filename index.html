@@ -1398,22 +1398,42 @@ async function playStation(station) {
   audio.volume = document.getElementById('vol-slider').value;
   setPlayerLoading(station);
 
-  // Build URL list — prefer HTTPS, fallback HTTP
+  // Build URL list — HTTPS direct → HTTP via CORS proxy → HTTP direct
+  const AUDIO_PROXIES = [
+    u => u,
+    u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+    u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u)
+  ];
   const raw = station.url_resolved || station.url || '';
   const alt = station.url || '';
-  const urls = [...new Set([raw, alt].filter(Boolean))];
-  console.log('[SonicStream] URLs:', urls);
+  const urls = [];
+  // Add HTTPS URLs first (no proxy needed)
+  [raw, alt].filter(Boolean).forEach(u => {
+    if (u.startsWith('https://')) urls.push(u);
+  });
+  // Add HTTP URLs via CORS proxy
+  [raw, alt].filter(Boolean).forEach(u => {
+    if (u.startsWith('http://')) {
+      AUDIO_PROXIES.slice(1).forEach(p => urls.push(p(u)));
+    }
+  });
+  // Add HTTP directly as last resort
+  [raw, alt].filter(Boolean).forEach(u => {
+    if (u.startsWith('http://')) urls.push(u);
+  });
+  const uniqueUrls = [...new Set(urls.filter(Boolean))];
+  console.log('[SonicStream] URLs:', uniqueUrls);
 
   let ok = false;
-  for (const url of urls) {
+  for (const url of uniqueUrls) {
     try {
-      console.log('[SonicStream] Trying:', url);
+      console.log('[SonicStream] Trying:', url.substring(0,60));
       await tryUrl(url);
       ok = true;
-      console.log('[SonicStream] ✅ Playing:', url);
+      console.log('[SonicStream] ✅ Playing:', url.substring(0,60));
       break;
     } catch(e) {
-      console.warn('[SonicStream] ❌ Failed:', url);
+      console.warn('[SonicStream] ❌ Failed:', url.substring(0,60));
     }
   }
 
