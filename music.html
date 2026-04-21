@@ -100,7 +100,18 @@ header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.85);backdrop-f
     <input type="text" id="music-search" placeholder="Busca una canción, artista o álbum..." onkeydown="if(event.key==='Enter')searchMusic()">
     <button onclick="searchMusic()">🔍 Buscar</button>
   </div>
-  <div id="results-container">
+  <!-- TOP CHARTS -->
+  <div id="charts-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <div style="font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;">🔥 Top Charts Deezer</div>
+      <button onclick="loadCharts()" style="background:none;border:none;color:var(--accent);font-size:.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;">Actualizar</button>
+    </div>
+    <div id="charts-grid" class="results-grid">
+      <div class="loading"><div class="spinner"></div>Cargando charts...</div>
+    </div>
+  </div>
+
+  <div id="results-container" style="display:none">
     <div class="empty"><div class="icon">🎵</div><p>Escribe el nombre de una canción para empezar</p></div>
   </div>
 </div>
@@ -164,6 +175,8 @@ function deezerSearch(q) {
 async function searchMusic() {
   var q = document.getElementById('music-search').value.trim();
   if (!q) return;
+  document.getElementById('charts-section').style.display = 'none';
+  document.getElementById('results-container').style.display = 'block';
   var c = document.getElementById('results-container');
   c.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando canciones...</div>';
   try {
@@ -280,6 +293,8 @@ async function startDownload(encTitle, encArtist) {
     var title   = data.title || '';
     var videoId  = data.videoId;
     var ytUrl    = 'https://www.youtube.com/watch?v=' + videoId;
+    var artist   = decodeURIComponent(encArtist);
+    var artwork  = '';
     var downloadApi = VERCEL_API.replace('/api/search', '/api/download') + '?id=' + videoId;
 
     setStep(2, 'active', '🔄 Generando enlace MP3...');
@@ -324,7 +339,8 @@ async function startDownload(encTitle, encArtist) {
       // Build URL to our dedicated download page
       var downloadPageUrl = 'download.html?vid=' + videoId
         + '&title=' + encodeURIComponent(title)
-        + '&artist=' + encodeURIComponent(artist || '');
+        + '&artist=' + encodeURIComponent(artist || '')
+        + '&art=' + encodeURIComponent(artwork || '');
 
       iframeWrap.innerHTML =
         '<div style="padding:20px;text-align:center;">'
@@ -371,6 +387,51 @@ window.addEventListener('load', function() {
     }
   } catch(e) {}
 });
+
+// ── TOP CHARTS DEEZER ─────────────────────────────────────
+function loadCharts() {
+  var grid = document.getElementById('charts-grid');
+  grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando charts...</div>';
+  var cb = '_chart' + Date.now();
+  var s = document.createElement('script');
+  window[cb] = function(data) {
+    try { document.head.removeChild(s); } catch(e) {}
+    delete window[cb];
+    var tracks = data.tracks ? data.tracks.data : (data.data || []);
+    if (!tracks || !tracks.length) {
+      grid.innerHTML = '<div class="empty"><div class="icon">📭</div><p>No se pudo cargar</p></div>';
+      return;
+    }
+    grid.innerHTML = tracks.slice(0,12).map(function(t, i) {
+      var artwork = t.album && t.album.cover_medium ? t.album.cover_medium : '';
+      var title   = (t.title || '').replace(/'/g, '&#39;');
+      var artist  = (t.artist ? t.artist.name : '').replace(/'/g, '&#39;');
+      var preview = t.preview || '';
+      var encT = encodeURIComponent(t.title || '');
+      var encA = encodeURIComponent(t.artist ? t.artist.name : '');
+      var encP = encodeURIComponent(preview);
+      return '<div class="track-card" style="position:relative">'
+        + '<div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:800;font-size:.75rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1;">' + (i+1) + '</div>'
+        + (artwork ? '<img class="track-artwork" src="' + artwork + '" alt="" loading="lazy" onerror="this.style.display='none'">' : '<div class="track-artwork-placeholder">🎵</div>')
+        + '<div class="track-info">'
+        + '<div class="track-title">' + title + '</div>'
+        + '<div class="track-artist">' + artist + '</div>'
+        + '<div class="track-actions">'
+        + (preview ? '<button class="btn-preview" onclick="playPreview('' + encP + '','' + encT + '',this)">▶ Preview</button>' : '<button class="btn-preview" disabled style="opacity:.4">Sin preview</button>')
+        + '<button class="btn-download" onclick="startDownload('' + encT + '','' + encA + '')">⬇️ MP3</button>'
+        + '</div></div></div>';
+    }).join('');
+  };
+  s.onerror = function() {
+    grid.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Error cargando charts</p></div>';
+  };
+  s.src = 'https://api.deezer.com/chart/0/tracks?limit=12&output=jsonp&callback=' + cb;
+  document.head.appendChild(s);
+}
+
+// Load charts on start
+window.addEventListener('load', function() { loadCharts(); });
+
 </script>
 </body>
 </html>
