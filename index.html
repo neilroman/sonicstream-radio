@@ -1859,10 +1859,12 @@ function renderHistory() {
   var scroll = document.getElementById('history-scroll');
   if (!h.length || !wrap || !scroll) return;
   wrap.style.display = 'block';
-  scroll.innerHTML = h.map(function(s) {
-    var enc = JSON.stringify(s).replace(/"/g, '&quot;');
-    var img = s.favicon ? '<img src="' + s.favicon + '" width="16" height="16" style="border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.remove()">' : '📻 ';
-    return '<div class="history-chip" onclick="playStation(JSON.parse(decodeURIComponent(atob('' + btoa(encodeURIComponent(JSON.stringify(s))) + ''))))">' + img + s.name + '</div>';
+  window._hmap = {};
+  scroll.innerHTML = h.map(function(s, i) {
+    window._hmap['k'+i] = s;
+    return '<div class="history-chip" onclick="playStation(window._hmap.k'+i+')">'
+      + (s.favicon ? '<img src="'+s.favicon+'" width="16" height="16" style="border-radius:3px;margin-right:4px;vertical-align:middle">' : '&#128251; ')
+      + s.name + '</div>';
   }).join('');
 }
 
