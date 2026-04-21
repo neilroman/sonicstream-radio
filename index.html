@@ -1423,6 +1423,7 @@ async function playStation(station) {
     document.getElementById('player-name').textContent = station.name;
     updateCard(station.stationuuid, true);
     fetchDeezerMeta(station);
+    addToHistory(station);
   } else {
     isPlaying = false;
     currentStation = null;
@@ -1948,12 +1949,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ── PATCH playStation TO ADD HISTORY ─────────────────────
-var _origPlayStation = playStation;
-async function playStation(station) {
-  await _origPlayStation(station);
-  if (station && station.stationuuid) addToHistory(station);
-}
+// History is added directly inside the original playStation function
 
 // ── INIT HISTORY ─────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
