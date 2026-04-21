@@ -919,6 +919,132 @@ body.light {
 .kbd-row { display:flex; align-items:center; gap:8px; }
 .kbd { background:var(--bg3); border:1px solid var(--border); border-radius:4px; padding:2px 6px; font-size:.7rem; color:var(--text); }
 
+
+/* ── LYRICS PANEL ───────────────────────────────────── */
+.lyrics-panel {
+  position:fixed; bottom:0; left:0; right:0;
+  background:rgba(8,12,20,.97);
+  backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  z-index:199;
+  transform:translateY(100%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+  max-height:60vh;
+  display:flex;
+  flex-direction:column;
+}
+.lyrics-panel.open {
+  transform:translateY(0);
+}
+.lyrics-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 20px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.lyrics-title {
+  font-family:'Syne',sans-serif;
+  font-weight:700;
+  font-size:.9rem;
+  color:var(--accent);
+}
+.lyrics-close {
+  background:none;border:none;
+  color:var(--muted);font-size:1.2rem;
+  cursor:pointer;transition:color .2s;
+}
+.lyrics-close:hover { color:var(--text); }
+.lyrics-body {
+  overflow-y:auto;
+  padding:20px;
+  flex:1;
+  scroll-behavior:smooth;
+}
+.lyrics-body::-webkit-scrollbar { width:4px; }
+.lyrics-body::-webkit-scrollbar-thumb { background:var(--border);border-radius:2px; }
+.lyrics-line {
+  font-size:1.1rem;
+  line-height:1.9;
+  color:var(--muted);
+  transition:all .5s;
+  padding:4px 0;
+  cursor:pointer;
+}
+.lyrics-line.active {
+  color:var(--text);
+  font-size:1.25rem;
+  font-weight:700;
+  font-family:'Syne',sans-serif;
+}
+.lyrics-line.passed {
+  color:rgba(255,255,255,.3);
+}
+.lyrics-loading {
+  text-align:center;
+  padding:2rem;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.lyrics-error {
+  text-align:center;
+  padding:2rem;
+  color:var(--muted);
+  font-size:.85rem;
+  line-height:1.6;
+}
+.lyrics-btn {
+  background:none;border:none;
+  color:var(--muted);cursor:pointer;
+  font-size:1rem;padding:8px;
+  border-radius:8px;transition:all .2s;
+}
+.lyrics-btn:hover { color:var(--accent);background:rgba(0,229,255,.08); }
+.lyrics-btn.active { color:var(--accent); }
+/* Push player bar up when lyrics open */
+.player-bar.lyrics-open {
+  bottom:60vh;
+}
+
+
+/* ── KARAOKE PAGE ───────────────────────────────────── */
+.kline {
+  font-size:1.3rem;
+  line-height:2;
+  color:rgba(255,255,255,.2);
+  transition:all .6s ease;
+  padding:4px 8px;
+  border-radius:8px;
+  cursor:pointer;
+  text-align:center;
+}
+.kline:hover { color:rgba(255,255,255,.4); }
+.kline.k-active {
+  color:#ffffff;
+  font-size:1.7rem;
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  background:rgba(0,229,255,.06);
+  border-left:3px solid var(--accent);
+  padding-left:16px;
+  text-shadow:0 0 20px rgba(0,229,255,.3);
+}
+.kline.k-passed {
+  color:rgba(255,255,255,.12);
+  font-size:1.1rem;
+}
+.kline.k-empty { height:20px; }
+
+#karaoke-lyrics {
+  scroll-behavior:smooth;
+  max-height:55vh;
+  overflow-y:auto;
+  padding:1rem 0;
+}
+#karaoke-lyrics::-webkit-scrollbar { width:4px; }
+#karaoke-lyrics::-webkit-scrollbar-thumb { background:var(--border);border-radius:2px; }
+
 </style>
 </head>
 <body>
@@ -1022,6 +1148,64 @@ body.light {
   </div>
 </div>
 
+
+<!-- KARAOKE PANEL (overlay) -->
+<div id="karaoke-overlay" style="display:none;position:fixed;inset:0;background:rgba(8,12,20,.97);z-index:300;flex-direction:column;overflow:hidden;">
+  <div style="max-width:700px;margin:0 auto;padding:1rem 1.5rem 8rem;position:relative;z-index:1;">
+
+    <!-- No station playing -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;"><span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);">🎤 Karaoke</span><button onclick="toggleKaraoke()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;">✕ Cerrar</button></div><div id="karaoke-idle" style="text-align:center;padding:4rem 2rem;">
+      <div style="font-size:4rem;margin-bottom:1rem;">🎤</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:1rem;">
+        <span class="gradient">Karaoke</span>
+      </h2>
+      <p style="color:var(--muted);line-height:1.7;margin-bottom:2rem;">
+        Reproduce cualquier radio y la letra<br>aparecerá aquí automáticamente.
+      </p>
+      <button onclick="showPage('home',document.querySelector('nav button'))"
+        style="background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000;font-weight:700;
+        padding:14px 28px;border-radius:12px;border:none;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;">
+        📻 Ir a Radio
+      </button>
+    </div>
+
+    <!-- Now playing info -->
+    <div id="karaoke-player" style="display:none;">
+      <div style="display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);
+        border-radius:16px;padding:16px;margin-bottom:2rem;">
+        <div id="karaoke-art" style="width:56px;height:56px;border-radius:10px;background:var(--bg3);
+          display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;">📻</div>
+        <div style="min-width:0;">
+          <div id="karaoke-station" style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+          <div id="karaoke-track" style="font-size:.78rem;color:var(--accent);margin-top:2px;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:2px;height:20px;flex-shrink:0;">
+          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate;"></span>
+          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate .15s;"></span>
+          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate .3s;"></span>
+          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate .45s;"></span>
+        </div>
+      </div>
+
+      <!-- Lyrics display -->
+      <div id="karaoke-lyrics-wrap">
+        <div id="karaoke-loading" style="text-align:center;padding:3rem;color:var(--muted);">
+          <div class="spinner" style="margin:0 auto 1rem;"></div>
+          Buscando letra...
+        </div>
+        <div id="karaoke-lyrics" style="display:none;"></div>
+        <div id="karaoke-error" style="display:none;text-align:center;padding:3rem;color:var(--muted);">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">😔</div>
+          <p id="karaoke-error-msg"></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- NOVEDADES -->
 <div id="page-news" class="page">
   <div class="news-page">
@@ -1083,6 +1267,8 @@ body.light {
       <button class="sleep-btn" id="sleep-btn" onclick="toggleSleepMenu()" title="Sleep timer">😴</button>
       <button class="btn-share" onclick="shareStation()" title="Compartir por WhatsApp">📲</button>
       <button class="ctrl-btn" onclick="copyStationLink()" title="Copiar enlace">🔗</button>
+      <button class="ctrl-btn" id="karaoke-btn" onclick="toggleKaraoke()" title="Karaoke">🎤</button>
+
       <button class="ctrl-btn" onclick="toggleKbdHint()" title="Atajos de teclado">⌨️</button>
       <div class="volume-wrap">🔊
         <input type="range" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)" id="vol-slider">
@@ -1092,6 +1278,8 @@ body.light {
 </div>
 
 <audio id="audio-player" preload="none"></audio>
+
+
 
 <!-- SLEEP MENU -->
 <div class="sleep-menu" id="sleep-menu">
@@ -1971,6 +2159,358 @@ document.addEventListener('click', function(e) {
 window.addEventListener('DOMContentLoaded', function() {
   renderHistory();
 });
+
+
+// ── LYRICS ───────────────────────────────────────────────
+var lyricsLines    = [];
+var lyricsInterval = null;
+var lyricsIndex    = 0;
+var lyricsOpen     = false;
+var lyricsArtist   = '';
+var lyricsSong     = '';
+
+function toggleLyrics() {
+  if (lyricsOpen) {
+    closeLyrics();
+  } else {
+    openLyrics();
+  }
+}
+
+function openLyrics() {
+  lyricsOpen = true;
+  document.getElementById('lyrics-panel').classList.add('open');
+  document.getElementById('lyrics-btn').classList.add('active');
+  document.querySelector('.player-bar').classList.add('lyrics-open');
+  // If we have a current track from Deezer, load lyrics
+  if (lyricsSong && lyricsArtist) {
+    fetchLyrics(lyricsArtist, lyricsSong);
+  } else if (currentStation) {
+    document.getElementById('lyrics-body').innerHTML =
+      '<div class="lyrics-loading">⏳ Esperando identificar la canción...</div>';
+  }
+}
+
+function closeLyrics() {
+  lyricsOpen = false;
+  document.getElementById('lyrics-panel').classList.remove('open');
+  document.getElementById('lyrics-btn').classList.remove('active');
+  document.querySelector('.player-bar').classList.remove('lyrics-open');
+  if (lyricsInterval) { clearInterval(lyricsInterval); lyricsInterval = null; }
+}
+
+async function fetchLyrics(artist, song) {
+  var body = document.getElementById('lyrics-body');
+  var nameEl = document.getElementById('lyrics-song-name');
+  body.innerHTML = '<div class="lyrics-loading"><div class="spinner"></div>Buscando letra...</div>';
+  nameEl.textContent = song + ' — ' + artist;
+
+  try {
+    // Try lyrics.ovh API
+    var res = await fetch('https://api.lyrics.ovh/v1/' + encodeURIComponent(artist) + '/' + encodeURIComponent(song));
+    var data = await res.json();
+
+    if (data.lyrics) {
+      displayLyrics(data.lyrics, song, artist);
+    } else {
+      throw new Error('No lyrics found');
+    }
+  } catch(e) {
+    // Try lrclib as backup
+    try {
+      var res2 = await fetch('https://lrclib.net/api/search?artist_name=' + encodeURIComponent(artist) + '&track_name=' + encodeURIComponent(song));
+      var data2 = await res2.json();
+      if (data2 && data2.length > 0 && data2[0].plainLyrics) {
+        displayLyrics(data2[0].plainLyrics, song, artist);
+      } else {
+        throw new Error('No lyrics');
+      }
+    } catch(e2) {
+      body.innerHTML = '<div class="lyrics-error">😔 No se encontró la letra de<br><strong>' + song + '</strong><br><br>Intenta con otra emisora</div>';
+    }
+  }
+}
+
+function displayLyrics(text, song, artist) {
+  var body = document.getElementById('lyrics-body');
+  
+  // Clean and split lyrics into lines
+  lyricsLines = text
+    .replace(/
+/g, '
+')
+    .split('
+')
+    .map(function(l) { return l.trim(); })
+    .filter(function(l, i, arr) {
+      // Remove consecutive empty lines
+      return !(l === '' && arr[i-1] === '');
+    });
+
+  lyricsIndex = 0;
+  renderLyricsLines();
+  startLyricsScroll();
+}
+
+function renderLyricsLines() {
+  var body = document.getElementById('lyrics-body');
+  body.innerHTML = lyricsLines.map(function(line, i) {
+    var cls = i === lyricsIndex ? 'lyrics-line active' : (i < lyricsIndex ? 'lyrics-line passed' : 'lyrics-line');
+    return '<div class="lyrics-line" id="ll-' + i + '" onclick="jumpToLine(' + i + ')">' + (line || '&nbsp;') + '</div>';
+  }).join('');
+  scrollToActive();
+}
+
+function scrollToActive() {
+  var active = document.getElementById('ll-' + lyricsIndex);
+  if (active) {
+    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function jumpToLine(i) {
+  lyricsIndex = i;
+  updateLyricsHighlight();
+}
+
+function updateLyricsHighlight() {
+  lyricsLines.forEach(function(_, i) {
+    var el = document.getElementById('ll-' + i);
+    if (!el) return;
+    if (i === lyricsIndex) {
+      el.className = 'lyrics-line active';
+    } else if (i < lyricsIndex) {
+      el.className = 'lyrics-line passed';
+    } else {
+      el.className = 'lyrics-line';
+    }
+  });
+  scrollToActive();
+}
+
+function startLyricsScroll() {
+  if (lyricsInterval) clearInterval(lyricsInterval);
+  // Advance one line every ~3 seconds on average
+  // Empty lines advance faster
+  function advance() {
+    if (!lyricsOpen || !isPlaying) return;
+    if (lyricsIndex < lyricsLines.length - 1) {
+      lyricsIndex++;
+      updateLyricsHighlight();
+      // Schedule next advance - empty lines faster, normal lines slower
+      var currentLine = lyricsLines[lyricsIndex] || '';
+      var delay = currentLine === '' ? 1000 : (currentLine.length > 40 ? 4000 : 3000);
+      lyricsInterval = setTimeout(advance, delay);
+    }
+  }
+  lyricsInterval = setTimeout(advance, 2000);
+}
+
+// Hook into Deezer track display to get song info for lyrics
+var _origShowDeezerTrack = showDeezerTrack;
+function showDeezerTrack(track) {
+  _origShowDeezerTrack(track);
+  // Save track info for lyrics
+  lyricsSong   = track.title || '';
+  lyricsArtist = track.artist ? track.artist.name : '';
+  // Auto-update lyrics if panel is open
+  if (lyricsOpen && lyricsSong && lyricsArtist) {
+    if (lyricsInterval) { clearInterval(lyricsInterval); lyricsInterval = null; }
+    fetchLyrics(lyricsArtist, lyricsSong);
+  }
+}
+
+// Stop lyrics when audio stops
+var _origStopAudio = stopAudio;
+function stopAudio() {
+  _origStopAudio();
+  if (lyricsInterval) { clearInterval(lyricsInterval); lyricsInterval = null; }
+  lyricsLines = []; lyricsIndex = 0;
+  lyricsSong = ''; lyricsArtist = '';
+}
+
+
+// ── KARAOKE PAGE ─────────────────────────────────────────
+var kLines    = [];
+var kIndex    = 0;
+var kTimer    = null;
+var kArtist   = '';
+var kSong     = '';
+var kArtwork  = '';
+
+function toggleKaraoke() {
+  var overlay = document.getElementById('karaoke-overlay');
+  var btn     = document.getElementById('karaoke-btn');
+  if (overlay.style.display === 'flex') {
+    overlay.style.display = 'none';
+    btn.style.color = '';
+    if (kTimer) { clearTimeout(kTimer); kTimer = null; }
+  } else {
+    overlay.style.display = 'flex';
+    btn.style.color = 'var(--accent)';
+    initKaraokePage();
+  }
+}
+
+function initKaraokePage() {
+  // Update now playing info
+  if (currentStation && isPlaying) {
+    document.getElementById('karaoke-idle').style.display   = 'none';
+    document.getElementById('karaoke-player').style.display = 'block';
+    document.getElementById('karaoke-station').textContent  = currentStation.name;
+
+    var art = document.getElementById('karaoke-art');
+    if (kArtwork) {
+      art.innerHTML = '<img src="' + kArtwork + '" style="width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.parentElement.innerHTML='📻'">';
+    }
+    if (kSong) {
+      document.getElementById('karaoke-track').textContent = kSong + (kArtist ? ' — ' + kArtist : '');
+      if (kLines.length > 0) {
+        renderKaraokeLines();
+      } else {
+        fetchKaraokeLyrics(kArtist, kSong);
+      }
+    } else {
+      document.getElementById('karaoke-loading').style.display = 'block';
+      document.getElementById('karaoke-lyrics').style.display  = 'none';
+      document.getElementById('karaoke-error').style.display   = 'none';
+    }
+  } else {
+    document.getElementById('karaoke-idle').style.display   = 'block';
+    document.getElementById('karaoke-player').style.display = 'none';
+  }
+}
+
+async function fetchKaraokeLyrics(artist, song) {
+  document.getElementById('karaoke-loading').style.display = 'block';
+  document.getElementById('karaoke-lyrics').style.display  = 'none';
+  document.getElementById('karaoke-error').style.display   = 'none';
+
+  try {
+    var res = await fetch('https://api.lyrics.ovh/v1/' + encodeURIComponent(artist) + '/' + encodeURIComponent(song));
+    var data = await res.json();
+    if (data.lyrics) {
+      parseAndShowKaraoke(data.lyrics);
+      return;
+    }
+    throw new Error('no lyrics');
+  } catch(e) {
+    try {
+      var res2 = await fetch('https://lrclib.net/api/search?artist_name=' + encodeURIComponent(artist) + '&track_name=' + encodeURIComponent(song));
+      var data2 = await res2.json();
+      if (data2 && data2.length > 0 && data2[0].plainLyrics) {
+        parseAndShowKaraoke(data2[0].plainLyrics);
+        return;
+      }
+      throw new Error('no lyrics');
+    } catch(e2) {
+      document.getElementById('karaoke-loading').style.display = 'none';
+      document.getElementById('karaoke-error').style.display   = 'block';
+      document.getElementById('karaoke-error-msg').innerHTML   =
+        'No se encontró la letra de<br><strong>' + song + '</strong><br><br>' +
+        '<span style="font-size:.78rem">Intenta con otra emisora o espera a que cambie la canción</span>';
+    }
+  }
+}
+
+function parseAndShowKaraoke(text) {
+  kLines = text
+    .replace(/
+/g, '
+')
+    .split('
+')
+    .map(function(l) { return l.trim(); });
+  // Remove consecutive empty lines
+  var cleaned = [];
+  kLines.forEach(function(l, i) {
+    if (l === '' && cleaned[cleaned.length-1] === '') return;
+    cleaned.push(l);
+  });
+  kLines = cleaned;
+  kIndex = 0;
+
+  document.getElementById('karaoke-loading').style.display = 'none';
+  document.getElementById('karaoke-lyrics').style.display  = 'block';
+  renderKaraokeLines();
+  startKaraokeScroll();
+}
+
+function renderKaraokeLines() {
+  var el = document.getElementById('karaoke-lyrics');
+  el.innerHTML = kLines.map(function(line, i) {
+    var cls = i === kIndex ? 'kline k-active' : (i < kIndex ? 'kline k-passed' : 'kline');
+    if (line === '') cls += ' k-empty';
+    return '<div class="' + cls + '" id="kl-' + i + '" onclick="kJump(' + i + ')">'
+      + (line || '') + '</div>';
+  }).join('');
+  kScrollToActive();
+}
+
+function kScrollToActive() {
+  var el = document.getElementById('kl-' + kIndex);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function kUpdateHighlight() {
+  kLines.forEach(function(_, i) {
+    var el = document.getElementById('kl-' + i);
+    if (!el) return;
+    var base = kLines[i] === '' ? ' k-empty' : '';
+    if (i === kIndex)      el.className = 'kline k-active' + base;
+    else if (i < kIndex)   el.className = 'kline k-passed' + base;
+    else                   el.className = 'kline' + base;
+  });
+  kScrollToActive();
+}
+
+function kJump(i) {
+  kIndex = i;
+  if (kTimer) { clearTimeout(kTimer); kTimer = null; }
+  kUpdateHighlight();
+  startKaraokeScroll();
+}
+
+function startKaraokeScroll() {
+  if (kTimer) { clearTimeout(kTimer); kTimer = null; }
+  function advance() {
+    if (!isPlaying) { kTimer = setTimeout(advance, 1000); return; }
+    if (kIndex < kLines.length - 1) {
+      kIndex++;
+      kUpdateHighlight();
+      var line = kLines[kIndex] || '';
+      var delay = line === '' ? 800 : (line.length > 50 ? 4500 : line.length > 25 ? 3500 : 2800);
+      kTimer = setTimeout(advance, delay);
+    }
+  }
+  var firstDelay = kLines[kIndex] === '' ? 800 : 2500;
+  kTimer = setTimeout(advance, firstDelay);
+}
+
+// Hook Deezer to update karaoke info
+var _origShowDeezerTrack2 = showDeezerTrack;
+function showDeezerTrack(track) {
+  _origShowDeezerTrack2(track);
+  var newSong   = track.title || '';
+  var newArtist = track.artist ? track.artist.name : '';
+  var newArt    = track.album && track.album.cover_medium ? track.album.cover_medium : '';
+
+  // If song changed, reset and reload
+  if (newSong !== kSong || newArtist !== kArtist) {
+    kSong    = newSong;
+    kArtist  = newArtist;
+    kArtwork = newArt;
+    kLines   = [];
+    kIndex   = 0;
+    if (kTimer) { clearTimeout(kTimer); kTimer = null; }
+
+    // Update karaoke page if visible
+    var kPage = document.getElementById('page-karaoke');
+    if (kPage && kPage.classList.contains('active')) {
+      initKaraokePage();
+    }
+  }
+}
 
 </script>
 </body>
