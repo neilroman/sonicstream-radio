@@ -1051,14 +1051,14 @@ body.light {
 
 <header>
   <div class="header-inner">
-    <a class="logo" href="#"><div class="logo-icon">&#128251;</div>Sonic<span>Stream</span></a>
-    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Cambiar tema">&#127769;</button>
+    <a class="logo" href="#"><div class="logo-icon">📻</div>Sonic<span>Stream</span></a>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Cambiar tema">🌙</button>
     <nav>
-      <button class="active" onclick="showPage('home',this)">&#128251; Radio</button>
+      <button class="active" onclick="showPage('home',this)">📻 Radio</button>
       <button onclick="showPage('favs',this)">⭐ Favoritos</button>
-      <button onclick="showPage('news',this)">&#128240; Novedades</button>
-      <button onclick="window.location.href='music.html'">&#127925; Música</button>
-      <button onclick="showPage('download',this)">&#128241; App</button>
+      <button onclick="showPage('news',this)">📰 Novedades</button>
+      <button onclick="window.location.href='music.html'">🎵 Música</button>
+      <button onclick="showPage('download',this)">📱 App</button>
     </nav>
   </div>
 </header>
@@ -1066,7 +1066,7 @@ body.light {
 <!-- RADIO -->
 <div id="page-home" class="page active">
   <div class="hero">
-    <div class="hero-badge">&#128308; EN VIVO — Miles de radios online</div>
+    <div class="hero-badge">🔴 EN VIVO — Miles de radios online</div>
     <h1>Escucha el mundo<br><span class="gradient">en un solo lugar</span></h1>
     <p>Descubre miles de emisoras online. Busca por género, país o nombre.</p>
   </div>
@@ -1079,60 +1079,60 @@ body.light {
 
   <!-- MOOD BAR -->
   <div class="mood-bar">
-    <button class="mood-btn" onclick="filterMood('happy')">&#128516; Feliz</button>
-    <button class="mood-btn" onclick="filterMood('relax')">&#128524; Relajado</button>
-    <button class="mood-btn" onclick="filterMood('energy')">&#9889; Energético</button>
-    <button class="mood-btn" onclick="filterMood('romantic')">&#128149; Romántico</button>
-    <button class="mood-btn" onclick="filterMood('focus')">&#127919; Concentración</button>
-    <button class="mood-btn" onclick="filterMood('party')">&#127881; Fiesta</button>
+    <button class="mood-btn" onclick="filterMood('happy')">😄 Feliz</button>
+    <button class="mood-btn" onclick="filterMood('relax')">😌 Relajado</button>
+    <button class="mood-btn" onclick="filterMood('energy')">\u26a1 Energético</button>
+    <button class="mood-btn" onclick="filterMood('romantic')">💕 Romántico</button>
+    <button class="mood-btn" onclick="filterMood('focus')">🎯 Concentración</button>
+    <button class="mood-btn" onclick="filterMood('party')">🎉 Fiesta</button>
   </div>
 
   <!-- HISTORIAL Y RANDOM -->
   <div class="history-wrap" id="history-wrap" style="display:none">
-    <div class="history-label">&#128336; Recientes</div>
+    <div class="history-label">🕐 Recientes</div>
     <div class="history-scroll" id="history-scroll"></div>
   </div>
   <div style="display:flex;justify-content:center;margin-bottom:1rem;padding:0 2rem;position:relative;z-index:1;">
-    <button class="random-btn" onclick="playRandom()">&#128256; Radio aleatoria</button>
+    <button class="random-btn" onclick="playRandom()">🔀 Radio aleatoria</button>
   </div>
 
   <div class="genres">
-    <button class="genre-btn active" onclick="filterGenre('',this)">&#127925; Todos</button>
-    <button class="genre-btn" onclick="filterGenre('pop',this)">&#127908; Pop</button>
-    <button class="genre-btn" onclick="filterGenre('salsa',this)">&#128131; Salsa</button>
-    <button class="genre-btn" onclick="filterGenre('rock',this)">&#127928; Rock</button>
-    <button class="genre-btn" onclick="filterGenre('jazz',this)">&#127927; Jazz</button>
-    <button class="genre-btn" onclick="filterGenre('reggaeton',this)">&#128293; Reggaeton</button>
-    <button class="genre-btn" onclick="filterGenre('classical',this)">&#127931; Clásica</button>
-    <button class="genre-btn" onclick="filterGenre('electronic',this)">&#9889; Electrónica</button>
-    <button class="genre-btn" onclick="filterGenre('news',this)">&#128240; Noticias</button>
-    <button class="genre-btn" onclick="filterGenre('bachata',this)">&#127925; Bachata</button>
-    <button class="genre-btn" onclick="filterGenre('tropical',this)">&#127796; Tropical</button>
+    <button class="genre-btn active" onclick="filterGenre('',this)">🎵 Todos</button>
+    <button class="genre-btn" onclick="filterGenre('pop',this)">🎤 Pop</button>
+    <button class="genre-btn" onclick="filterGenre('salsa',this)">💃 Salsa</button>
+    <button class="genre-btn" onclick="filterGenre('rock',this)">🎸 Rock</button>
+    <button class="genre-btn" onclick="filterGenre('jazz',this)">🎷 Jazz</button>
+    <button class="genre-btn" onclick="filterGenre('reggaeton',this)">🔥 Reggaeton</button>
+    <button class="genre-btn" onclick="filterGenre('classical',this)">🎻 Clásica</button>
+    <button class="genre-btn" onclick="filterGenre('electronic',this)">\u26a1 Electrónica</button>
+    <button class="genre-btn" onclick="filterGenre('news',this)">📰 Noticias</button>
+    <button class="genre-btn" onclick="filterGenre('bachata',this)">🎵 Bachata</button>
+    <button class="genre-btn" onclick="filterGenre('tropical',this)">🌴 Tropical</button>
   </div>
 
   <!-- LOCATION FILTERS -->
   <div class="location-bar">
-    <span class="loc-label">&#128205; Ubicación:</span>
+    <span class="loc-label">📍 Ubicación:</span>
     <select class="loc-select" id="sel-continent" onchange="onContinentChange(this.value)">
-      <option value="">&#127757; Todos los continentes</option>
-      <option value="AF">&#127757; África</option>
-      <option value="AS">&#127759; Asia</option>
-      <option value="EU">&#127757; Europa</option>
-      <option value="NA">&#127758; Norteamérica</option>
-      <option value="SA">&#127758; Sudamérica</option>
-      <option value="OC">&#127759; Oceanía</option>
+      <option value="">🌍 Todos los continentes</option>
+      <option value="AF">🌍 África</option>
+      <option value="AS">🌏 Asia</option>
+      <option value="EU">🌍 Europa</option>
+      <option value="NA">🌎 Norteamérica</option>
+      <option value="SA">🌎 Sudamérica</option>
+      <option value="OC">🌏 Oceanía</option>
     </select>
     <select class="loc-select" id="sel-country" onchange="handleCountryChange(this.value)" style="display:none">
-      <option value="">&#127987;️ Todos los países</option>
+      <option value="">🏳️ Todos los países</option>
     </select>
     <select class="loc-select" id="sel-state" onchange="onStateChange(this.value)" style="display:none">
-      <option value="">&#127961;️ Todas las ciudades</option>
+      <option value="">🏙️ Todas las ciudades</option>
     </select>
-    <button class="loc-reset" onclick="resetLocation()">&#10005; Limpiar</button>
+    <button class="loc-reset" onclick="resetLocation()">\u2715 Limpiar</button>
   </div>
 
   <div class="stations-section">
-    <div class="section-title">&#128293; Estaciones populares</div>
+    <div class="section-title">🔥 Estaciones populares</div>
     <div id="stations-grid" class="stations-grid">
       <div class="loading"><div class="spinner"></div>Cargando estaciones...</div>
     </div>
@@ -1154,8 +1154,8 @@ body.light {
   <div style="max-width:700px;margin:0 auto;padding:1rem 1.5rem 8rem;position:relative;z-index:1;">
 
     <!-- No station playing -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;"><span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);">&#127908; Karaoke</span><button onclick="toggleKaraoke()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;">&#10005; Cerrar</button></div><div id="karaoke-idle" style="text-align:center;padding:4rem 2rem;">
-      <div style="font-size:4rem;margin-bottom:1rem;">&#127908;</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;"><span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);">🎤 Karaoke</span><button onclick="toggleKaraoke()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;">\u2715 Cerrar</button></div><div id="karaoke-idle" style="text-align:center;padding:4rem 2rem;">
+      <div style="font-size:4rem;margin-bottom:1rem;">🎤</div>
       <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:1rem;">
         <span class="gradient">Karaoke</span>
       </h2>
@@ -1165,7 +1165,7 @@ body.light {
       <button onclick="showPage('home',document.querySelector('nav button'))"
         style="background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000;font-weight:700;
         padding:14px 28px;border-radius:12px;border:none;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;">
-        &#128251; Ir a Radio
+        📻 Ir a Radio
       </button>
     </div>
 
@@ -1174,7 +1174,7 @@ body.light {
       <div style="display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);
         border-radius:16px;padding:16px;margin-bottom:2rem;">
         <div id="karaoke-art" style="width:56px;height:56px;border-radius:10px;background:var(--bg3);
-          display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;">&#128251;</div>
+          display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;">📻</div>
         <div style="min-width:0;">
           <div id="karaoke-station" style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;
             white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
@@ -1197,7 +1197,7 @@ body.light {
         </div>
         <div id="karaoke-lyrics" style="display:none;"></div>
         <div id="karaoke-error" style="display:none;text-align:center;padding:3rem;color:var(--muted);">
-          <div style="font-size:2.5rem;margin-bottom:1rem;">&#128532;</div>
+          <div style="font-size:2.5rem;margin-bottom:1rem;">😔</div>
           <p id="karaoke-error-msg"></p>
         </div>
       </div>
@@ -1209,7 +1209,7 @@ body.light {
 <!-- NOVEDADES -->
 <div id="page-news" class="page">
   <div class="news-page">
-    <h2>&#128240; <span class="gradient">Novedades</span></h2>
+    <h2>📰 <span class="gradient">Novedades</span></h2>
     <div id="posts-container"></div>
   </div>
 </div>
@@ -1228,21 +1228,21 @@ body.light {
 <div id="page-download" class="page">
   <div class="download-page">
     <div class="download-hero">
-      <div class="app-icon">&#128251;</div>
+      <div class="app-icon">📻</div>
       <h2>SonicStream <span style="color:var(--accent)">para Android</span></h2>
       <p>La app de radio online más completa. Miles de emisoras y descarga gratis.</p>
       <a class="download-btn" href="https://mega.nz/file/TyohGDjK#bR-6HoXmrDtHo-5GNPO0KCMMZel_bD2ns6f9rxtSyzg" target="_blank">⬇️ Descargar SonicStream APK</a>
       <br>
       <span class="download-soon">⏳ Próximamente en Google Play Store</span>
-      <div class="playstore-badge"><span>&#128994;</span> Versión Android — Gratis</div>
+      <div class="playstore-badge"><span>🟢</span> Versión Android — Gratis</div>
     </div>
     <div class="features-grid">
-      <div class="feature-card"><span class="feature-icon">&#128251;</span><h4>Miles de radios</h4><p>Accede a miles de emisoras de todo el mundo.</p></div>
-      <div class="feature-card"><span class="feature-icon">&#128269;</span><h4>Búsqueda inteligente</h4><p>Encuentra tu emisora por nombre, género o país.</p></div>
+      <div class="feature-card"><span class="feature-icon">📻</span><h4>Miles de radios</h4><p>Accede a miles de emisoras de todo el mundo.</p></div>
+      <div class="feature-card"><span class="feature-icon">🔍</span><h4>Búsqueda inteligente</h4><p>Encuentra tu emisora por nombre, género o país.</p></div>
       <div class="feature-card"><span class="feature-icon">⭐</span><h4>Favoritos</h4><p>Guarda tus emisoras favoritas.</p></div>
-      <div class="feature-card"><span class="feature-icon">&#129302;</span><h4>IA integrada</h4><p>La IA encuentra la emisora perfecta para ti.</p></div>
-      <div class="feature-card"><span class="feature-icon">&#127911;</span><h4>Mini reproductor</h4><p>Sigue escuchando mientras navegas.</p></div>
-      <div class="feature-card"><span class="feature-icon">&#128246;</span><h4>Alta calidad</h4><p>Streams MP3, AAC y más formatos.</p></div>
+      <div class="feature-card"><span class="feature-icon">🤖</span><h4>IA integrada</h4><p>La IA encuentra la emisora perfecta para ti.</p></div>
+      <div class="feature-card"><span class="feature-icon">🎧</span><h4>Mini reproductor</h4><p>Sigue escuchando mientras navegas.</p></div>
+      <div class="feature-card"><span class="feature-icon">📶</span><h4>Alta calidad</h4><p>Streams MP3, AAC y más formatos.</p></div>
     </div>
   </div>
 </div>
@@ -1251,7 +1251,7 @@ body.light {
 <div class="player-bar" id="player-bar">
   <div class="player-inner">
     <div class="player-station">
-      <div class="player-logo" id="player-logo">&#128251;</div>
+      <div class="player-logo" id="player-logo">📻</div>
       <div class="player-info">
         <div class="player-name" id="player-name">—</div>
         <div id="player-track" style="font-size:.75rem;color:var(--muted);margin-top:2px;display:none"></div>
@@ -1264,13 +1264,13 @@ body.light {
     <div class="player-controls">
       <button class="ctrl-btn" onclick="stopAudio()">⏹</button>
       <button class="ctrl-play" id="ctrl-play" onclick="togglePlay()">▶</button>
-      <button class="sleep-btn" id="sleep-btn" onclick="toggleSleepMenu()" title="Sleep timer">&#128564;</button>
-      <button class="btn-share" onclick="shareStation()" title="Compartir por WhatsApp">&#128242;</button>
-      <button class="ctrl-btn" onclick="copyStationLink()" title="Copiar enlace">&#128279;</button>
-      <button class="ctrl-btn" id="karaoke-btn" onclick="toggleKaraoke()" title="Karaoke">&#127908;</button>
+      <button class="sleep-btn" id="sleep-btn" onclick="toggleSleepMenu()" title="Sleep timer">😴</button>
+      <button class="btn-share" onclick="shareStation()" title="Compartir por WhatsApp">📲</button>
+      <button class="ctrl-btn" onclick="copyStationLink()" title="Copiar enlace">🔗</button>
+      <button class="ctrl-btn" id="karaoke-btn" onclick="toggleKaraoke()" title="Karaoke">🎤</button>
 
       <button class="ctrl-btn" onclick="toggleKbdHint()" title="Atajos de teclado">⌨️</button>
-      <div class="volume-wrap">&#128266;
+      <div class="volume-wrap">🔊
         <input type="range" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)" id="vol-slider">
       </div>
     </div>
@@ -1287,7 +1287,7 @@ body.light {
   <button onclick="setSleepTimer(30)">⏱ 30 minutos</button>
   <button onclick="setSleepTimer(60)">⏱ 60 minutos</button>
   <button onclick="setSleepTimer(90)">⏱ 90 minutos</button>
-  <button onclick="cancelSleep()" style="color:#ff3d7f;border-color:rgba(255,61,127,.3)">&#10005; Cancelar</button>
+  <button onclick="cancelSleep()" style="color:#ff3d7f;border-color:rgba(255,61,127,.3)">\u2715 Cancelar</button>
 </div>
 
 <!-- TOAST -->
@@ -1305,7 +1305,7 @@ body.light {
 
 <!-- SLEEP BADGE -->
 <div class="sleep-timer-badge" id="sleep-badge">
-  &#128564; Apagando en <span id="sleep-countdown"></span>
+  😴 Apagando en <span id="sleep-countdown"></span>
 </div>
 
 <script>
@@ -1372,11 +1372,11 @@ async function apiFetch(path) {
         const text = await res.text();
         const data = JSON.parse(text);
         if (Array.isArray(data) && data.length > 0) {
-          console.log('[API] &#9989; Got', data.length, 'stations');
+          console.log('[API] \u2705 Got', data.length, 'stations');
           return data;
         }
       } catch(e) {
-        console.warn('[API] &#10060;', e.message.substring(0, 60));
+        console.warn('[API] \u274c', e.message.substring(0, 60));
         continue;
       }
     }
@@ -1433,7 +1433,7 @@ async function fetchStations(query = '', tag = '', limit = 24) {
 function renderCard(station) {
   const tag      = station.tags ? station.tags.split(',')[0].trim() : '';
   const isActive = currentStation && currentStation.stationuuid === station.stationuuid;
-  const favIcon  = isFav(station.stationuuid) ? '&#10084;️' : '&#129293;';
+  const favIcon  = isFav(station.stationuuid) ? '\u2764️' : '🤍';
   const favClass = isFav(station.stationuuid) ? ' active' : '';
   const data = JSON.stringify(station)
     .replace(/\\/g, '\\\\')
@@ -1450,8 +1450,8 @@ function renderCard(station) {
         title="Guardar en favoritos">${favIcon}</button>
       <div class="station-logo">
         ${station.favicon
-          ? `<img src="${station.favicon}" onerror="this.parentElement.innerHTML='&#128251;'" alt="">`
-          : '&#128251;'}
+          ? `<img src="${station.favicon}" onerror="this.parentElement.innerHTML='📻'" alt="">`
+          : '📻'}
       </div>
       <div class="station-info">
         <div class="station-name">${station.name || 'Sin nombre'}</div>
@@ -1459,7 +1459,7 @@ function renderCard(station) {
           ${tag ? `<span class="station-tag">${tag}</span>` : ''}
           <span>${station.country || ''}</span>
         </div>
-        <div class="station-listeners">&#127911; ${(station.votes||0).toLocaleString()} votos · ${station.bitrate||0}kbps</div>
+        <div class="station-listeners">🎧 ${(station.votes||0).toLocaleString()} votos · ${station.bitrate||0}kbps</div>
       </div>
       <div class="play-btn">
         ${isActive && isPlaying
@@ -1475,7 +1475,7 @@ async function loadHome(tag = '') {
   grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando estaciones...</div>';
   const stations = await fetchStations('', tag, 24);
   if (!stations.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="icon">&#128237;</div><p>No se encontraron estaciones.<br><small>Prueba con: pop, rock, jazz, latin</small></p></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No se encontraron estaciones.<br><small>Prueba con: pop, rock, jazz, latin</small></p></div>';
     return;
   }
   grid.innerHTML = stations.map(renderCard).join('');
@@ -1487,14 +1487,14 @@ async function loadRadios(tag = '', query = '') {
   grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando estaciones...</div>';
   const stations = await fetchStations(query, tag, 48);
   if (!stations.length) {
-    count.textContent = '&#128251; 0 estaciones';
-    grid.innerHTML = `<div class="empty-state"><div class="icon">&#128237;</div>
+    count.textContent = '📻 0 estaciones';
+    grid.innerHTML = `<div class="empty-state"><div class="icon">📭</div>
       <p>No se encontraron estaciones para "<strong>${query||tag}</strong>"</p>
       <p style="font-size:0.82rem;color:var(--muted);margin-top:8px">Prueba: pop, rock, salsa, jazz, latin, tropical, news</p>
     </div>`;
     return;
   }
-  count.textContent = `&#128251; ${stations.length} estaciones encontradas`;
+  count.textContent = `📻 ${stations.length} estaciones encontradas`;
   grid.innerHTML = stations.map(renderCard).join('');
 }
 
@@ -1507,7 +1507,7 @@ async function doSearch() {
   grid.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando...</div>';
   const stations = await fetchStations(q, '', 24);
   if (!stations.length) {
-    grid.innerHTML = `<div class="empty-state"><div class="icon">&#128237;</div><p>Sin resultados para "<strong>${q}</strong>"</p></div>`;
+    grid.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Sin resultados para "<strong>${q}</strong>"</p></div>`;
     return;
   }
   grid.innerHTML = stations.map(renderCard).join('');
@@ -1538,8 +1538,8 @@ function setPlayerLoading(station) {
   document.getElementById('ctrl-play').textContent = '⏳';
   const logo = document.getElementById('player-logo');
   logo.innerHTML = station.favicon
-    ? `<img src="${station.favicon}" onerror="this.parentElement.innerHTML='&#128251;'" alt="">`
-    : '&#128251;';
+    ? `<img src="${station.favicon}" onerror="this.parentElement.innerHTML='📻'" alt="">`
+    : '📻';
 }
 
 function tryUrl(url) {
@@ -1614,10 +1614,10 @@ async function playStation(station) {
       console.log('[SonicStream] Trying:', url.substring(0,60));
       await tryUrl(url);
       ok = true;
-      console.log('[SonicStream] &#9989; Playing:', url.substring(0,60));
+      console.log('[SonicStream] \u2705 Playing:', url.substring(0,60));
       break;
     } catch(e) {
-      console.warn('[SonicStream] &#10060; Failed:', url.substring(0,60));
+      console.warn('[SonicStream] \u274c Failed:', url.substring(0,60));
     }
   }
 
@@ -1632,8 +1632,8 @@ async function playStation(station) {
     isPlaying = false;
     currentStation = null;
     audio.pause(); audio.src = '';
-    document.getElementById('ctrl-play').textContent = '&#10005;';
-    document.getElementById('player-name').textContent = '&#9888;️ Stream no disponible — prueba otra radio';
+    document.getElementById('ctrl-play').textContent = '\u2715';
+    document.getElementById('player-name').textContent = '\u26a0️ Stream no disponible — prueba otra radio';
     setTimeout(() => document.getElementById('player-bar').classList.remove('visible'), 3000);
   }
 }
@@ -1703,7 +1703,7 @@ function showDeezerTrack(track) {
       `<img src="${track.album.cover_small}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:9px">`;
   }
   const t = document.getElementById('player-track');
-  if (t) { t.style.display = 'block'; t.innerHTML = `&#127925; ${track.title} — ${track.artist.name}`; }
+  if (t) { t.style.display = 'block'; t.innerHTML = `🎵 ${track.title} — ${track.artist.name}`; }
 }
 
 // ─── INIT ────────────────────────────────────────────
@@ -1718,7 +1718,7 @@ function loadPosts() {
     try { var s = document.getElementById('_bs'); if(s) s.remove(); } catch(e){}
     var entries = (data.feed && data.feed.entry) ? data.feed.entry : [];
     if (!entries.length) {
-      c.innerHTML = '<div class="empty-state"><div class="icon">&#128237;</div><p>Aun no hay novedades.</p></div>';
+      c.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aun no hay novedades.</p></div>';
       return;
     }
     c.innerHTML = entries.map(function(e) {
@@ -1730,7 +1730,7 @@ function loadPosts() {
       var enc     = btoa(unescape(encodeURIComponent(content)));
       var encT    = encodeURIComponent(title);
       return '<div class="post-card">'
-        + '<div class="post-meta">&#128197; ' + date + '</div>'
+        + '<div class="post-meta">📅 ' + date + '</div>'
         + '<h3><a href="#" data-t="'+encT+'" data-h="'+enc+'" data-d="'+date+'" onclick="openPost(this);return false;">' + title + '</a></h3>'
         + '<p class="post-snippet">' + snippet + '</p>'
         + '<button class="read-more" onclick="openPost(this.parentElement.querySelector(&quot;a&quot;))">Leer mas →</button>'
@@ -1739,7 +1739,7 @@ function loadPosts() {
   };
   var s = document.createElement('script');
   s.id = '_bs';
-  s.onerror = function(){ c.innerHTML = '<div class="empty-state"><div class="icon">&#9888;️</div><p>Error cargando novedades.</p></div>'; };
+  s.onerror = function(){ c.innerHTML = '<div class="empty-state"><div class="icon">\u26a0️</div><p>Error cargando novedades.</p></div>'; };
   s.src = 'https://softsonicstream.blogspot.com/feeds/posts/default?alt=json-in-script&callback=_blogCB&max-results=20';
   document.head.appendChild(s);
 }
@@ -1751,7 +1751,7 @@ function openPost(el) {
   var body  = '';
   try { body = decodeURIComponent(escape(atob(enc))); } catch(e){}
   document.getElementById('post-title').textContent = title;
-  document.getElementById('post-meta').textContent  = '&#128197; ' + date;
+  document.getElementById('post-meta').textContent  = '📅 ' + date;
   document.getElementById('post-body').innerHTML    = body;
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
@@ -1788,18 +1788,18 @@ function onContinentChange(continent) {
   var selCountry = document.getElementById('sel-country');
   var selState   = document.getElementById('sel-state');
   selState.style.display = 'none';
-  selState.innerHTML = '<option value="">&#127961;️ Todas las ciudades</option>';
+  selState.innerHTML = '<option value="">🏙️ Todas las ciudades</option>';
 
   if (!continent) {
     selCountry.style.display = 'none';
-    selCountry.innerHTML = '<option value="">&#127987;️ Todos los países</option>';
+    selCountry.innerHTML = '<option value="">🏳️ Todos los países</option>';
     loadHome('');
     return;
   }
 
   // Populate countries
   var countries = COUNTRIES[continent] || [];
-  selCountry.innerHTML = '<option value="">&#127987;️ Todos los países</option>'
+  selCountry.innerHTML = '<option value="">🏳️ Todos los países</option>'
     + countries.map(function(c){ return '<option value="'+c[0]+'">'+c[1]+'</option>'; }).join('');
   selCountry.style.display = 'block';
 
@@ -1819,7 +1819,7 @@ async function onCountryChange(country) {
 
   if (!country) {
     selState.style.display = 'none';
-    selState.innerHTML = '<option value="">&#127961;️ Todas las ciudades</option>';
+    selState.innerHTML = '<option value="">🏙️ Todas las ciudades</option>';
     loadByLocation(currentContinent, '', '');
     return;
   }
@@ -1828,7 +1828,7 @@ async function onCountryChange(country) {
   try {
     var states = await apiFetch('/states/' + encodeURIComponent(country) + '/json');
     if (states && states.length > 1) {
-      selState.innerHTML = '<option value="">&#127961;️ Todas las ciudades</option>'
+      selState.innerHTML = '<option value="">🏙️ Todas las ciudades</option>'
         + states.filter(function(s){ return s.name; })
                 .sort(function(a,b){ return a.name.localeCompare(b.name); })
                 .map(function(s){ return '<option value="'+s.name+'">'+s.name+'</option>'; }).join('');
@@ -1852,9 +1852,9 @@ function resetLocation() {
   currentContinent = ''; currentCountry = ''; currentState = '';
   document.getElementById('sel-continent').value = '';
   document.getElementById('sel-country').style.display = 'none';
-  document.getElementById('sel-country').innerHTML = '<option value="">&#127987;️ Todos los países</option>';
+  document.getElementById('sel-country').innerHTML = '<option value="">🏳️ Todos los países</option>';
   document.getElementById('sel-state').style.display = 'none';
-  document.getElementById('sel-state').innerHTML = '<option value="">&#127961;️ Todas las ciudades</option>';
+  document.getElementById('sel-state').innerHTML = '<option value="">🏙️ Todas las ciudades</option>';
   // Reset genre buttons
   document.querySelectorAll('.genre-btn').forEach(function(b){ b.classList.remove('active'); });
   document.querySelector('.genre-btn').classList.add('active');
@@ -1883,15 +1883,15 @@ async function loadByLocation(continent, country, state) {
     }
 
     var label = state || (country ? country : (continent ? continent : ''));
-    document.querySelector('.section-title').textContent = '&#128205; ' + (stations.length) + ' estaciones — ' + label;
+    document.querySelector('.section-title').textContent = '📍 ' + (stations.length) + ' estaciones — ' + label;
 
     if (!stations.length) {
-      grid.innerHTML = '<div class="empty-state"><div class="icon">&#128237;</div><p>No se encontraron estaciones para esta ubicación.</p></div>';
+      grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No se encontraron estaciones para esta ubicación.</p></div>';
       return;
     }
     grid.innerHTML = stations.map(renderCard).join('');
   } catch(e) {
-    grid.innerHTML = '<div class="empty-state"><div class="icon">&#9888;️</div><p>Error cargando estaciones.</p></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="icon">\u26a0️</div><p>Error cargando estaciones.</p></div>';
   }
 }
 
@@ -1911,11 +1911,11 @@ function toggleFav(station, btn) {
   var idx  = favs.findIndex(function(s) { return s.stationuuid === station.stationuuid; });
   if (idx >= 0) {
     favs.splice(idx, 1);
-    btn.textContent = '&#129293;';
+    btn.textContent = '🤍';
     btn.classList.remove('active');
   } else {
     favs.unshift(station);
-    btn.textContent = '&#10084;️';
+    btn.textContent = '\u2764️';
     btn.classList.add('active');
   }
   saveFavs(favs);
@@ -1924,7 +1924,7 @@ function loadFavs() {
   var grid = document.getElementById('favs-grid');
   var favs = getFavs();
   if (!favs.length) {
-    grid.innerHTML = '<div class="favs-empty"><div class="icon">&#129293;</div><p>Aún no tienes favoritos.<br>Toca &#10084;️ en cualquier emisora para guardarla.</p></div>';
+    grid.innerHTML = '<div class="favs-empty"><div class="icon">🤍</div><p>Aún no tienes favoritos.<br>Toca \u2764️ en cualquier emisora para guardarla.</p></div>';
     return;
   }
   grid.innerHTML = favs.map(renderCard).join('');
@@ -1954,11 +1954,11 @@ function filterMood(mood) {
   })).then(function(results) {
     var stations = mergeDedup(results).slice(0,24);
     if (!stations.length) {
-      grid.innerHTML = '<div class="empty-state"><div class="icon">&#128237;</div><p>No se encontraron estaciones</p></div>';
+      grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No se encontraron estaciones</p></div>';
       return;
     }
     grid.innerHTML = stations.map(renderCard).join('');
-    document.querySelector('.section-title').textContent = '&#127917; Estado de ánimo: ' + mood;
+    document.querySelector('.section-title').textContent = '🎭 Estado de ánimo: ' + mood;
   });
 }
 
@@ -2016,8 +2016,8 @@ document.addEventListener('click', function(e) {
 // ── WHATSAPP SHARE ───────────────────────────────────────
 function shareStation() {
   if (!currentStation) return;
-  var text = '&#127925; Estoy escuchando ' + currentStation.name + ' en SonicStream!\n'
-    + '&#128251; Escúchalo aquí: https://softsonicstream.blogspot.com';
+  var text = '🎵 Estoy escuchando ' + currentStation.name + ' en SonicStream!\n'
+    + '📻 Escúchalo aquí: https://softsonicstream.blogspot.com';
   var url = 'https://wa.me/?text=' + encodeURIComponent(text);
   window.open(url, '_blank');
 }
@@ -2028,14 +2028,14 @@ function shareStation() {
 // ── THEME TOGGLE ─────────────────────────────────────────
 function toggleTheme() {
   var isLight = document.body.classList.toggle('light');
-  document.getElementById('theme-btn').textContent = isLight ? '&#127774;' : '&#127769;';
+  document.getElementById('theme-btn').textContent = isLight ? '🌞' : '🌙';
   localStorage.setItem('ss_theme', isLight ? 'light' : 'dark');
 }
 (function() {
   if (localStorage.getItem('ss_theme') === 'light') {
     document.body.classList.add('light');
     var btn = document.getElementById('theme-btn');
-    if (btn) btn.textContent = '&#127774;';
+    if (btn) btn.textContent = '🌞';
   }
 })();
 
@@ -2068,22 +2068,22 @@ function renderHistory() {
   scroll.innerHTML = h.map(function(s, i) {
     window._hmap['k'+i] = s;
     return '<div class="history-chip" onclick="playStation(window._hmap.k'+i+')">'
-      + (s.favicon ? '<img src="'+s.favicon+'" width="16" height="16" style="border-radius:3px;margin-right:4px;vertical-align:middle">' : '&#128251; ')
+      + (s.favicon ? '<img src="'+s.favicon+'" width="16" height="16" style="border-radius:3px;margin-right:4px;vertical-align:middle">' : '📻 ')
       + s.name + '</div>';
   }).join('');
 }
 
 // ── RANDOM RADIO ─────────────────────────────────────────
 async function playRandom() {
-  showToast('&#128256; Buscando radio aleatoria...');
+  showToast('🔀 Buscando radio aleatoria...');
   try {
     var stations = await apiFetch('/stations/random?limit=1&hidebroken=true');
     if (stations && stations.length > 0) {
       playStation(stations[0]);
-      showToast('&#128251; ' + stations[0].name);
+      showToast('📻 ' + stations[0].name);
     }
   } catch(e) {
-    showToast('&#10060; Error buscando radio');
+    showToast('\u274c Error buscando radio');
   }
 }
 
@@ -2092,9 +2092,9 @@ function copyStationLink() {
   if (!currentStation) { showToast('▶ Primero reproduce una radio'); return; }
   var text = currentStation.url_resolved || currentStation.url || '';
   navigator.clipboard.writeText(text).then(function() {
-    showToast('&#128279; Enlace copiado al portapapeles');
+    showToast('🔗 Enlace copiado al portapapeles');
   }).catch(function() {
-    showToast('&#10060; No se pudo copiar');
+    showToast('\u274c No se pudo copiar');
   });
 }
 
@@ -2116,19 +2116,19 @@ document.addEventListener('keydown', function(e) {
       var vol = document.getElementById('vol-slider');
       vol.value = Math.min(1, parseFloat(vol.value) + 0.1);
       setVolume(vol.value);
-      showToast('&#128266; Volumen: ' + Math.round(vol.value * 100) + '%');
+      showToast('🔊 Volumen: ' + Math.round(vol.value * 100) + '%');
       break;
     case 'ArrowDown':
       e.preventDefault();
       var vol2 = document.getElementById('vol-slider');
       vol2.value = Math.max(0, parseFloat(vol2.value) - 0.1);
       setVolume(vol2.value);
-      showToast('&#128265; Volumen: ' + Math.round(vol2.value * 100) + '%');
+      showToast('🔉 Volumen: ' + Math.round(vol2.value * 100) + '%');
       break;
     case 'f': case 'F':
       if (currentStation) {
         var favBtn = document.querySelector('#card-' + currentStation.stationuuid + ' .btn-fav');
-        if (favBtn) { favBtn.click(); showToast(isFav(currentStation.stationuuid) ? '&#10084;️ Añadido a favoritos' : '&#129293; Eliminado de favoritos'); }
+        if (favBtn) { favBtn.click(); showToast(isFav(currentStation.stationuuid) ? '\u2764️ Añadido a favoritos' : '🤍 Eliminado de favoritos'); }
       }
       break;
     case 'r': case 'R':
@@ -2226,7 +2226,7 @@ async function fetchLyrics(artist, song) {
         throw new Error('No lyrics');
       }
     } catch(e2) {
-      body.innerHTML = '<div class="lyrics-error">&#128532; No se encontró la letra de<br><strong>' + song + '</strong><br><br>Intenta con otra emisora</div>';
+      body.innerHTML = '<div class="lyrics-error">😔 No se encontró la letra de<br><strong>' + song + '</strong><br><br>Intenta con otra emisora</div>';
     }
   }
 }
@@ -2252,7 +2252,7 @@ function renderLyricsLines() {
   var body = document.getElementById('lyrics-body');
   body.innerHTML = lyricsLines.map(function(line, i) {
     var cls = i === lyricsIndex ? 'lyrics-line active' : (i < lyricsIndex ? 'lyrics-line passed' : 'lyrics-line');
-    return '<div class="lyrics-line" id="ll-' + i + '" onclick="jumpToLine(' + i + ')">' + (line || '&nbsp;') + '</div>';
+    return '<div class="lyrics-line" id="ll-' + i + '" onclick="jumpToLine(' + i + ')">' + (line || ' ') + '</div>';
   }).join('');
   scrollToActive();
 }
@@ -2357,7 +2357,12 @@ function initKaraokePage() {
 
     var art = document.getElementById('karaoke-art');
     if (kArtwork) {
-      art.innerHTML = '<img src="' + kArtwork + '" style="width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.parentElement.innerHTML='&#128251;'">';
+      var img = document.createElement('img');
+      img.src = kArtwork;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:9px';
+      img.onerror = function(){ this.parentElement.textContent = ''; };
+      art.innerHTML = '';
+      art.appendChild(img);
     }
     if (kSong) {
       document.getElementById('karaoke-track').textContent = kSong + (kArtist ? ' — ' + kArtist : '');
