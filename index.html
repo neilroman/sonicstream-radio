@@ -2236,13 +2236,9 @@ function displayLyrics(text, song, artist) {
   
   // Clean and split lyrics into lines
   lyricsLines = text
-    .replace(/
-/g, '
-')
-    .split('
-')
-    .map(function(l) { return l.trim(); })
-    .filter(function(l, i, arr) {
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+.filter(function(l, i, arr) {
       // Remove consecutive empty lines
       return !(l === '' && arr[i-1] === '');
     });
