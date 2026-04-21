@@ -412,7 +412,7 @@ function loadCharts() {
       var encP = encodeURIComponent(preview);
       return '<div class="track-card" style="position:relative">'
         + '<div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:800;font-size:.75rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1;">' + (i+1) + '</div>'
-        + (artwork ? '<img class="track-artwork" src="' + artwork + '" alt="" loading="lazy" onerror="this.style.display='none'">' : '<div class="track-artwork-placeholder">🎵</div>')
+        + (artwork ? '<img class="track-artwork" src="' + artwork + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="track-artwork-placeholder">🎵</div>')
         + '<div class="track-info">'
         + '<div class="track-title">' + title + '</div>'
         + '<div class="track-artist">' + artist + '</div>'
