@@ -1861,9 +1861,8 @@ function renderHistory() {
   wrap.style.display = 'block';
   scroll.innerHTML = h.map(function(s) {
     var enc = JSON.stringify(s).replace(/"/g, '&quot;');
-    return '<div class="history-chip" onclick="playStation(' + enc + ')">'
-      + (s.favicon ? '<img src="' + s.favicon + '" style="width:16px;height:16px;border-radius:3px" onerror="this.style.display='none'">' : '📻')
-      + s.name + '</div>';
+    var img = s.favicon ? '<img src="' + s.favicon + '" width="16" height="16" style="border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.remove()">' : '📻 ';
+    return '<div class="history-chip" onclick="playStation(JSON.parse(decodeURIComponent(atob('' + btoa(encodeURIComponent(JSON.stringify(s))) + ''))))">' + img + s.name + '</div>';
   }).join('');
 }
 
