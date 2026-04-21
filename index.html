@@ -849,6 +849,76 @@
   background:rgba(124,77,255,.1); border-color:rgba(124,77,255,.3); color:#a78bfa;
 }
 
+
+/* ── THEME TOGGLE ───────────────────────────────────── */
+body.light {
+  --bg:#f0f4f8; --bg2:#e2e8f0; --bg3:#cbd5e1;
+  --text:#1e293b; --muted:#64748b; --card:#ffffff;
+  --border:rgba(0,0,0,0.08);
+}
+.theme-btn {
+  background:none; border:1px solid var(--border);
+  color:var(--muted); padding:6px 10px; border-radius:8px;
+  cursor:pointer; font-size:1rem; transition:all .2s;
+  flex-shrink:0;
+}
+.theme-btn:hover { color:var(--text); border-color:rgba(0,229,255,.3); }
+
+/* ── HISTORY ────────────────────────────────────────── */
+.history-wrap {
+  max-width:1200px; margin:0 auto;
+  padding:0 2rem 1rem; position:relative; z-index:1;
+}
+.history-scroll {
+  display:flex; gap:8px; overflow-x:auto;
+  padding-bottom:4px; -webkit-overflow-scrolling:touch;
+}
+.history-scroll::-webkit-scrollbar { display:none; }
+.history-chip {
+  display:flex; align-items:center; gap:6px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:100px; padding:6px 14px;
+  font-size:.78rem; color:var(--muted); white-space:nowrap;
+  cursor:pointer; transition:all .2s; flex-shrink:0;
+}
+.history-chip:hover { border-color:rgba(0,229,255,.3); color:var(--accent); }
+.history-label { font-size:.7rem; color:var(--muted); margin-bottom:6px; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+
+/* ── TOAST NOTIFICATION ─────────────────────────────── */
+.toast {
+  position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:100px; padding:10px 20px;
+  font-size:.82rem; color:var(--text); font-weight:500;
+  z-index:1000; opacity:0; transition:all .3s;
+  white-space:nowrap; box-shadow:0 4px 20px rgba(0,0,0,.3);
+  pointer-events:none;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── RANDOM BTN ─────────────────────────────────────── */
+.random-btn {
+  background:rgba(124,77,255,.1); border:1px solid rgba(124,77,255,.3);
+  color:#a78bfa; padding:8px 16px; border-radius:100px;
+  font-size:.82rem; font-weight:600; cursor:pointer;
+  transition:all .2s; font-family:'DM Sans',sans-serif;
+  display:flex; align-items:center; gap:6px;
+}
+.random-btn:hover { background:rgba(124,77,255,.2); }
+
+/* ── KEYBOARD HINT ──────────────────────────────────── */
+.kbd-hint {
+  position:fixed; bottom:90px; right:16px;
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:12px; padding:12px 16px;
+  font-size:.72rem; color:var(--muted); z-index:300;
+  display:none; flex-direction:column; gap:6px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+}
+.kbd-hint.open { display:flex; }
+.kbd-row { display:flex; align-items:center; gap:8px; }
+.kbd { background:var(--bg3); border:1px solid var(--border); border-radius:4px; padding:2px 6px; font-size:.7rem; color:var(--text); }
+
 </style>
 </head>
 <body>
@@ -856,6 +926,7 @@
 <header>
   <div class="header-inner">
     <a class="logo" href="#"><div class="logo-icon">📻</div>Sonic<span>Stream</span></a>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Cambiar tema">🌙</button>
     <nav>
       <button class="active" onclick="showPage('home',this)">📻 Radio</button>
       <button onclick="showPage('favs',this)">⭐ Favoritos</button>
@@ -888,6 +959,15 @@
     <button class="mood-btn" onclick="filterMood('romantic')">💕 Romántico</button>
     <button class="mood-btn" onclick="filterMood('focus')">🎯 Concentración</button>
     <button class="mood-btn" onclick="filterMood('party')">🎉 Fiesta</button>
+  </div>
+
+  <!-- HISTORIAL Y RANDOM -->
+  <div class="history-wrap" id="history-wrap" style="display:none">
+    <div class="history-label">🕐 Recientes</div>
+    <div class="history-scroll" id="history-scroll"></div>
+  </div>
+  <div style="display:flex;justify-content:center;margin-bottom:1rem;padding:0 2rem;position:relative;z-index:1;">
+    <button class="random-btn" onclick="playRandom()">🔀 Radio aleatoria</button>
   </div>
 
   <div class="genres">
@@ -1002,6 +1082,8 @@
       <button class="ctrl-play" id="ctrl-play" onclick="togglePlay()">▶</button>
       <button class="sleep-btn" id="sleep-btn" onclick="toggleSleepMenu()" title="Sleep timer">😴</button>
       <button class="btn-share" onclick="shareStation()" title="Compartir por WhatsApp">📲</button>
+      <button class="ctrl-btn" onclick="copyStationLink()" title="Copiar enlace">🔗</button>
+      <button class="ctrl-btn" onclick="toggleKbdHint()" title="Atajos de teclado">⌨️</button>
       <div class="volume-wrap">🔊
         <input type="range" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)" id="vol-slider">
       </div>
@@ -1018,6 +1100,19 @@
   <button onclick="setSleepTimer(60)">⏱ 60 minutos</button>
   <button onclick="setSleepTimer(90)">⏱ 90 minutos</button>
   <button onclick="cancelSleep()" style="color:#ff3d7f;border-color:rgba(255,61,127,.3)">✕ Cancelar</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- KEYBOARD HINT -->
+<div class="kbd-hint" id="kbd-hint">
+  <div class="kbd-row"><span class="kbd">Espacio</span> Pausar/Reanudar</div>
+  <div class="kbd-row"><span class="kbd">↑</span><span class="kbd">↓</span> Volumen</div>
+  <div class="kbd-row"><span class="kbd">F</span> Favorito</div>
+  <div class="kbd-row"><span class="kbd">R</span> Radio aleatoria</div>
+  <div class="kbd-row"><span class="kbd">S</span> Compartir WhatsApp</div>
+  <div class="kbd-row"><span class="kbd">Esc</span> Detener</div>
 </div>
 
 <!-- SLEEP BADGE -->
@@ -1724,7 +1819,146 @@ function shareStation() {
 
 
 
+
+// ── THEME TOGGLE ─────────────────────────────────────────
+function toggleTheme() {
+  var isLight = document.body.classList.toggle('light');
+  document.getElementById('theme-btn').textContent = isLight ? '🌞' : '🌙';
+  localStorage.setItem('ss_theme', isLight ? 'light' : 'dark');
+}
+(function() {
+  if (localStorage.getItem('ss_theme') === 'light') {
+    document.body.classList.add('light');
+    var btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = '🌞';
+  }
+})();
+
+// ── TOAST ────────────────────────────────────────────────
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// ── HISTORY ──────────────────────────────────────────────
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem('ss_history') || '[]'); } catch(e) { return []; }
+}
+function addToHistory(station) {
+  var h = getHistory().filter(function(s) { return s.stationuuid !== station.stationuuid; });
+  h.unshift({ stationuuid: station.stationuuid, name: station.name, favicon: station.favicon, tags: station.tags, country: station.country });
+  h = h.slice(0, 10);
+  localStorage.setItem('ss_history', JSON.stringify(h));
+  renderHistory();
+}
+function renderHistory() {
+  var h = getHistory();
+  var wrap = document.getElementById('history-wrap');
+  var scroll = document.getElementById('history-scroll');
+  if (!h.length || !wrap || !scroll) return;
+  wrap.style.display = 'block';
+  scroll.innerHTML = h.map(function(s) {
+    var enc = JSON.stringify(s).replace(/"/g, '&quot;');
+    return '<div class="history-chip" onclick="playStation(' + enc + ')">'
+      + (s.favicon ? '<img src="' + s.favicon + '" style="width:16px;height:16px;border-radius:3px" onerror="this.style.display='none'">' : '📻')
+      + s.name + '</div>';
+  }).join('');
+}
+
+// ── RANDOM RADIO ─────────────────────────────────────────
+async function playRandom() {
+  showToast('🔀 Buscando radio aleatoria...');
+  try {
+    var stations = await apiFetch('/stations/random?limit=1&hidebroken=true');
+    if (stations && stations.length > 0) {
+      playStation(stations[0]);
+      showToast('📻 ' + stations[0].name);
+    }
+  } catch(e) {
+    showToast('❌ Error buscando radio');
+  }
+}
+
+// ── COPY LINK ─────────────────────────────────────────────
+function copyStationLink() {
+  if (!currentStation) { showToast('▶ Primero reproduce una radio'); return; }
+  var text = currentStation.url_resolved || currentStation.url || '';
+  navigator.clipboard.writeText(text).then(function() {
+    showToast('🔗 Enlace copiado al portapapeles');
+  }).catch(function() {
+    showToast('❌ No se pudo copiar');
+  });
+}
+
+// ── KEYBOARD SHORTCUTS ───────────────────────────────────
+function toggleKbdHint() {
+  document.getElementById('kbd-hint').classList.toggle('open');
+}
+
+document.addEventListener('keydown', function(e) {
+  // Ignore if typing in input
+  if (e.target.tagName === 'INPUT') return;
+  switch(e.key) {
+    case ' ':
+      e.preventDefault();
+      if (currentStation) togglePlay();
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      var vol = document.getElementById('vol-slider');
+      vol.value = Math.min(1, parseFloat(vol.value) + 0.1);
+      setVolume(vol.value);
+      showToast('🔊 Volumen: ' + Math.round(vol.value * 100) + '%');
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      var vol2 = document.getElementById('vol-slider');
+      vol2.value = Math.max(0, parseFloat(vol2.value) - 0.1);
+      setVolume(vol2.value);
+      showToast('🔉 Volumen: ' + Math.round(vol2.value * 100) + '%');
+      break;
+    case 'f': case 'F':
+      if (currentStation) {
+        var favBtn = document.querySelector('#card-' + currentStation.stationuuid + ' .btn-fav');
+        if (favBtn) { favBtn.click(); showToast(isFav(currentStation.stationuuid) ? '❤️ Añadido a favoritos' : '🤍 Eliminado de favoritos'); }
+      }
+      break;
+    case 'r': case 'R':
+      playRandom();
+      break;
+    case 's': case 'S':
+      shareStation();
+      break;
+    case 'Escape':
+      stopAudio();
+      document.getElementById('kbd-hint').classList.remove('open');
+      document.getElementById('sleep-menu').classList.remove('open');
+      break;
+  }
+});
+
+// Close kbd hint on outside click
+document.addEventListener('click', function(e) {
+  var hint = document.getElementById('kbd-hint');
+  if (hint && !hint.contains(e.target) && !e.target.closest('.ctrl-btn[onclick*="toggleKbdHint"]')) {
+    hint.classList.remove('open');
+  }
+});
+
+// ── PATCH playStation TO ADD HISTORY ─────────────────────
+var _origPlayStation = playStation;
+async function playStation(station) {
+  await _origPlayStation(station);
+  if (station && station.stationuuid) addToHistory(station);
+}
+
+// ── INIT HISTORY ─────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  renderHistory();
+});
+
 </script>
 </body>
 </html>
-
