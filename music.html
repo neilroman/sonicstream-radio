@@ -391,6 +391,7 @@ window.addEventListener('load', function() {
 // ── TOP CHARTS DEEZER ─────────────────────────────────────
 function loadCharts() {
   var grid = document.getElementById('charts-grid');
+  if (!grid) return;
   grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando charts...</div>';
   var cb = '_chart' + Date.now();
   var s = document.createElement('script');
@@ -399,34 +400,45 @@ function loadCharts() {
     delete window[cb];
     var tracks = data.tracks ? data.tracks.data : (data.data || []);
     if (!tracks || !tracks.length) {
-      grid.innerHTML = '<div class="empty"><div class="icon">📭</div><p>No se pudo cargar</p></div>';
+      grid.innerHTML = '<div class="empty"><div class="icon">&#128218;</div><p>No se pudo cargar</p></div>';
       return;
     }
+    window._chartTracks = {};
     grid.innerHTML = tracks.slice(0,12).map(function(t, i) {
+      window._chartTracks['c'+i] = t;
       var artwork = t.album && t.album.cover_medium ? t.album.cover_medium : '';
-      var title   = (t.title || '').replace(/'/g, '&#39;');
-      var artist  = (t.artist ? t.artist.name : '').replace(/'/g, '&#39;');
-      var preview = t.preview || '';
-      var encT = encodeURIComponent(t.title || '');
-      var encA = encodeURIComponent(t.artist ? t.artist.name : '');
-      var encP = encodeURIComponent(preview);
+      var title   = (t.title || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var artist  = (t.artist ? t.artist.name : '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var hasPreview = t.preview ? true : false;
       return '<div class="track-card" style="position:relative">'
-        + '<div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:800;font-size:.75rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1;">' + (i+1) + '</div>'
-        + (artwork ? '<img class="track-artwork" src="' + artwork + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="track-artwork-placeholder">🎵</div>')
+        + '<div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#00e5ff,#7c4dff);color:#000;font-weight:800;font-size:.75rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1">' + (i+1) + '</div>'
+        + (artwork ? '<img class="track-artwork" src="' + artwork + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="track-artwork-placeholder">&#127925;</div>')
         + '<div class="track-info">'
         + '<div class="track-title">' + title + '</div>'
         + '<div class="track-artist">' + artist + '</div>'
         + '<div class="track-actions">'
-        + (preview ? '<button class="btn-preview" onclick="playPreview('' + encP + '','' + encT + '',this)">▶ Preview</button>' : '<button class="btn-preview" disabled style="opacity:.4">Sin preview</button>')
-        + '<button class="btn-download" onclick="startDownload('' + encT + '','' + encA + '')">⬇️ MP3</button>'
+        + (hasPreview
+            ? '<button class="btn-preview" onclick="playChartPreview(' + i + ',this)">&#9654; Preview</button>'
+            : '<button class="btn-preview" disabled style="opacity:.4">Sin preview</button>')
+        + '<button class="btn-download" onclick="downloadChartTrack(' + i + ')">&#11015;&#65039; MP3</button>'
         + '</div></div></div>';
     }).join('');
   };
   s.onerror = function() {
-    grid.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Error cargando charts</p></div>';
+    grid.innerHTML = '<div class="empty"><div class="icon">&#9888;</div><p>Error cargando charts</p></div>';
   };
   s.src = 'https://api.deezer.com/chart/0/tracks?limit=12&output=jsonp&callback=' + cb;
   document.head.appendChild(s);
+}
+
+function playChartPreview(i, btn) {
+  var t = window._chartTracks['c'+i];
+  if (t && t.preview) playPreview(encodeURIComponent(t.preview), encodeURIComponent(t.title || ''), btn);
+}
+
+function downloadChartTrack(i) {
+  var t = window._chartTracks['c'+i];
+  if (t) startDownload(encodeURIComponent(t.title || ''), encodeURIComponent(t.artist ? t.artist.name : ''));
 }
 
 // Load charts on start
