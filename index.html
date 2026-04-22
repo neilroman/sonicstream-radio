@@ -1209,8 +1209,8 @@ body.light {
       <button class="ctrl-play" id="ctrl-play" onclick="togglePlay()">▶</button>
       <button class="sleep-btn" id="sleep-btn" onclick="toggleSleepMenu()" title="Sleep timer">😴</button>
       <button class="btn-share" onclick="shareStation()" title="Compartir por WhatsApp">📲</button>
+      <button class="ctrl-btn" onclick="skipStation()" title="Siguiente estacion" style="font-size:1.1rem;">&#9197;</button>
       <button class="ctrl-btn" onclick="copyStationLink()" title="Copiar enlace">🔗</button>
-      <button class="ctrl-btn" id="karaoke-btn" onclick="toggleKaraoke()" title="Karaoke">🎤</button>
 
       <button class="ctrl-btn" onclick="toggleKbdHint()" title="Atajos de teclado">⌨️</button>
       <div class="volume-wrap">🔊
@@ -2284,16 +2284,7 @@ var kArtwork  = '';
 
 function toggleKaraoke() {
   var overlay = document.getElementById('karaoke-overlay');
-  var btn     = document.getElementById('karaoke-btn');
-  if (overlay.style.display === 'flex') {
-    overlay.style.display = 'none';
-    btn.style.color = '';
-    if (kTimer) { clearTimeout(kTimer); kTimer = null; }
-  } else {
-    overlay.style.display = 'flex';
-    btn.style.color = 'var(--accent)';
-    initKaraokePage();
-  }
+  // karaoke removed
 }
 
 function initKaraokePage() {
