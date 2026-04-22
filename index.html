@@ -1680,30 +1680,44 @@ function updateCard(uuid, playing) {
 }
 
 // ─── DEEZER META ─────────────────────────────────────
-async function fetchDeezerMeta(station) {
+function fetchDeezerMeta(station) {
   if (deezerInterval) { clearInterval(deezerInterval); deezerInterval = null; }
-  const q = station.tags ? station.tags.split(',')[0].trim() : station.name.split(' ').slice(0,2).join(' ');
-  try {
-    const res = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(q)}&limit=10&output=json`);
-    const data = await res.json();
+  var q = station.tags ? station.tags.split(',')[0].trim() : station.name.split(' ').slice(0,2).join(' ');
+
+  // Use JSONP to avoid CORS
+  var cb = '_dzmeta' + Date.now();
+  var s  = document.createElement('script');
+  window[cb] = function(data) {
+    try { document.head.removeChild(s); } catch(e) {}
+    delete window[cb];
     if (data.data && data.data.length) {
-      let idx = 0;
+      var idx = 0;
       showDeezerTrack(data.data[0]);
-      deezerInterval = setInterval(() => {
+      deezerInterval = setInterval(function() {
         idx = (idx + 1) % data.data.length;
         showDeezerTrack(data.data[idx]);
       }, 30000);
     }
-  } catch(e) {}
+  };
+  s.onerror = function() { try { document.head.removeChild(s); } catch(e) {} };
+  s.src = 'https://api.deezer.com/search?q=' + encodeURIComponent(q) + '&limit=10&output=jsonp&callback=' + cb;
+  document.head.appendChild(s);
 }
 
 function showDeezerTrack(track) {
-  if (track.album?.cover_small) {
-    document.getElementById('player-logo').innerHTML =
-      `<img src="${track.album.cover_small}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:9px">`;
+  if (track.album && track.album.cover_small) {
+    var logo = document.getElementById('player-logo');
+    var img = document.createElement('img');
+    img.src = track.album.cover_small;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:9px';
+    logo.innerHTML = '';
+    logo.appendChild(img);
   }
-  const t = document.getElementById('player-track');
-  if (t) { t.style.display = 'block'; t.innerHTML = `🎵 ${track.title} — ${track.artist.name}`; }
+  var t = document.getElementById('player-track');
+  if (t) {
+    t.style.display = 'block';
+    t.textContent = '♫ ' + track.title + ' — ' + (track.artist ? track.artist.name : '');
+  }
 }
 
 // ─── INIT ────────────────────────────────────────────
