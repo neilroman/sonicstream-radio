@@ -1149,63 +1149,6 @@ body.light {
 </div>
 
 
-<!-- KARAOKE PANEL (overlay) -->
-<div id="karaoke-overlay" style="display:none;position:fixed;inset:0;background:rgba(8,12,20,.97);z-index:300;flex-direction:column;overflow:hidden;">
-  <div style="max-width:700px;margin:0 auto;padding:1rem 1.5rem 8rem;position:relative;z-index:1;">
-
-    <!-- No station playing -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;"><span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);">🎤 Karaoke</span><button onclick="toggleKaraoke()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;">\u2715 Cerrar</button></div><div id="karaoke-idle" style="text-align:center;padding:4rem 2rem;">
-      <div style="font-size:4rem;margin-bottom:1rem;">🎤</div>
-      <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:1rem;">
-        <span class="gradient">Karaoke</span>
-      </h2>
-      <p style="color:var(--muted);line-height:1.7;margin-bottom:2rem;">
-        Reproduce cualquier radio y la letra<br>aparecerá aquí automáticamente.
-      </p>
-      <button onclick="showPage('home',document.querySelector('nav button'))"
-        style="background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000;font-weight:700;
-        padding:14px 28px;border-radius:12px;border:none;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;">
-        📻 Ir a Radio
-      </button>
-    </div>
-
-    <!-- Now playing info -->
-    <div id="karaoke-player" style="display:none;">
-      <div style="display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);
-        border-radius:16px;padding:16px;margin-bottom:2rem;">
-        <div id="karaoke-art" style="width:56px;height:56px;border-radius:10px;background:var(--bg3);
-          display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;">📻</div>
-        <div style="min-width:0;">
-          <div id="karaoke-station" style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;
-            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
-          <div id="karaoke-track" style="font-size:.78rem;color:var(--accent);margin-top:2px;
-            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
-        </div>
-        <div style="display:flex;align-items:flex-end;gap:2px;height:20px;flex-shrink:0;">
-          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate;"></span>
-          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate .15s;"></span>
-          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate .3s;"></span>
-          <span style="display:block;width:3px;background:var(--accent);border-radius:2px;animation:eq .8s ease-in-out infinite alternate .45s;"></span>
-        </div>
-      </div>
-
-      <!-- Lyrics display -->
-      <div id="karaoke-lyrics-wrap">
-        <div id="karaoke-loading" style="text-align:center;padding:3rem;color:var(--muted);">
-          <div class="spinner" style="margin:0 auto 1rem;"></div>
-          Buscando letra...
-        </div>
-        <div id="karaoke-lyrics" style="display:none;"></div>
-        <div id="karaoke-error" style="display:none;text-align:center;padding:3rem;color:var(--muted);">
-          <div style="font-size:2.5rem;margin-bottom:1rem;">😔</div>
-          <p id="karaoke-error-msg"></p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 <!-- NOVEDADES -->
 <div id="page-news" class="page">
   <div class="news-page">
@@ -1727,20 +1670,7 @@ function showDeezerTrack(track) {
     if (lyricsInterval) { clearInterval(lyricsInterval); lyricsInterval = null; }
     fetchLyrics(lyricsArtist, lyricsSong);
   }
-  // 4. Update karaoke info
-  var newSong   = track.title || '';
-  var newArtist = track.artist ? track.artist.name : '';
-  var newArt    = track.album && track.album.cover_medium ? track.album.cover_medium : '';
-  if (newSong !== kSong || newArtist !== kArtist) {
-    kSong = newSong; kArtist = newArtist; kArtwork = newArt;
-    kLines = []; kIndex = 0;
-    if (kTimer) { clearTimeout(kTimer); kTimer = null; }
-    // Update karaoke overlay if open
-    var overlay = document.getElementById('karaoke-overlay');
-    if (overlay && overlay.style.display === 'flex') {
-      initKaraokePage();
-    }
-  }
+
 }
 
 // ─── INIT ────────────────────────────────────────────
@@ -2198,6 +2128,25 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+// ── SKIP STATION ─────────────────────────────────────────
+var _currentStations = [];
+
+function skipStation() {
+  if (!currentStation) { showToast('&#9654; Primero reproduce una radio'); return; }
+  // Get current list of stations from the active grid
+  var cards = document.querySelectorAll('.station-card');
+  if (!cards.length) { showToast('No hay estaciones para saltar'); return; }
+  var ids = Array.from(cards).map(function(c) { return c.id.replace('card-', ''); });
+  var currentIdx = ids.indexOf(currentStation.stationuuid);
+  var nextIdx = (currentIdx + 1) % ids.length;
+  var nextCard = document.getElementById('card-' + ids[nextIdx]);
+  if (nextCard) {
+    nextCard.click();
+    showToast('&#9197; Siguiente estacion');
+  }
+}
+
 // ── LYRICS ───────────────────────────────────────────────
 var lyricsLines    = [];
 var lyricsInterval = null;
@@ -2310,6 +2259,22 @@ function stopAudio() {
 
 
 // ── KARAOKE PAGE ─────────────────────────────────────────
+
+function searchKaraokeLyrics() {
+  var q = document.getElementById('karaoke-search-input').value.trim();
+  if (!q) return;
+  // Parse "artist song" or just "song"
+  var parts = q.split(' - ');
+  var artist = parts.length > 1 ? parts[0].trim() : '';
+  var song   = parts.length > 1 ? parts[1].trim() : q;
+  // Show player section
+  document.getElementById('karaoke-idle').style.display   = 'none';
+  document.getElementById('karaoke-player').style.display = 'block';
+  document.getElementById('karaoke-station').textContent  = currentStation ? currentStation.name : 'Radio';
+  document.getElementById('karaoke-track').textContent    = q;
+  fetchKaraokeLyrics(artist, song);
+}
+
 var kLines    = [];
 var kIndex    = 0;
 var kTimer    = null;
