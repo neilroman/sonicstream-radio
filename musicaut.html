@@ -161,47 +161,21 @@ async function doSearch() {
   var results = document.getElementById('results');
   results.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando...</div>';
 
-  // Use Piped API for search
-  var PIPED = [
-    'https://pipedapi.kavin.rocks',
-    'https://piped-api.garudalinux.org',
-    'https://api.piped.projectsegfau.lt'
-  ];
-
-  for (var i = 0; i < PIPED.length; i++) {
-    try {
-      var res = await fetch(PIPED[i] + '/search?q=' + encodeURIComponent(q) + '&filter=videos');
-      if (!res.ok) continue;
-      var data = await res.json();
-      var items = (data.items || []).filter(function(v) { return v.url && v.url.includes('watch'); });
-      if (items.length) {
-        renderResults(items.slice(0, 24));
-        return;
-      }
-    } catch(e) { continue; }
-  }
-
-  // Fallback: search via Vercel proxy
+  // Use Vercel video search endpoint (no CORS issues)
   try {
-    var res2 = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(q));
-    if (res2.ok) {
-      var d = await res2.json();
-      if (d.videoId) {
-        // Show single result
-        renderResults([{
-          url: '/watch?v=' + d.videoId,
-          title: d.title || q,
-          uploaderName: '',
-          thumbnail: 'https://i.ytimg.com/vi/' + d.videoId + '/mqdefault.jpg',
-          duration: 0,
-          views: 0
-        }]);
+    var res = await fetch(VERCEL + '/api/videosearch?q=' + encodeURIComponent(q));
+    if (res.ok) {
+      var data = await res.json();
+      if (data.items && data.items.length) {
+        renderResults(data.items);
         return;
       }
     }
-  } catch(e) {}
+  } catch(e) {
+    console.error('Search error:', e);
+  }
 
-  results.innerHTML = '<div class="empty"><div class="icon">📭</div><p>No se encontraron resultados para "<strong>' + q + '</strong>"</p></div>';
+  results.innerHTML = '<div class="empty"><div class="icon">&#128218;</div><p>No se encontraron resultados para "<strong>' + q + '</strong>"</p></div>';
 }
 
 function formatDuration(secs) {
@@ -247,7 +221,7 @@ function renderResults(items) {
 async function openVideo(idx) {
   var v = window._videos['v' + idx];
   if (!v) return;
-  var vid = v.url ? v.url.split('watch?v=')[1] : '';
+  var vid = v.videoId || (v.url ? v.url.split('watch?v=')[1] : '');
   if (vid) vid = vid.split('&')[0];
   if (!vid) return;
 
