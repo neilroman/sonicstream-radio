@@ -8,83 +8,53 @@
 <style>
 :root{--bg:#080c14;--bg2:#0d1220;--bg3:#111827;--accent:#00e5ff;--accent2:#ff3d7f;--accent3:#7c4dff;--text:#e8eaf0;--muted:#6b7280;--card:#131929;--border:rgba(255,255,255,0.06);--glow:0 0 30px rgba(0,229,255,0.15)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;
-  background:radial-gradient(ellipse at 20% 20%,rgba(0,229,255,.04) 0%,transparent 50%),
-  radial-gradient(ellipse at 80% 80%,rgba(124,77,255,.04) 0%,transparent 50%);
-  pointer-events:none;z-index:0}
-
-/* HEADER */
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(0,229,255,.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(124,77,255,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem}
 .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
 .logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none}
 .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent3));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
 .logo span{color:var(--accent)}
-.back-btn{background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--accent);padding:7px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600;white-space:nowrap}
-
-/* MAIN */
+.back-btn{background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--accent);padding:7px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600}
 .main{max-width:1000px;margin:0 auto;padding:2rem 1.5rem 6rem;position:relative;z-index:1}
-
-/* HERO */
-.hero{text-align:center;margin-bottom:2.5rem}
+.hero{text-align:center;margin-bottom:2rem}
 .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);border-radius:100px;padding:5px 14px;font-size:.75rem;color:var(--accent);margin-bottom:1rem;font-weight:500}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;margin-bottom:.8rem}
 .gradient{background:linear-gradient(90deg,var(--accent),var(--accent3),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--muted);font-size:.95rem;line-height:1.7}
-
-/* SEARCH */
 .search-box{background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;overflow:hidden;margin-bottom:2rem;transition:border-color .3s,box-shadow .3s}
 .search-box:focus-within{border-color:rgba(0,229,255,.4);box-shadow:var(--glow)}
 .search-box input{flex:1;background:none;border:none;outline:none;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text)}
 .search-box input::placeholder{color:var(--muted)}
-.search-box button{background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;padding:10px 22px;margin:6px;border-radius:10px;color:#000;font-weight:700;font-size:.85rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s}
-.search-box button:hover{opacity:.9}
-
-/* RESULTS */
-.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.search-box button{background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;padding:10px 22px;margin:6px;border-radius:10px;color:#000;font-weight:700;font-size:.85rem;cursor:pointer;font-family:'DM Sans',sans-serif}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
 .video-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .25s;cursor:pointer}
 .video-card:hover{border-color:rgba(0,229,255,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
 .thumb-wrap{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--bg3)}
-.thumb-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.video-card:hover .thumb-wrap img{transform:scale(1.03)}
+.thumb-wrap img{width:100%;height:100%;object-fit:cover}
 .duration-badge{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.8);color:#fff;font-size:.7rem;font-weight:600;padding:2px 6px;border-radius:4px}
 .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);opacity:0;transition:opacity .2s}
 .video-card:hover .play-overlay{opacity:1}
 .play-overlay span{width:48px;height:48px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#000}
 .video-info{padding:14px}
-.video-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.video-meta{font-size:.75rem;color:var(--muted);display:flex;gap:8px;align-items:center}
-.video-channel{color:var(--accent);font-size:.75rem}
-
-/* PLAYER MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(12px);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto}
+.video-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.video-meta{font-size:.75rem;color:var(--muted)}
+.video-channel{color:var(--accent)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(12px);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;overflow-y:auto}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:800px;overflow:hidden;margin:auto}
-.modal-video{width:100%;aspect-ratio:16/9;background:#000;position:relative}
-.modal-video video{width:100%;height:100%;display:block}
-.modal-video iframe{width:100%;height:100%;border:none}
+.modal-video{width:100%;aspect-ratio:16/9;background:#000;position:relative;display:flex;align-items:center;justify-content:center}
+.modal-video video{width:100%;height:100%;display:none}
+.modal-loading{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
 .modal-body{padding:20px}
-.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:6px}
-.modal-channel{color:var(--accent);font-size:.82rem;margin-bottom:16px}
-.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.btn-action{display:flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
+.modal-channel{color:var(--accent);font-size:.8rem;margin-bottom:16px}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.btn-dl{display:inline-flex;align-items:center;gap:6px;padding:11px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
 .btn-mp4{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000}
 .btn-mp3{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--accent)}
-.btn-mp3:hover{background:rgba(0,229,255,.2)}
-.btn-close{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted)}
-.btn-close:hover{color:var(--text)}
-
-/* DOWNLOAD QUEUE */
-.queue-wrap{margin-top:16px}
-.queue-title{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
-.queue-item{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px;font-size:.82rem}
-.queue-item .q-thumb{width:40px;height:28px;border-radius:4px;object-fit:cover;flex-shrink:0}
-.queue-item .q-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.queue-item .q-status{font-size:.72rem;color:var(--accent);flex-shrink:0}
-.queue-item .q-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;flex-shrink:0}
-.queue-item .q-remove:hover{color:var(--accent2)}
-
-/* LOADING / EMPTY */
+.btn-close-modal{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);cursor:pointer}
+.modal-info{font-size:.75rem;color:var(--muted);line-height:1.6}
 .loading{text-align:center;padding:4rem 2rem;color:var(--muted)}
 .spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -106,9 +76,9 @@ header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.9);backdrop-fi
 
 <div class="main">
   <div class="hero">
-    <div class="badge">🎬 Videos sin publicidad · MP4 + MP3 · Descarga directa</div>
+    <div class="badge">🎬 Sin publicidad · MP4 + MP3 · Descarga directa</div>
     <h1>Music<span class="gradient">Aut</span></h1>
-    <p>Busca cualquier video o canción. Reprodúcelo limpio y descárgalo en MP4 o MP3.</p>
+    <p>Busca videos y canciones. Reprodúcelos sin publicidad y descárgalos en MP4 o MP3.</p>
   </div>
 
   <div class="search-box">
@@ -116,53 +86,48 @@ header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.9);backdrop-fi
     <button onclick="doSearch()">🔍 Buscar</button>
   </div>
 
-  <!-- DOWNLOAD QUEUE -->
-  <div class="queue-wrap" id="queue-wrap" style="display:none">
-    <div class="queue-title">⬇️ Cola de descargas</div>
-    <div id="queue-list"></div>
-  </div>
-
   <div id="results">
     <div class="empty"><div class="icon">🎬</div><p>Busca un video para empezar</p></div>
   </div>
 </div>
 
-<!-- PLAYER MODAL -->
-<div class="modal-overlay" id="modal" onclick="handleModalClick(event)">
-  <div class="modal" id="modal-inner">
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
     <div class="modal-video" id="modal-video">
-      <video id="video-player" controls autoplay preload="auto" style="display:none"></video>
-      <div id="video-loading" style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:12px;">
+      <video id="video-player" controls preload="auto"></video>
+      <div class="modal-loading" id="modal-loading">
         <div class="spinner"></div>
-        <p style="color:var(--muted);font-size:.85rem;">Cargando video...</p>
+        <span>Cargando video...</span>
       </div>
     </div>
     <div class="modal-body">
-      <div class="modal-title" id="modal-title">Cargando...</div>
+      <div class="modal-title" id="modal-title"></div>
       <div class="modal-channel" id="modal-channel"></div>
       <div class="modal-actions">
-        <a class="btn-action btn-mp4" id="btn-mp4" href="#" download>⬇️ Descargar MP4</a>
-        <a class="btn-action btn-mp3" id="btn-mp3" href="#" download>🎵 Descargar MP3</a>
-        <button class="btn-action btn-close" onclick="closeModal()">✕ Cerrar</button>
+        <a class="btn-dl btn-mp4" id="btn-mp4" href="#" target="_blank">⬇️ MP4</a>
+        <a class="btn-dl btn-mp3" id="btn-mp3" href="#" target="_blank">🎵 MP3</a>
+        <button class="btn-dl btn-close-modal" onclick="closeModal()">✕ Cerrar</button>
       </div>
-      <div id="modal-info" style="font-size:.78rem;color:var(--muted);line-height:1.6"></div>
+      <div class="modal-info" id="modal-info">Obteniendo enlaces de descarga...</div>
     </div>
   </div>
 </div>
 
 <script>
+// ── CONFIG ───────────────────────────────────────────────
 var VERCEL = 'https://sonicstream-api-to1x.vercel.app';
-var downloadQueue = [];
+window._videos = {};
 
 // ── SEARCH ───────────────────────────────────────────────
 async function doSearch() {
   var q = document.getElementById('search-input').value.trim();
   if (!q) return;
-  var results = document.getElementById('results');
-  results.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando...</div>';
+  var el = document.getElementById('results');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando...</div>';
 
-  // Strategy 1: Vercel video search endpoint
   try {
+    // Use Vercel videosearch endpoint
     var res = await fetch(VERCEL + '/api/videosearch?q=' + encodeURIComponent(q));
     if (res.ok) {
       var data = await res.json();
@@ -171,279 +136,146 @@ async function doSearch() {
         return;
       }
     }
-  } catch(e) {
-    console.warn('Vercel search failed:', e.message);
-  }
+  } catch(e) { console.warn('Search error:', e.message); }
 
-  // Strategy 2: Use Vercel search (returns single videoId) + build grid
-  try {
-    var res2 = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(q));
-    if (res2.ok) {
-      var d2 = await res2.json();
-      if (d2.videoId) {
-        // Build multiple results from related searches
-        var queries = [q, q + ' official', q + ' video', q + ' live', q + ' lyrics'];
-        var allItems = [];
-        for (var qi = 0; qi < queries.length; qi++) {
-          try {
-            var rq = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(queries[qi]));
-            if (rq.ok) {
-              var dq = await rq.json();
-              if (dq.videoId && !allItems.find(function(x){ return x.videoId === dq.videoId; })) {
-                allItems.push({
-                  videoId: dq.videoId,
-                  title: dq.title || queries[qi],
-                  channel: '',
-                  thumb: 'https://i.ytimg.com/vi/' + dq.videoId + '/mqdefault.jpg'
-                });
-              }
-            }
-          } catch(e3) {}
-        }
-        if (allItems.length) {
-          renderResults(allItems);
-          return;
+  // Fallback: use single search multiple times
+  var queries = [q, q + ' official', q + ' video', q + ' audio', q + ' live'];
+  var items = [];
+  for (var i = 0; i < queries.length; i++) {
+    try {
+      var r = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(queries[i]));
+      if (r.ok) {
+        var d = await r.json();
+        if (d.videoId && !items.find(function(x){ return x.videoId === d.videoId; })) {
+          items.push({
+            videoId: d.videoId,
+            title: d.title || queries[i],
+            channel: '',
+            thumb: 'https://i.ytimg.com/vi/' + d.videoId + '/mqdefault.jpg'
+          });
         }
       }
-    }
-  } catch(e2) {
-    console.warn('Vercel single search failed:', e2.message);
+    } catch(e2) {}
   }
 
-  results.innerHTML = '<div class="empty"><div class="icon">&#128218;</div><p>No se encontraron resultados para "<strong>' + q + '</strong>".<br><small style="color:var(--muted)">Intenta con otro t&eacute;rmino de b&uacute;squeda</small></p></div>';
+  if (items.length) { renderResults(items); return; }
+  el.innerHTML = '<div class="empty"><div class="icon">📭</div><p>No se encontraron resultados para "<strong>' + q + '</strong>"</p></div>';
 }
 
-function formatDuration(secs) {
-  if (!secs) return '';
-  var m = Math.floor(secs / 60);
-  var s = secs % 60;
-  return m + ':' + (s < 10 ? '0' : '') + s;
-}
-
-function formatViews(n) {
-  if (!n) return '';
-  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M views';
-  if (n >= 1000) return (n/1000).toFixed(0) + 'K views';
-  return n + ' views';
+function formatDuration(s) {
+  if (!s) return '';
+  return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + s%60;
 }
 
 function renderResults(items) {
   window._videos = {};
-  var html = '<div class="results-grid">' + items.map(function(v, i) {
-    window._videos['v' + i] = v;
-    var vid = v.url ? v.url.split('watch?v=')[1] : '';
-    if (vid) vid = vid.split('&')[0];
-    var thumb = v.thumbnail || (vid ? 'https://i.ytimg.com/vi/' + vid + '/mqdefault.jpg' : '');
-    var dur = formatDuration(v.duration);
-    var views = formatViews(v.views);
-    return '<div class="video-card" onclick="openVideo(' + i + ')">'
+  var html = '<div class="results-grid">';
+  items.forEach(function(v, i) {
+    window._videos['v'+i] = v;
+    var vid  = v.videoId || '';
+    var thumb = v.thumb || v.thumbnail || (vid ? 'https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg' : '');
+    var dur  = formatDuration(v.duration);
+    var ch   = v.channel || v.uploaderName || '';
+    html += '<div class="video-card" onclick="openVideo('+i+')">'
       + '<div class="thumb-wrap">'
-      + (thumb ? '<img src="' + thumb + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '')
-      + (dur ? '<span class="duration-badge">' + dur + '</span>' : '')
+      + (thumb ? '<img src="'+thumb+'" alt="" loading="lazy">' : '')
+      + (dur ? '<span class="duration-badge">'+dur+'</span>' : '')
       + '<div class="play-overlay"><span>&#9654;</span></div>'
       + '</div>'
       + '<div class="video-info">'
-      + '<div class="video-title">' + (v.title || '') + '</div>'
-      + '<div class="video-meta">'
-      + (v.uploaderName ? '<span class="video-channel">' + v.uploaderName + '</span>' : '')
-      + (views ? '<span>' + views + '</span>' : '')
-      + '</div></div></div>';
-  }).join('') + '</div>';
+      + '<div class="video-title">'+(v.title||'')+'</div>'
+      + '<div class="video-meta">'+(ch?'<span class="video-channel">'+ch+'</span>':'')+'</div>'
+      + '</div></div>';
+  });
+  html += '</div>';
   document.getElementById('results').innerHTML = html;
 }
 
 // ── PLAYER ───────────────────────────────────────────────
 async function openVideo(idx) {
-  var v = window._videos['v' + idx];
+  var v = window._videos['v'+idx];
   if (!v) return;
-  var vid = v.videoId || (v.url ? v.url.split('watch?v=')[1] : '');
-  if (vid) vid = vid.split('&')[0];
+  var vid = v.videoId || '';
   if (!vid) return;
 
   // Open modal
   document.getElementById('modal').classList.add('open');
-  document.getElementById('modal-title').textContent   = v.title || 'Cargando...';
-  document.getElementById('modal-channel').textContent = v.uploaderName || '';
-  document.getElementById('video-loading').style.display = 'flex';
-  document.getElementById('video-player').style.display  = 'none';
+  document.getElementById('modal-title').textContent   = v.title || '';
+  document.getElementById('modal-channel').textContent = v.channel || v.uploaderName || '';
+  document.getElementById('modal-info').textContent    = 'Obteniendo enlaces...';
+
+  // Reset player
+  var player = document.getElementById('video-player');
+  player.src = '';
+  player.style.display = 'none';
+  document.getElementById('modal-loading').style.display = 'flex';
+
+  // Reset buttons
   document.getElementById('btn-mp4').href = '#';
   document.getElementById('btn-mp3').href = '#';
-  document.getElementById('modal-info').textContent = 'Obteniendo enlaces...';
-
-  // Get direct video URL via Cobalt API through Vercel
-  await loadVideoLinks(vid, v.title || '');
-}
-
-async function loadVideoLinks(videoId, title) {
-  var infoEl = document.getElementById('modal-info');
-  var loadingEl = document.getElementById('video-loading');
-  var playerEl = document.getElementById('video-player');
-
-  infoEl.textContent = 'Obteniendo enlaces...';
 
   // Get MP4 via Vercel Cobalt proxy
+  var gotVideo = false;
   try {
-    var r4 = await fetch(VERCEL + '/api/cobalt?id=' + videoId + '&type=mp4');
+    var r4 = await fetch(VERCEL + '/api/cobalt?id=' + vid + '&type=mp4');
     if (r4.ok) {
       var d4 = await r4.json();
       if (d4.url) {
-        // Play directly in HTML5 video player
-        playerEl.src = d4.url;
-        playerEl.style.display = 'block';
-        loadingEl.style.display = 'none';
-        playerEl.play().catch(function(){});
-
-        // Set download button
+        player.src = d4.url;
+        player.style.display = 'block';
+        document.getElementById('modal-loading').style.display = 'none';
+        player.play().catch(function(){});
         var btn4 = document.getElementById('btn-mp4');
         btn4.href = d4.url;
-        btn4.setAttribute('download', title + '.mp4');
-        btn4.target = '';
-        btn4.textContent = '&#11015;&#65039; Descargar MP4';
-        infoEl.textContent = '&#127916; Video listo. Descarga MP4 o MP3.';
+        btn4.setAttribute('download', (v.title||vid) + '.mp4');
+        btn4.removeAttribute('target');
+        btn4.textContent = '⬇️ Descargar MP4';
+        gotVideo = true;
       }
     }
-  } catch(e) {
-    console.warn('MP4 failed:', e.message);
-    // Show fallback message
-    loadingEl.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem;">&#9888; No se pudo cargar el video.<br>Descarga el MP3 abajo.</p>';
+  } catch(e) { console.warn('MP4 failed:', e.message); }
+
+  if (!gotVideo) {
+    document.getElementById('modal-loading').innerHTML =
+      '<p style="color:var(--muted);text-align:center;padding:1rem">⚠️ No se pudo cargar el video</p>';
+    var btn4 = document.getElementById('btn-mp4');
+    btn4.href = 'https://cobalt.tools/?url=' + encodeURIComponent('https://www.youtube.com/watch?v='+vid);
+    btn4.target = '_blank';
+    btn4.removeAttribute('download');
+    btn4.textContent = '🎬 Ver en Cobalt';
   }
 
   // Get MP3 via Vercel Cobalt proxy
   try {
-    var r3 = await fetch(VERCEL + '/api/cobalt?id=' + videoId + '&type=mp3');
+    var r3 = await fetch(VERCEL + '/api/cobalt?id=' + vid + '&type=mp3');
     if (r3.ok) {
       var d3 = await r3.json();
       if (d3.url) {
         var btn3 = document.getElementById('btn-mp3');
         btn3.href = d3.url;
-        btn3.setAttribute('download', title + '.mp3');
-        btn3.target = '';
-        btn3.textContent = '&#11015;&#65039; Descargar MP3';
+        btn3.setAttribute('download', (v.title||vid) + '.mp3');
+        btn3.removeAttribute('target');
+        btn3.textContent = '⬇️ Descargar MP3';
+        document.getElementById('modal-info').textContent = '✅ Listo. Haz clic en los botones para descargar.';
+        return;
       }
     }
-  } catch(e) {
-    console.warn('MP3 failed:', e.message);
-  }
+  } catch(e) { console.warn('MP3 failed:', e.message); }
+
+  document.getElementById('modal-info').textContent = 'Descarga disponible via los botones.';
 }
 
-function playDirectVideo(url, title) {
-  var player = document.getElementById('video-player');
-  var loading = document.getElementById('video-loading');
-  player.src = url;
-  player.style.display = 'block';
-  loading.style.display = 'none';
-  player.play().catch(function() {
-    showYouTubeEmbed('');
-  });
-}
-
-function showYouTubeEmbed_disabled(videoId) {
-  var loading = document.getElementById('video-loading');
-  var player  = document.getElementById('video-player');
-  loading.style.display = 'none';
-  player.style.display  = 'none';
-
-  // Try multiple embeds - Invidious instances work without CORS
-  var EMBEDS = [
-    'https://inv.nadeko.net/embed/' + videoId + '?autoplay=1&listen=0',
-    'https://yewtu.be/embed/' + videoId + '?autoplay=1',
-    'https://invidious.tiekoetter.com/embed/' + videoId + '?autoplay=1'
-  ];
-
-  var iframe = document.createElement('iframe');
-  iframe.src = EMBEDS[0];
-  iframe.style.cssText = 'width:100%;height:100%;border:none;display:block';
-  iframe.allowFullscreen = true;
-  iframe.setAttribute('allow', 'fullscreen');
-  iframe.setAttribute('loading', 'lazy');
-
-  // If first fails, try next
-  var embedIdx = 0;
-  iframe.onerror = function() {
-    embedIdx++;
-    if (embedIdx < EMBEDS.length) {
-      iframe.src = EMBEDS[embedIdx];
-    }
-  };
-
-  // Remove existing iframes
-  document.getElementById('modal-video').querySelectorAll('iframe').forEach(function(f){ f.remove(); });
-  document.getElementById('modal-video').appendChild(iframe);
-  document.getElementById('modal-info').textContent = 'Reproductor cargado.';
-}
-
-// ── DOWNLOAD QUEUE ────────────────────────────────────────
-function addToQueue(videoId, title, thumb) {
-  downloadQueue.push({ videoId, title, thumb, status: 'pending' });
-  renderQueue();
-  processQueue();
-}
-
-function renderQueue() {
-  var wrap = document.getElementById('queue-wrap');
-  var list = document.getElementById('queue-list');
-  if (!downloadQueue.length) { wrap.style.display = 'none'; return; }
-  wrap.style.display = 'block';
-  list.innerHTML = downloadQueue.map(function(item, i) {
-    return '<div class="queue-item">'
-      + (item.thumb ? '<img class="q-thumb" src="' + item.thumb + '" alt="">' : '')
-      + '<span class="q-title">' + item.title + '</span>'
-      + '<span class="q-status">' + (item.status === 'done' ? '✅' : item.status === 'error' ? '❌' : '⏳') + '</span>'
-      + '<button class="q-remove" onclick="removeFromQueue(' + i + ')">✕</button>'
-      + '</div>';
-  }).join('');
-}
-
-function removeFromQueue(i) {
-  downloadQueue.splice(i, 1);
-  renderQueue();
-}
-
-async function processQueue() {
-  for (var i = 0; i < downloadQueue.length; i++) {
-    var item = downloadQueue[i];
-    if (item.status !== 'pending') continue;
-    item.status = 'downloading';
-    renderQueue();
-    try {
-      var res = await fetch(VERCEL + '/api/download?id=' + item.videoId + '&title=' + encodeURIComponent(item.title));
-      var data = await res.json();
-      if (data.url) {
-        var a = document.createElement('a');
-        a.href = data.url;
-        a.download = item.title + '.mp3';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        item.status = 'done';
-      } else {
-        item.status = 'error';
-      }
-    } catch(e) {
-      item.status = 'error';
-    }
-    renderQueue();
-  }
-}
-
-// ── MODAL ─────────────────────────────────────────────────
+// ── CLOSE ─────────────────────────────────────────────────
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
   var player = document.getElementById('video-player');
-  player.pause(); player.src = '';
-  // Remove any iframe
-  var iframes = document.getElementById('modal-video').querySelectorAll('iframe');
-  iframes.forEach(function(f) { f.remove(); });
+  player.pause();
+  player.src = '';
   player.style.display = 'none';
-  document.getElementById('video-loading').style.display = 'flex';
+  document.getElementById('modal-loading').style.display = 'flex';
+  document.getElementById('modal-loading').innerHTML =
+    '<div class="spinner"></div><span>Cargando video...</span>';
 }
-
-function handleModalClick(e) {
-  if (e.target === document.getElementById('modal')) closeModal();
-}
-
-// ── INIT ──────────────────────────────────────────────────
-document.getElementById('search-input').focus();
 </script>
 </body>
 </html>
