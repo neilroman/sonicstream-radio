@@ -1705,6 +1705,7 @@ function fetchDeezerMeta(station) {
 }
 
 function showDeezerTrack(track) {
+  // 1. Update player logo
   if (track.album && track.album.cover_small) {
     var logo = document.getElementById('player-logo');
     var img = document.createElement('img');
@@ -1713,10 +1714,32 @@ function showDeezerTrack(track) {
     logo.innerHTML = '';
     logo.appendChild(img);
   }
+  // 2. Update player track info
   var t = document.getElementById('player-track');
   if (t) {
     t.style.display = 'block';
     t.textContent = '♫ ' + track.title + ' — ' + (track.artist ? track.artist.name : '');
+  }
+  // 3. Update lyrics info
+  lyricsSong   = track.title || '';
+  lyricsArtist = track.artist ? track.artist.name : '';
+  if (lyricsOpen && lyricsSong && lyricsArtist) {
+    if (lyricsInterval) { clearInterval(lyricsInterval); lyricsInterval = null; }
+    fetchLyrics(lyricsArtist, lyricsSong);
+  }
+  // 4. Update karaoke info
+  var newSong   = track.title || '';
+  var newArtist = track.artist ? track.artist.name : '';
+  var newArt    = track.album && track.album.cover_medium ? track.album.cover_medium : '';
+  if (newSong !== kSong || newArtist !== kArtist) {
+    kSong = newSong; kArtist = newArtist; kArtwork = newArt;
+    kLines = []; kIndex = 0;
+    if (kTimer) { clearTimeout(kTimer); kTimer = null; }
+    // Update karaoke overlay if open
+    var overlay = document.getElementById('karaoke-overlay');
+    if (overlay && overlay.style.display === 'flex') {
+      initKaraokePage();
+    }
   }
 }
 
@@ -2274,18 +2297,7 @@ function startLyricsScroll() {
 }
 
 // Hook into Deezer track display to get song info for lyrics
-var _origShowDeezerTrack = showDeezerTrack;
-function showDeezerTrack(track) {
-  _origShowDeezerTrack(track);
-  // Save track info for lyrics
-  lyricsSong   = track.title || '';
-  lyricsArtist = track.artist ? track.artist.name : '';
-  // Auto-update lyrics if panel is open
-  if (lyricsOpen && lyricsSong && lyricsArtist) {
-    if (lyricsInterval) { clearInterval(lyricsInterval); lyricsInterval = null; }
-    fetchLyrics(lyricsArtist, lyricsSong);
-  }
-}
+// lyrics track update handled in main showDeezerTrack
 
 // Stop lyrics when audio stops
 var _origStopAudio = stopAudio;
@@ -2441,29 +2453,7 @@ function startKaraokeScroll() {
 }
 
 // Hook Deezer to update karaoke info
-var _origShowDeezerTrack2 = showDeezerTrack;
-function showDeezerTrack(track) {
-  _origShowDeezerTrack2(track);
-  var newSong   = track.title || '';
-  var newArtist = track.artist ? track.artist.name : '';
-  var newArt    = track.album && track.album.cover_medium ? track.album.cover_medium : '';
-
-  // If song changed, reset and reload
-  if (newSong !== kSong || newArtist !== kArtist) {
-    kSong    = newSong;
-    kArtist  = newArtist;
-    kArtwork = newArt;
-    kLines   = [];
-    kIndex   = 0;
-    if (kTimer) { clearTimeout(kTimer); kTimer = null; }
-
-    // Update karaoke page if visible
-    var kPage = document.getElementById('page-karaoke');
-    if (kPage && kPage.classList.contains('active')) {
-      initKaraokePage();
-    }
-  }
-}
+// karaoke track update handled in main showDeezerTrack
 
 </script>
 </body>
