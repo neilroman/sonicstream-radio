@@ -161,7 +161,7 @@ async function doSearch() {
   var results = document.getElementById('results');
   results.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando...</div>';
 
-  // Use Vercel video search endpoint (no CORS issues)
+  // Strategy 1: Vercel video search endpoint
   try {
     var res = await fetch(VERCEL + '/api/videosearch?q=' + encodeURIComponent(q));
     if (res.ok) {
@@ -172,10 +172,45 @@ async function doSearch() {
       }
     }
   } catch(e) {
-    console.error('Search error:', e);
+    console.warn('Vercel search failed:', e.message);
   }
 
-  results.innerHTML = '<div class="empty"><div class="icon">&#128218;</div><p>No se encontraron resultados para "<strong>' + q + '</strong>"</p></div>';
+  // Strategy 2: Use Vercel search (returns single videoId) + build grid
+  try {
+    var res2 = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(q));
+    if (res2.ok) {
+      var d2 = await res2.json();
+      if (d2.videoId) {
+        // Build multiple results from related searches
+        var queries = [q, q + ' official', q + ' video', q + ' live', q + ' lyrics'];
+        var allItems = [];
+        for (var qi = 0; qi < queries.length; qi++) {
+          try {
+            var rq = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(queries[qi]));
+            if (rq.ok) {
+              var dq = await rq.json();
+              if (dq.videoId && !allItems.find(function(x){ return x.videoId === dq.videoId; })) {
+                allItems.push({
+                  videoId: dq.videoId,
+                  title: dq.title || queries[qi],
+                  channel: '',
+                  thumb: 'https://i.ytimg.com/vi/' + dq.videoId + '/mqdefault.jpg'
+                });
+              }
+            }
+          } catch(e3) {}
+        }
+        if (allItems.length) {
+          renderResults(allItems);
+          return;
+        }
+      }
+    }
+  } catch(e2) {
+    console.warn('Vercel single search failed:', e2.message);
+  }
+
+  results.innerHTML = '<div class="empty"><div class="icon">&#128218;</div><p>No se encontraron resultados para "<strong>' + q + '</strong>".<br><small style="color:var(--muted)">Intenta con otro t&eacute;rmino de b&uacute;squeda</small></p></div>';
 }
 
 function formatDuration(secs) {
