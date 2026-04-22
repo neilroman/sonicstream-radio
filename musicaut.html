@@ -275,77 +275,55 @@ async function openVideo(idx) {
 }
 
 async function loadVideoLinks(videoId, title) {
-  var ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
+  var infoEl = document.getElementById('modal-info');
+  var loadingEl = document.getElementById('video-loading');
+  var playerEl = document.getElementById('video-player');
 
+  infoEl.textContent = 'Obteniendo enlaces...';
+
+  // Get MP4 via Vercel Cobalt proxy
   try {
-    // Try Cobalt.tools API for direct links
-    var cobaltRes = await fetch('https://api.cobalt.tools/api/json', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        url: ytUrl,
-        vCodec: 'h264',
-        vQuality: '720',
-        aFormat: 'mp3',
-        isAudioOnly: false,
-        disableMetadata: false
-      })
-    });
+    var r4 = await fetch(VERCEL + '/api/cobalt?id=' + videoId + '&type=mp4');
+    if (r4.ok) {
+      var d4 = await r4.json();
+      if (d4.url) {
+        // Play directly in HTML5 video player
+        playerEl.src = d4.url;
+        playerEl.style.display = 'block';
+        loadingEl.style.display = 'none';
+        playerEl.play().catch(function(){});
 
-    if (cobaltRes.ok) {
-      var cobaltData = await cobaltRes.json();
-      if (cobaltData.status === 'stream' || cobaltData.status === 'redirect') {
-        var videoUrl = cobaltData.url;
-        playDirectVideo(videoUrl, title);
-
-        // Get MP3 separately
-        var mp3Res = await fetch('https://api.cobalt.tools/api/json', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ url: ytUrl, isAudioOnly: true, aFormat: 'mp3' })
-        });
-        if (mp3Res.ok) {
-          var mp3Data = await mp3Res.json();
-          if (mp3Data.url) {
-            document.getElementById('btn-mp3').href = mp3Data.url;
-            document.getElementById('btn-mp3').setAttribute('download', title + '.mp3');
-          }
-        }
-
-        document.getElementById('btn-mp4').href = videoUrl;
-        document.getElementById('btn-mp4').setAttribute('download', title + '.mp4');
-        document.getElementById('modal-info').textContent = 'Video listo. Haz clic en Descargar para guardar.';
-        return;
+        // Set download button
+        var btn4 = document.getElementById('btn-mp4');
+        btn4.href = d4.url;
+        btn4.setAttribute('download', title + '.mp4');
+        btn4.target = '';
+        btn4.textContent = '&#11015;&#65039; Descargar MP4';
+        infoEl.textContent = '&#127916; Video listo. Descarga MP4 o MP3.';
       }
     }
   } catch(e) {
-    console.warn('Cobalt failed:', e.message);
+    console.warn('MP4 failed:', e.message);
+    // Show fallback message
+    loadingEl.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem;">&#9888; No se pudo cargar el video.<br>Descarga el MP3 abajo.</p>';
   }
 
-  // Fallback: use Vercel download endpoint for MP3 + show YouTube embed
-  document.getElementById('modal-info').textContent = 'Cargando reproductor...';
-  showYouTubeEmbed(videoId);
-
-  // Get MP3 via Vercel
+  // Get MP3 via Vercel Cobalt proxy
   try {
-    var dlRes = await fetch(VERCEL + '/api/download?id=' + videoId + '&title=' + encodeURIComponent(title));
-    if (dlRes.ok) {
-      var dlData = await dlRes.json();
-      if (dlData.url) {
-        document.getElementById('btn-mp3').href = dlData.url;
-        document.getElementById('btn-mp3').setAttribute('download', title + '.mp3');
+    var r3 = await fetch(VERCEL + '/api/cobalt?id=' + videoId + '&type=mp3');
+    if (r3.ok) {
+      var d3 = await r3.json();
+      if (d3.url) {
+        var btn3 = document.getElementById('btn-mp3');
+        btn3.href = d3.url;
+        btn3.setAttribute('download', title + '.mp3');
+        btn3.target = '';
+        btn3.textContent = '&#11015;&#65039; Descargar MP3';
       }
     }
-  } catch(e) {}
-
-  document.getElementById('btn-mp4').href = 'https://cobalt.tools/?url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + videoId);
-  document.getElementById('btn-mp4').removeAttribute('download');
-  document.getElementById('btn-mp4').target = '_blank';
-  document.getElementById('btn-mp4').textContent = '⬇️ Descargar MP4 (Cobalt)';
-  document.getElementById('modal-info').textContent = 'Reproductor listo. Para descargar MP4 usa el botón Cobalt.';
+  } catch(e) {
+    console.warn('MP3 failed:', e.message);
+  }
 }
 
 function playDirectVideo(url, title) {
@@ -359,18 +337,39 @@ function playDirectVideo(url, title) {
   });
 }
 
-function showYouTubeEmbed(videoId) {
+function showYouTubeEmbed_disabled(videoId) {
   var loading = document.getElementById('video-loading');
   var player  = document.getElementById('video-player');
   loading.style.display = 'none';
   player.style.display  = 'none';
-  // Create Piped embed (no ads)
-  var embedDiv = document.createElement('iframe');
-  embedDiv.src = 'https://piped.video/embed/' + videoId + '?autoplay=1';
-  embedDiv.style.cssText = 'width:100%;height:100%;border:none;display:block';
-  embedDiv.allowFullscreen = true;
-  embedDiv.allow = 'autoplay; fullscreen';
-  document.getElementById('modal-video').appendChild(embedDiv);
+
+  // Try multiple embeds - Invidious instances work without CORS
+  var EMBEDS = [
+    'https://inv.nadeko.net/embed/' + videoId + '?autoplay=1&listen=0',
+    'https://yewtu.be/embed/' + videoId + '?autoplay=1',
+    'https://invidious.tiekoetter.com/embed/' + videoId + '?autoplay=1'
+  ];
+
+  var iframe = document.createElement('iframe');
+  iframe.src = EMBEDS[0];
+  iframe.style.cssText = 'width:100%;height:100%;border:none;display:block';
+  iframe.allowFullscreen = true;
+  iframe.setAttribute('allow', 'fullscreen');
+  iframe.setAttribute('loading', 'lazy');
+
+  // If first fails, try next
+  var embedIdx = 0;
+  iframe.onerror = function() {
+    embedIdx++;
+    if (embedIdx < EMBEDS.length) {
+      iframe.src = EMBEDS[embedIdx];
+    }
+  };
+
+  // Remove existing iframes
+  document.getElementById('modal-video').querySelectorAll('iframe').forEach(function(f){ f.remove(); });
+  document.getElementById('modal-video').appendChild(iframe);
+  document.getElementById('modal-info').textContent = 'Reproductor cargado.';
 }
 
 // ── DOWNLOAD QUEUE ────────────────────────────────────────
