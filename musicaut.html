@@ -204,48 +204,33 @@ async function openVideo(idx) {
   document.getElementById('modal-channel').textContent = v.channel || v.uploaderName || '';
   document.getElementById('modal-info').textContent    = 'Obteniendo enlaces...';
 
-  // Reset player
-  var player = document.getElementById('video-player');
-  player.src = '';
-  player.style.display = 'none';
+  // Show loading state
   document.getElementById('modal-loading').style.display = 'flex';
+  document.getElementById('modal-loading').innerHTML = '<div class="spinner"></div><span>Preparando descarga...</span>';
+  document.querySelectorAll('#modal-video iframe').forEach(function(f){ f.remove(); });
+  document.getElementById('video-player').style.display = 'none';
 
-  // Reset buttons
-  document.getElementById('btn-mp4').href = '#';
-  document.getElementById('btn-mp3').href = '#';
+  // Set watch button - opens video player page
+  var btn4 = document.getElementById('btn-mp4');
+  btn4.href = 'player.html?v=' + vid + '&t=' + encodeURIComponent(v.title||'');
+  btn4.target = '_blank';
+  btn4.removeAttribute('download');
+  btn4.textContent = '▶️ Ver Video';
 
-  // Get MP4 via Vercel Cobalt proxy
-  var gotVideo = false;
-  try {
-    var r4 = await fetch(VERCEL + '/api/cobalt?id=' + vid + '&type=mp4');
-    if (r4.ok) {
-      var d4 = await r4.json();
-      if (d4.url) {
-        player.src = d4.url;
-        player.style.display = 'block';
-        document.getElementById('modal-loading').style.display = 'none';
-        player.play().catch(function(){});
-        var btn4 = document.getElementById('btn-mp4');
-        btn4.href = d4.url;
-        btn4.setAttribute('download', (v.title||vid) + '.mp4');
-        btn4.removeAttribute('target');
-        btn4.textContent = '⬇️ Descargar MP4';
-        gotVideo = true;
-      }
-    }
-  } catch(e) { console.warn('MP4 failed:', e.message); }
+  // Show preview thumbnail in modal
+  var thumbUrl = 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg';
+  document.getElementById('modal-loading').style.display = 'none';
+  var thumbDiv = document.createElement('div');
+  thumbDiv.style.cssText = 'width:100%;height:100%;position:relative;cursor:pointer;';
+  thumbDiv.innerHTML = '<img src="'+thumbUrl+'" style="width:100%;height:100%;object-fit:cover;">'
+    + '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);">'
+    + '<a href="player.html?v='+vid+'&t='+encodeURIComponent(v.title||'')+'" target="_blank" '
+    + 'style="width:72px;height:72px;background:rgba(255,0,0,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.8rem;">&#9654;</a>'
+    + '</div>';
+  document.getElementById('modal-video').appendChild(thumbDiv);
 
-  if (!gotVideo) {
-    document.getElementById('modal-loading').innerHTML =
-      '<p style="color:var(--muted);text-align:center;padding:1rem">⚠️ No se pudo cargar el video</p>';
-    var btn4 = document.getElementById('btn-mp4');
-    btn4.href = 'https://cobalt.tools/?url=' + encodeURIComponent('https://www.youtube.com/watch?v='+vid);
-    btn4.target = '_blank';
-    btn4.removeAttribute('download');
-    btn4.textContent = '🎬 Ver en Cobalt';
-  }
-
-  // Get MP3 via Vercel Cobalt proxy
+  // Get MP3 via Vercel
+  document.getElementById('modal-info').textContent = 'Obteniendo enlace MP3...';
   try {
     var r3 = await fetch(VERCEL + '/api/cobalt?id=' + vid + '&type=mp3');
     if (r3.ok) {
@@ -256,13 +241,12 @@ async function openVideo(idx) {
         btn3.setAttribute('download', (v.title||vid) + '.mp3');
         btn3.removeAttribute('target');
         btn3.textContent = '⬇️ Descargar MP3';
-        document.getElementById('modal-info').textContent = '✅ Listo. Haz clic en los botones para descargar.';
+        document.getElementById('modal-info').textContent = '✅ MP3 listo. Haz clic en "Ver Video" para reproducir.';
         return;
       }
     }
   } catch(e) { console.warn('MP3 failed:', e.message); }
-
-  document.getElementById('modal-info').textContent = 'Descarga disponible via los botones.';
+  document.getElementById('modal-info').textContent = 'Haz clic en "Ver Video" para reproducir.';
 }
 
 // ── CLOSE ─────────────────────────────────────────────────
@@ -272,9 +256,9 @@ function closeModal() {
   player.pause();
   player.src = '';
   player.style.display = 'none';
+  document.querySelectorAll('#modal-video iframe, #modal-video div').forEach(function(f){ f.remove(); });
   document.getElementById('modal-loading').style.display = 'flex';
-  document.getElementById('modal-loading').innerHTML =
-    '<div class="spinner"></div><span>Cargando video...</span>';
+  document.getElementById('modal-loading').innerHTML = '<div class="spinner"></div><span>Cargando video...</span>';
 }
 </script>
 </body>
