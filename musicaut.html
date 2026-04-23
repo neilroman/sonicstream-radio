@@ -11,50 +11,78 @@
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(0,229,255,.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(124,77,255,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem}
-.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
 .logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none}
 .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent3));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
 .logo span{color:var(--accent)}
 .back-btn{background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--accent);padding:7px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600}
-.main{max-width:1000px;margin:0 auto;padding:2rem 1.5rem 6rem;position:relative;z-index:1}
+.main{max-width:1000px;margin:0 auto;padding:2rem 1.5rem 8rem;position:relative;z-index:1}
 .hero{text-align:center;margin-bottom:2rem}
 .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);border-radius:100px;padding:5px 14px;font-size:.75rem;color:var(--accent);margin-bottom:1rem;font-weight:500}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;margin-bottom:.8rem}
 .gradient{background:linear-gradient(90deg,var(--accent),var(--accent3),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--muted);font-size:.95rem;line-height:1.7}
-.search-box{background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;overflow:hidden;margin-bottom:2rem;transition:border-color .3s,box-shadow .3s}
+.search-box{background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;overflow:hidden;margin-bottom:1.5rem;transition:border-color .3s,box-shadow .3s}
 .search-box:focus-within{border-color:rgba(0,229,255,.4);box-shadow:var(--glow)}
 .search-box input{flex:1;background:none;border:none;outline:none;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text)}
 .search-box input::placeholder{color:var(--muted)}
-.search-box button{background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;padding:10px 22px;margin:6px;border-radius:10px;color:#000;font-weight:700;font-size:.85rem;cursor:pointer;font-family:'DM Sans',sans-serif}
-.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.video-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .25s;cursor:pointer}
-.video-card:hover{border-color:rgba(0,229,255,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
-.thumb-wrap{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--bg3)}
-.thumb-wrap img{width:100%;height:100%;object-fit:cover}
-.duration-badge{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.8);color:#fff;font-size:.7rem;font-weight:600;padding:2px 6px;border-radius:4px}
-.play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);opacity:0;transition:opacity .2s}
-.video-card:hover .play-overlay{opacity:1}
-.play-overlay span{width:48px;height:48px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#000}
-.video-info{padding:14px}
-.video-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.video-meta{font-size:.75rem;color:var(--muted)}
-.video-channel{color:var(--accent)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(12px);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;overflow-y:auto}
-.modal-overlay.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:800px;overflow:hidden;margin:auto}
-.modal-video{width:100%;aspect-ratio:16/9;background:#000;position:relative;display:flex;align-items:center;justify-content:center}
-.modal-video video{width:100%;height:100%;display:none}
-.modal-loading{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
-.modal-body{padding:20px}
-.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
-.modal-channel{color:var(--accent);font-size:.8rem;margin-bottom:16px}
-.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.btn-dl{display:inline-flex;align-items:center;gap:6px;padding:11px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
-.btn-mp4{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000}
-.btn-mp3{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--accent)}
-.btn-close-modal{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);cursor:pointer}
-.modal-info{font-size:.75rem;color:var(--muted);line-height:1.6}
+.search-box button{background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;padding:10px 22px;margin:6px;border-radius:10px;color:#000;font-weight:700;font-size:.85rem;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+
+/* GENRE PILLS */
+.genre-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2rem}
+.pill{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:6px 16px;border-radius:100px;font-size:.8rem;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.pill:hover,.pill.active{background:rgba(0,229,255,.1);border-color:rgba(0,229,255,.3);color:var(--accent)}
+
+/* RESULTS */
+.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.track-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .25s;position:relative}
+.track-card:hover{border-color:rgba(0,229,255,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.track-artwork{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--bg3)}
+.track-artwork-placeholder{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--bg3),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:3rem}
+.track-rank{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000;font-weight:800;font-size:.72rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.track-info{padding:14px}
+.track-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-artist{font-size:.75rem;color:var(--muted);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-actions{display:flex;gap:6px}
+.btn-preview{flex:1;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--accent);border-radius:8px;padding:7px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-align:center}
+.btn-preview:hover{background:rgba(0,229,255,.15)}
+.btn-preview.playing{background:rgba(0,229,255,.2);border-color:var(--accent)}
+.btn-dl{flex:1;background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;color:#000;border-radius:8px;padding:7px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s;text-align:center}
+.btn-dl:hover{opacity:.9}
+
+/* MINI PLAYER */
+.mini-player{position:fixed;bottom:0;left:0;right:0;background:rgba(8,12,20,.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:0 1.5rem;z-index:200;transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.mini-player.visible{transform:translateY(0)}
+.mini-inner{max-width:1000px;margin:0 auto;height:70px;display:flex;align-items:center;gap:14px}
+.mini-art{width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.mini-info{flex:1;min-width:0}
+.mini-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-artist{font-size:.72rem;color:var(--accent)}
+.mini-progress{width:100%;height:3px;background:var(--border);border-radius:2px;margin-top:6px;cursor:pointer}
+.mini-bar{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .5s linear}
+.mini-controls{display:flex;align-items:center;gap:8px}
+.mini-time{font-size:.7rem;color:var(--muted);min-width:36px;text-align:right}
+.mini-play{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;color:#000;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mini-stop{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:6px}
+
+/* DOWNLOAD MODAL */
+.dl-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.dl-modal.open{display:flex}
+.dl-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2rem;max-width:440px;width:100%;position:relative}
+.dl-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+.dl-art{width:80px;height:80px;border-radius:12px;object-fit:cover;margin:0 auto 1rem;display:block;background:var(--bg3)}
+.dl-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;text-align:center;margin-bottom:4px}
+.dl-artist{font-size:.82rem;color:var(--muted);text-align:center;margin-bottom:1.5rem}
+.dl-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
+.dl-step{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:10px;font-size:.82rem}
+.dl-step.active .dl-step-text{color:var(--accent)}
+.dl-step.done .dl-step-text{color:#4ade80}
+.dl-step.error .dl-step-text{color:var(--accent2)}
+.dl-btn{display:block;width:100%;background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;color:#000;font-weight:700;padding:14px;border-radius:12px;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;text-align:center;transition:opacity .2s}
+.dl-btn:hover{opacity:.9}
+.dl-btn-sec{display:block;width:100%;background:none;border:1px solid var(--border);color:var(--muted);font-weight:600;padding:10px;border-radius:10px;font-size:.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;text-decoration:none;text-align:center}
+
+/* LOADING */
 .loading{text-align:center;padding:4rem 2rem;color:var(--muted)}
 .spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -62,204 +90,578 @@ header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.9);backdrop-fi
 .empty .icon{font-size:3rem;margin-bottom:1rem}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-@media(max-width:600px){.results-grid{grid-template-columns:1fr}.modal-actions{flex-direction:column}}
+@media(max-width:600px){.results-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* QUALITY SELECTOR */
+.quality-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
+.quality-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:10px 6px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;transition:all .2s;text-align:center}
+.quality-btn:hover{border-color:rgba(0,229,255,.3);color:var(--accent)}
+.quality-btn.selected{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.5);color:var(--accent)}
+.quality-btn .qfmt{font-size:.7rem;color:var(--muted);font-weight:400;display:block;margin-top:2px}
+.quality-btn.selected .qfmt{color:rgba(0,229,255,.7)}
+
+/* QUEUE */
+.queue-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:1.5rem;display:none}
+.queue-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.queue-title-el{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem}
+.queue-clear{background:none;border:none;color:var(--muted);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif}
+.queue-clear:hover{color:var(--accent2)}
+.queue-items{display:flex;flex-direction:column;gap:6px}
+.q-item{display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg3);border-radius:8px;font-size:.8rem}
+.q-thumb{width:36px;height:36px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--bg2)}
+.q-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-fmt{font-size:.7rem;color:var(--accent);background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);padding:2px 6px;border-radius:4px;flex-shrink:0}
+.q-status{font-size:.8rem;flex-shrink:0}
+.q-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;flex-shrink:0}
+.q-remove:hover{color:var(--accent2)}
+
+/* MULTI SELECT */
+.track-card.selected{border-color:rgba(0,229,255,.5);background:rgba(0,229,255,.04)}
+.select-badge{position:absolute;top:8px;right:8px;width:22px;height:22px;background:var(--accent);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:.7rem;color:#000;font-weight:800;z-index:2}
+.track-card.selected .select-badge{display:flex}
+.multi-bar{position:fixed;top:60px;left:0;right:0;background:rgba(0,229,255,.1);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,229,255,.3);padding:10px 1.5rem;z-index:150;display:none;align-items:center;justify-content:space-between;gap:12px}
+.multi-bar.visible{display:flex}
+.multi-info{font-size:.85rem;color:var(--accent);font-weight:600}
+.multi-actions{display:flex;gap:8px}
+.multi-btn{background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;color:#000;padding:7px 16px;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif}
+.multi-cancel{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif}
+
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <a class="logo" href="index.html"><div class="logo-icon">📻</div>Sonic<span>Stream</span></a>
-    <a class="back-btn" href="index.html">← Inicio</a>
+    <a class="logo" href="index.html"><div class="logo-icon">&#127925;</div>Sonic<span>Stream</span></a>
+    <a class="back-btn" href="index.html">&#8592; Inicio</a>
   </div>
 </header>
 
 <div class="main">
   <div class="hero">
-    <div class="badge">🎬 Sin publicidad · MP4 + MP3 · Descarga directa</div>
+    <div class="badge">&#127925; Deezer + Preview 30s + Descarga MP3</div>
     <h1>Music<span class="gradient">Aut</span></h1>
-    <p>Busca videos y canciones. Reprodúcelos sin publicidad y descárgalos en MP4 o MP3.</p>
+    <p>Descubre m&#250;sica, escucha previews y descarga MP3 gratis.</p>
   </div>
 
   <div class="search-box">
-    <input type="text" id="search-input" placeholder="Busca un video, canción o artista..." onkeydown="if(event.key==='Enter')doSearch()">
-    <button onclick="doSearch()">🔍 Buscar</button>
+    <input type="text" id="search-input" placeholder="Busca una canci&#243;n, artista o &#225;lbum..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">&#128269; Buscar</button>
+  </div>
+
+  <div class="genre-pills">
+    <button class="pill" onclick="searchGenre('pop')">&#127908; Pop</button>
+    <button class="pill" onclick="searchGenre('bachata')">&#127925; Bachata</button>
+    <button class="pill" onclick="searchGenre('salsa')">&#128131; Salsa</button>
+    <button class="pill" onclick="searchGenre('reggaeton')">&#128293; Reggaeton</button>
+    <button class="pill" onclick="searchGenre('rock')">&#127928; Rock</button>
+    <button class="pill" onclick="searchGenre('jazz')">&#127927; Jazz</button>
+    <button class="pill" onclick="searchGenre('electronica')">&#9889; Electr&#243;nica</button>
+    <button class="pill" onclick="searchGenre('cumbia')">&#127796; Cumbia</button>
+    <button class="pill" onclick="loadCharts()">&#128293; Top Charts</button>
+  </div>
+
+  <!-- MULTI SELECT BAR -->
+  <div class="multi-bar" id="multi-bar">
+    <span class="multi-info" id="multi-info">0 canciones seleccionadas</span>
+    <div class="multi-actions">
+      <button class="multi-btn" onclick="downloadSelected()">&#11015; Descargar seleccionadas</button>
+      <button class="multi-cancel" onclick="clearSelection()">&#10005; Cancelar</button>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD QUEUE -->
+  <div class="queue-section" id="queue-section">
+    <div class="queue-header">
+      <span class="queue-title-el">&#11015; Cola de descargas</span>
+      <button class="queue-clear" onclick="clearQueue()">Limpiar todo</button>
+    </div>
+    <div class="queue-items" id="queue-items"></div>
   </div>
 
   <div id="results">
-    <div class="empty"><div class="icon">🎬</div><p>Busca un video para empezar</p></div>
+    <div class="empty"><div class="icon">&#127925;</div><p>Busca una canci&#243;n o elige un g&#233;nero</p></div>
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-video" id="modal-video">
-      <video id="video-player" controls preload="auto"></video>
-      <div class="modal-loading" id="modal-loading">
-        <div class="spinner"></div>
-        <span>Cargando video...</span>
+<!-- MINI PLAYER -->
+<div class="mini-player" id="mini-player">
+  <div class="mini-inner">
+    <img class="mini-art" id="mini-art" src="" alt="">
+    <div class="mini-info">
+      <div class="mini-title" id="mini-title">-</div>
+      <div class="mini-artist" id="mini-artist">Preview 30s</div>
+      <div class="mini-progress" onclick="seekPreview(event)">
+        <div class="mini-bar" id="mini-bar"></div>
       </div>
     </div>
-    <div class="modal-body">
-      <div class="modal-title" id="modal-title"></div>
-      <div class="modal-channel" id="modal-channel"></div>
-      <div class="modal-actions">
-        <a class="btn-dl btn-mp4" id="btn-mp4" href="#" target="_blank">⬇️ MP4</a>
-        <a class="btn-dl btn-mp3" id="btn-mp3" href="#" target="_blank">🎵 MP3</a>
-        <button class="btn-dl btn-close-modal" onclick="closeModal()">✕ Cerrar</button>
-      </div>
-      <div class="modal-info" id="modal-info">Obteniendo enlaces de descarga...</div>
+    <div class="mini-controls">
+      <span class="mini-time" id="mini-time">0:30</span>
+      <button class="mini-play" id="mini-play-btn" onclick="toggleMiniPlay()">&#9616;&#9616;</button>
+      <button class="mini-stop" onclick="stopPreview()">&#9209;</button>
     </div>
   </div>
 </div>
+
+<!-- DOWNLOAD MODAL -->
+<div class="dl-modal" id="dl-modal" onclick="if(event.target===this)closeDlModal()">
+  <div class="dl-box">
+    <button class="dl-close" onclick="closeDlModal()">&#10005;</button>
+    <img class="dl-art" id="dl-art" src="" alt="">
+    <div class="dl-title" id="dl-title"></div>
+    <div class="dl-artist" id="dl-artist"></div>
+    <!-- FORMAT/QUALITY SELECTOR -->
+    <div style="margin-bottom:1rem" id="quality-selector">
+      <p style="font-size:.75rem;color:var(--muted);margin-bottom:8px;font-weight:600">&#127925; Formato y Calidad:</p>
+      <div class="quality-grid">
+        <button class="quality-btn selected" onclick="selectQuality(this,'mp3','320')" data-fmt="mp3" data-q="320">MP3<span class="qfmt">320 kbps</span></button>
+        <button class="quality-btn" onclick="selectQuality(this,'mp3','128')" data-fmt="mp3" data-q="128">MP3<span class="qfmt">128 kbps</span></button>
+        <button class="quality-btn" onclick="selectQuality(this,'ogg','best')" data-fmt="ogg" data-q="best">OGG<span class="qfmt">Alta calidad</span></button>
+        <button class="quality-btn" onclick="selectQuality(this,'opus','best')" data-fmt="opus" data-q="best">OPUS<span class="qfmt">Alta calidad</span></button>
+        <button class="quality-btn" onclick="selectQuality(this,'wav','best')" data-fmt="wav" data-q="best">WAV<span class="qfmt">Sin p&#233;rdida</span></button>
+        <button class="quality-btn" onclick="selectQuality(this,'mp4','720')" data-fmt="mp4" data-q="720">MP4<span class="qfmt">Video 720p</span></button>
+      </div>
+    </div>
+    <div class="dl-steps">
+      <div class="dl-step" id="dls1"><span>&#128269;</span><span class="dl-step-text">Buscando en YouTube...</span></div>
+      <div class="dl-step" id="dls2"><span>&#11015;&#65039;</span><span class="dl-step-text">Generando enlace MP3...</span></div>
+      <div class="dl-step" id="dls3"><span>&#9989;</span><span class="dl-step-text">Listo para descargar</span></div>
+    </div>
+    <a class="dl-btn" id="dl-main-btn" href="#" style="display:none">&#11015;&#65039; Descargar MP3</a>
+    <a class="dl-btn-sec" id="dl-alt-btn" href="#" target="_blank" style="display:none">&#127925; Alternativa: Cobalt.tools</a>
+    <p id="dl-info" style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:10px"></p>
+  </div>
+</div>
+
+<audio id="preview-audio" preload="none"></audio>
 
 <script>
-// ── CONFIG ───────────────────────────────────────────────
 var VERCEL = 'https://sonicstream-api-to1x.vercel.app';
-window._videos = {};
+var previewAudio = document.getElementById('preview-audio');
+var currentTrack = null;
+var progressTimer = null;
+window._tracks = {};
 
-// ── SEARCH ───────────────────────────────────────────────
+// ── DEEZER SEARCH ─────────────────────────────────────────
+function deezerSearch(q) {
+  return new Promise(function(resolve, reject) {
+    var cb = '_dz' + Date.now();
+    var s = document.createElement('script');
+    window[cb] = function(data) {
+      try { document.head.removeChild(s); } catch(e) {}
+      delete window[cb];
+      resolve(data.data || []);
+    };
+    s.onerror = function() { reject(new Error('Deezer error')); };
+    s.src = 'https://api.deezer.com/search?q=' + encodeURIComponent(q) + '&limit=24&output=jsonp&callback=' + cb;
+    document.head.appendChild(s);
+    setTimeout(function() { reject(new Error('Timeout')); }, 10000);
+  });
+}
+
+function deezerCharts() {
+  return new Promise(function(resolve, reject) {
+    var cb = '_dzc' + Date.now();
+    var s = document.createElement('script');
+    window[cb] = function(data) {
+      try { document.head.removeChild(s); } catch(e) {}
+      delete window[cb];
+      resolve(data.tracks ? data.tracks.data : (data.data || []));
+    };
+    s.onerror = function() { reject(new Error('Deezer error')); };
+    s.src = 'https://api.deezer.com/chart/0/tracks?limit=24&output=jsonp&callback=' + cb;
+    document.head.appendChild(s);
+    setTimeout(function() { reject(new Error('Timeout')); }, 10000);
+  });
+}
+
 async function doSearch() {
   var q = document.getElementById('search-input').value.trim();
   if (!q) return;
-  var el = document.getElementById('results');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div>Buscando...</div>';
-
+  document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('active'); });
+  showLoading();
   try {
-    // Use Vercel videosearch endpoint
-    var res = await fetch(VERCEL + '/api/videosearch?q=' + encodeURIComponent(q));
-    if (res.ok) {
-      var data = await res.json();
-      if (data.items && data.items.length) {
-        renderResults(data.items);
-        return;
-      }
-    }
-  } catch(e) { console.warn('Search error:', e.message); }
-
-  // Fallback: use single search multiple times
-  var queries = [q, q + ' official', q + ' video', q + ' audio', q + ' live'];
-  var items = [];
-  for (var i = 0; i < queries.length; i++) {
-    try {
-      var r = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(queries[i]));
-      if (r.ok) {
-        var d = await r.json();
-        if (d.videoId && !items.find(function(x){ return x.videoId === d.videoId; })) {
-          items.push({
-            videoId: d.videoId,
-            title: d.title || queries[i],
-            channel: '',
-            thumb: 'https://i.ytimg.com/vi/' + d.videoId + '/mqdefault.jpg'
-          });
-        }
-      }
-    } catch(e2) {}
+    var tracks = await deezerSearch(q);
+    renderTracks(tracks, false);
+  } catch(e) {
+    showError('Error buscando. Intenta de nuevo.');
   }
-
-  if (items.length) { renderResults(items); return; }
-  el.innerHTML = '<div class="empty"><div class="icon">📭</div><p>No se encontraron resultados para "<strong>' + q + '</strong>"</p></div>';
 }
 
-function formatDuration(s) {
-  if (!s) return '';
-  return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + s%60;
+async function searchGenre(g) {
+  document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('search-input').value = g;
+  showLoading();
+  try {
+    var tracks = await deezerSearch(g);
+    renderTracks(tracks, false);
+  } catch(e) { showError('Error cargando g&#233;nero.'); }
 }
 
-function renderResults(items) {
-  window._videos = {};
+async function loadCharts() {
+  document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('active'); });
+  event.target.classList.add('active');
+  showLoading();
+  try {
+    var tracks = await deezerCharts();
+    renderTracks(tracks, true);
+  } catch(e) { showError('Error cargando charts.'); }
+}
+
+function renderTracks(tracks, showRank) {
+  if (!tracks || !tracks.length) {
+    document.getElementById('results').innerHTML = '<div class="empty"><div class="icon">&#128218;</div><p>No se encontraron canciones</p></div>';
+    return;
+  }
+  window._tracks = {};
   var html = '<div class="results-grid">';
-  items.forEach(function(v, i) {
-    window._videos['v'+i] = v;
-    var vid  = v.videoId || '';
-    var thumb = v.thumb || v.thumbnail || (vid ? 'https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg' : '');
-    var dur  = formatDuration(v.duration);
-    var ch   = v.channel || v.uploaderName || '';
-    html += '<div class="video-card" onclick="openVideo('+i+')">'
-      + '<div class="thumb-wrap">'
-      + (thumb ? '<img src="'+thumb+'" alt="" loading="lazy">' : '')
-      + (dur ? '<span class="duration-badge">'+dur+'</span>' : '')
-      + '<div class="play-overlay"><span>&#9654;</span></div>'
-      + '</div>'
-      + '<div class="video-info">'
-      + '<div class="video-title">'+(v.title||'')+'</div>'
-      + '<div class="video-meta">'+(ch?'<span class="video-channel">'+ch+'</span>':'')+'</div>'
-      + '</div></div>';
+  tracks.slice(0, 24).forEach(function(t, i) {
+    window._tracks['t'+i] = t;
+    var art = t.album && t.album.cover_medium ? t.album.cover_medium : '';
+    var title = (t.title || '').replace(/'/g,'&#39;');
+    var artist = (t.artist ? t.artist.name : '').replace(/'/g,'&#39;');
+    var hasPreview = t.preview ? true : false;
+    html += '<div class="track-card" id="card-'+i+'" oncontextmenu="toggleSelect('+i+',event)">'
+      + '<div class="select-badge" id="sel-'+i+'">&#10003;</div>'
+      + (showRank ? '<div class="track-rank">'+(i+1)+'</div>' : '')
+      + (art ? '<img class="track-artwork" src="'+art+'" alt="" loading="lazy">' : '<div class="track-artwork-placeholder">&#127925;</div>')
+      + '<div class="track-info">'
+      + '<div class="track-title">'+title+'</div>'
+      + '<div class="track-artist">'+artist+'</div>'
+      + '<div class="track-actions">'
+      + (hasPreview
+          ? '<button class="btn-preview" onclick="playPreview('+i+',this)">&#9654; Preview</button>'
+          : '<button class="btn-preview" disabled style="opacity:.4">Sin preview</button>')
+      + '<button class="btn-dl" onclick="downloadTrack('+i+')">&#11015; MP3</button>'
+      + '</div></div></div>';
   });
   html += '</div>';
   document.getElementById('results').innerHTML = html;
 }
 
-// ── PLAYER ───────────────────────────────────────────────
-async function openVideo(idx) {
-  var v = window._videos['v'+idx];
-  if (!v) return;
-  var vid = v.videoId || '';
-  if (!vid) return;
+// ── PREVIEW PLAYER ─────────────────────────────────────────
+function playPreview(idx, btn) {
+  var t = window._tracks['t'+idx];
+  if (!t || !t.preview) return;
 
-  // Open modal
-  document.getElementById('modal').classList.add('open');
-  document.getElementById('modal-title').textContent   = v.title || '';
-  document.getElementById('modal-channel').textContent = v.channel || v.uploaderName || '';
-  document.getElementById('modal-info').textContent    = 'Obteniendo enlaces...';
+  if (currentTrack === t.preview) {
+    toggleMiniPlay();
+    return;
+  }
 
-  // Show loading state
-  document.getElementById('modal-loading').style.display = 'flex';
-  document.getElementById('modal-loading').innerHTML = '<div class="spinner"></div><span>Preparando descarga...</span>';
-  document.querySelectorAll('#modal-video iframe').forEach(function(f){ f.remove(); });
-  document.getElementById('video-player').style.display = 'none';
+  document.querySelectorAll('.btn-preview').forEach(function(b){ b.textContent = '&#9654; Preview'; b.classList.remove('playing'); });
 
-  // Set watch button - opens video player page
-  var btn4 = document.getElementById('btn-mp4');
-  btn4.href = 'player.html?v=' + vid + '&t=' + encodeURIComponent(v.title||'');
-  btn4.target = '_blank';
-  btn4.removeAttribute('download');
-  btn4.textContent = '▶️ Ver Video';
+  currentTrack = t.preview;
+  previewAudio.src = t.preview;
+  previewAudio.play();
 
-  // Show preview thumbnail in modal
-  var thumbUrl = 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg';
-  document.getElementById('modal-loading').style.display = 'none';
-  var thumbDiv = document.createElement('div');
-  thumbDiv.style.cssText = 'width:100%;height:100%;position:relative;cursor:pointer;';
-  thumbDiv.innerHTML = '<img src="'+thumbUrl+'" style="width:100%;height:100%;object-fit:cover;">'
-    + '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);">'
-    + '<a href="player.html?v='+vid+'&t='+encodeURIComponent(v.title||'')+'" target="_blank" '
-    + 'style="width:72px;height:72px;background:rgba(255,0,0,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.8rem;">&#9654;</a>'
-    + '</div>';
-  document.getElementById('modal-video').appendChild(thumbDiv);
+  btn.textContent = '&#9616;&#9616; Pausar';
+  btn.classList.add('playing');
 
-  // Get MP3 via Vercel
-  document.getElementById('modal-info').textContent = 'Obteniendo enlace MP3...';
+  var art = t.album && t.album.cover_medium ? t.album.cover_medium : '';
+  document.getElementById('mini-art').src = art;
+  document.getElementById('mini-title').textContent = t.title || '';
+  document.getElementById('mini-artist').textContent = t.artist ? t.artist.name : '';
+  document.getElementById('mini-player').classList.add('visible');
+  document.getElementById('mini-play-btn').textContent = '&#9616;&#9616;';
+
+  clearInterval(progressTimer);
+  progressTimer = setInterval(updateProgress, 300);
+  previewAudio.onended = stopPreview;
+}
+
+function toggleMiniPlay() {
+  if (previewAudio.paused) {
+    previewAudio.play();
+    document.getElementById('mini-play-btn').textContent = '&#9616;&#9616;';
+  } else {
+    previewAudio.pause();
+    document.getElementById('mini-play-btn').textContent = '&#9654;';
+  }
+}
+
+function stopPreview() {
+  previewAudio.pause(); previewAudio.src = '';
+  currentTrack = null;
+  clearInterval(progressTimer);
+  document.getElementById('mini-player').classList.remove('visible');
+  document.getElementById('mini-bar').style.width = '0%';
+  document.querySelectorAll('.btn-preview').forEach(function(b){ b.textContent = '&#9654; Preview'; b.classList.remove('playing'); });
+}
+
+function updateProgress() {
+  if (!previewAudio.duration) return;
+  var pct = (previewAudio.currentTime / previewAudio.duration) * 100;
+  document.getElementById('mini-bar').style.width = pct + '%';
+  var rem = Math.max(0, Math.ceil(previewAudio.duration - previewAudio.currentTime));
+  document.getElementById('mini-time').textContent = '0:' + (rem < 10 ? '0' : '') + rem;
+}
+
+function seekPreview(e) {
+  if (!previewAudio.duration) return;
+  var rect = e.currentTarget.getBoundingClientRect();
+  var pct = (e.clientX - rect.left) / rect.width;
+  previewAudio.currentTime = pct * previewAudio.duration;
+}
+
+// ── DOWNLOAD ───────────────────────────────────────────────
+async function downloadTrack(idx) {
+  var t = window._tracks['t'+idx];
+  if (!t) return;
+
+  var title  = t.title || '';
+  var artist = t.artist ? t.artist.name : '';
+  var art    = t.album && t.album.cover_medium ? t.album.cover_medium : '';
+  var ytQ    = title + ' ' + artist;
+
+  document.getElementById('dl-art').src    = art;
+  document.getElementById('dl-title').textContent  = title;
+  document.getElementById('dl-artist').textContent = artist;
+  document.getElementById('dl-main-btn').style.display = 'none';
+  document.getElementById('dl-alt-btn').style.display  = 'none';
+  document.getElementById('dl-info').textContent = '';
+  setDlStep(1,'active'); setDlStep(2,''); setDlStep(3,'');
+  document.getElementById('dl-modal').classList.add('open');
+
+  // Step 1: Get video ID via Vercel
   try {
-    var r3 = await fetch(VERCEL + '/api/cobalt?id=' + vid + '&type=mp3');
-    if (r3.ok) {
-      var d3 = await r3.json();
-      if (d3.url) {
-        var btn3 = document.getElementById('btn-mp3');
-        btn3.href = d3.url;
-        btn3.setAttribute('download', (v.title||vid) + '.mp3');
-        btn3.removeAttribute('target');
-        btn3.textContent = '⬇️ Descargar MP3';
-        document.getElementById('modal-info').textContent = '✅ MP3 listo. Haz clic en "Ver Video" para reproducir.';
-        return;
-      }
+    var r1 = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(ytQ));
+    if (!r1.ok) throw new Error('Search failed');
+    var d1 = await r1.json();
+    if (!d1.videoId) throw new Error('No video ID');
+
+    setDlStep(1,'done','&#9989; Video encontrado en YouTube');
+    setDlStep(2,'active');
+
+    // Step 2: Get MP3 via Vercel Cobalt proxy
+    var r2 = await fetch(VERCEL + '/api/cobalt?id=' + d1.videoId + '&type=mp3');
+    if (!r2.ok) throw new Error('Cobalt failed');
+    var d2 = await r2.json();
+
+    if (d2.url) {
+      setDlStep(2,'done','&#9989; Enlace MP3 generado');
+      setDlStep(3,'done','&#9989; Listo para descargar');
+
+      var btn = document.getElementById('dl-main-btn');
+      btn.href = d2.url;
+      btn.setAttribute('download', title + ' - ' + artist + '.mp3');
+      btn.removeAttribute('target');
+      btn.style.display = 'block';
+      document.getElementById('dl-info').textContent = 'Haz clic para guardar el MP3 en tu dispositivo.';
+    } else {
+      throw new Error('No URL from Cobalt');
     }
-  } catch(e) { console.warn('MP3 failed:', e.message); }
-  document.getElementById('modal-info').textContent = 'Haz clic en "Ver Video" para reproducir.';
+  } catch(e) {
+    setDlStep(1, 'error', '&#9888; Error: ' + e.message);
+    // Show fallback
+    var altBtn = document.getElementById('dl-alt-btn');
+    altBtn.href = 'download.html?vid=&title=' + encodeURIComponent(title) + '&artist=' + encodeURIComponent(artist);
+    altBtn.style.display = 'block';
+    document.getElementById('dl-info').textContent = 'Usa la alternativa para descargar.';
+  }
 }
 
-// ── CLOSE ─────────────────────────────────────────────────
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  var player = document.getElementById('video-player');
-  player.pause();
-  player.src = '';
-  player.style.display = 'none';
-  document.querySelectorAll('#modal-video iframe, #modal-video div').forEach(function(f){ f.remove(); });
-  document.getElementById('modal-loading').style.display = 'flex';
-  document.getElementById('modal-loading').innerHTML = '<div class="spinner"></div><span>Cargando video...</span>';
+function setDlStep(n, state, text) {
+  var el = document.getElementById('dls'+n);
+  el.className = 'dl-step' + (state ? ' '+state : '');
+  if (text) el.querySelector('.dl-step-text').textContent = text;
 }
+
+function closeDlModal() {
+  document.getElementById('dl-modal').classList.remove('open');
+}
+
+// ── UTILS ──────────────────────────────────────────────────
+function showLoading() {
+  document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
+}
+function showError(msg) {
+  document.getElementById('results').innerHTML = '<div class="empty"><div class="icon">&#9888;</div><p>'+msg+'</p></div>';
+}
+
+// ── QUALITY / FORMAT ──────────────────────────────────────
+var selectedFmt = 'mp3';
+var selectedQ   = '320';
+
+function selectQuality(btn, fmt, q) {
+  document.querySelectorAll('.quality-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  selectedFmt = fmt;
+  selectedQ   = q;
+}
+
+// ── MULTI SELECT ──────────────────────────────────────────
+var selectedTracks = {};
+
+function toggleSelect(idx, e) {
+  if (e) e.preventDefault();
+  if (selectedTracks[idx]) {
+    delete selectedTracks[idx];
+    document.getElementById('card-'+idx).classList.remove('selected');
+  } else {
+    selectedTracks[idx] = window._tracks['t'+idx];
+    document.getElementById('card-'+idx).classList.add('selected');
+  }
+  updateMultiBar();
+}
+
+function updateMultiBar() {
+  var count = Object.keys(selectedTracks).length;
+  var bar = document.getElementById('multi-bar');
+  if (count > 0) {
+    bar.classList.add('visible');
+    document.getElementById('multi-info').textContent = count + ' canci' + (count===1?'ón':'ones') + ' seleccionada' + (count===1?'':'s');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+function clearSelection() {
+  selectedTracks = {};
+  document.querySelectorAll('.track-card').forEach(function(c){ c.classList.remove('selected'); });
+  document.getElementById('multi-bar').classList.remove('visible');
+}
+
+async function downloadSelected() {
+  var tracks = Object.values(selectedTracks);
+  if (!tracks.length) return;
+  clearSelection();
+  for (var i = 0; i < tracks.length; i++) {
+    addToQueue(tracks[i]);
+  }
+  processQueue();
+}
+
+// ── DOWNLOAD QUEUE ────────────────────────────────────────
+var downloadQueue = [];
+var isProcessing  = false;
+
+function addToQueue(track) {
+  downloadQueue.push({ track: track, status: 'pending', fmt: selectedFmt, q: selectedQ });
+  renderQueue();
+}
+
+function renderQueue() {
+  var section = document.getElementById('queue-section');
+  var items   = document.getElementById('queue-items');
+  if (!downloadQueue.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  items.innerHTML = downloadQueue.map(function(item, i) {
+    var t = item.track;
+    var art = t.album && t.album.cover_medium ? t.album.cover_medium : '';
+    var statusIcon = item.status === 'done' ? '&#9989;' : item.status === 'error' ? '&#10060;' : item.status === 'downloading' ? '&#9203;' : '&#9203;';
+    return '<div class="q-item">'
+      + (art ? '<img class="q-thumb" src="'+art+'" alt="">' : '<div class="q-thumb"></div>')
+      + '<span class="q-name">'+(t.title||'')+'</span>'
+      + '<span class="q-fmt">'+item.fmt.toUpperCase()+'</span>'
+      + '<span class="q-status">'+statusIcon+'</span>'
+      + '<button class="q-remove" onclick="removeFromQueue('+i+')">&#10005;</button>'
+      + '</div>';
+  }).join('');
+}
+
+function removeFromQueue(i) {
+  downloadQueue.splice(i, 1);
+  renderQueue();
+}
+
+function clearQueue() {
+  downloadQueue = [];
+  renderQueue();
+}
+
+async function processQueue() {
+  if (isProcessing) return;
+  isProcessing = true;
+  for (var i = 0; i < downloadQueue.length; i++) {
+    var item = downloadQueue[i];
+    if (item.status !== 'pending') continue;
+    item.status = 'downloading';
+    renderQueue();
+    try {
+      var t = item.track;
+      var q = t.title + ' ' + (t.artist ? t.artist.name : '');
+      // Get video ID
+      var r1 = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(q));
+      var d1 = await r1.json();
+      if (!d1.videoId) throw new Error('No video ID');
+      // Get download URL with selected format
+      var r2 = await fetch(VERCEL + '/api/cobalt?id=' + d1.videoId + '&type=' + item.fmt);
+      var d2 = await r2.json();
+      if (d2.url) {
+        // Auto-download
+        var a = document.createElement('a');
+        a.href = d2.url;
+        a.download = (t.title||'audio') + ' - ' + (t.artist?t.artist.name:'') + '.' + item.fmt;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        item.status = 'done';
+      } else {
+        item.status = 'error';
+      }
+    } catch(e) {
+      item.status = 'error';
+    }
+    renderQueue();
+    // Small delay between downloads
+    await new Promise(function(r){ setTimeout(r, 1500); });
+  }
+  isProcessing = false;
+}
+
+// ── PATCH downloadTrack TO USE QUALITY ───────────────────
+var _origDownloadTrack = downloadTrack;
+async function downloadTrack(idx) {
+  var t = window._tracks['t'+idx];
+  if (!t) return;
+  var title  = t.title || '';
+  var artist = t.artist ? t.artist.name : '';
+  var art    = t.album && t.album.cover_medium ? t.album.cover_medium : '';
+  var ytQ    = title + ' ' + artist;
+
+  document.getElementById('dl-art').src    = art;
+  document.getElementById('dl-title').textContent  = title;
+  document.getElementById('dl-artist').textContent = artist;
+  document.getElementById('dl-main-btn').style.display = 'none';
+  document.getElementById('dl-alt-btn').style.display  = 'none';
+  document.getElementById('dl-info').textContent = '';
+  setDlStep(1,'active'); setDlStep(2,''); setDlStep(3,'');
+  document.getElementById('dl-modal').classList.add('open');
+
+  try {
+    var r1 = await fetch(VERCEL + '/api/search?q=' + encodeURIComponent(ytQ));
+    if (!r1.ok) throw new Error('Search failed');
+    var d1 = await r1.json();
+    if (!d1.videoId) throw new Error('No video ID');
+    setDlStep(1,'done','&#9989; Video encontrado');
+    setDlStep(2,'active');
+
+    // Use selected format
+    var r2 = await fetch(VERCEL + '/api/cobalt?id=' + d1.videoId + '&type=' + selectedFmt);
+    if (!r2.ok) throw new Error('Cobalt failed');
+    var d2 = await r2.json();
+    if (d2.url) {
+      setDlStep(2,'done','&#9989; Enlace '+selectedFmt.toUpperCase()+' generado');
+      setDlStep(3,'done','&#9989; Listo para descargar');
+      var btn = document.getElementById('dl-main-btn');
+      btn.href = d2.url;
+      btn.setAttribute('download', title + ' - ' + artist + '.' + selectedFmt);
+      btn.textContent = '&#11015; Descargar ' + selectedFmt.toUpperCase();
+      btn.removeAttribute('target');
+      btn.style.display = 'block';
+      document.getElementById('dl-info').textContent = 'Formato: '+selectedFmt.toUpperCase()+' · Calidad: '+selectedQ;
+    } else {
+      throw new Error('No URL');
+    }
+  } catch(e) {
+    setDlStep(1,'error','&#9888; '+e.message);
+    document.getElementById('dl-alt-btn').href = 'download.html?title='+encodeURIComponent(title)+'&artist='+encodeURIComponent(artist);
+    document.getElementById('dl-alt-btn').style.display = 'block';
+  }
+}
+
 </script>
 </body>
 </html>
